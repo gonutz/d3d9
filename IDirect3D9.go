@@ -1,8 +1,6 @@
 package d3d9
 
 /*
-#cgo LDFLAGS: -ld3d9
-
 #include <d3d9.h>
 
 HRESULT IDirect3D9CheckDepthStencilMatch(IDirect3D9* obj, UINT Adapter, D3DDEVTYPE DeviceType, D3DFORMAT AdapterFormat, D3DFORMAT RenderTargetFormat, D3DFORMAT DepthStencilFormat) {
@@ -66,8 +64,22 @@ void IDirect3D9Release(IDirect3D9* obj) {
 }
 */
 import "C"
-import "errors"
-import "unsafe"
+import (
+	"errors"
+	"syscall"
+	"unsafe"
+)
+
+var dll syscall.Handle
+
+func Init() (err error) {
+	dll, err = syscall.LoadLibrary("d3d9.dll")
+	return
+}
+
+func Close() {
+	syscall.FreeLibrary(dll)
+}
 
 type Direct3D struct {
 	handle *C.IDirect3D9
@@ -78,11 +90,18 @@ func (obj Direct3D) Release() {
 }
 
 func Create(version uint) (obj Direct3D, err error) {
-	d3d := C.Direct3DCreate9(C.UINT(version))
-	if d3d == nil {
-		return Direct3D{}, errors.New("Direct3DCreate9 failed")
+	Direct3DCreate9, err := syscall.GetProcAddress(dll, "Direct3DCreate9")
+	if err != nil {
+		return Direct3D{}, err
 	}
-	return Direct3D{d3d}, nil
+	result, _, callErr := syscall.Syscall(Direct3DCreate9, 1, uintptr(version), 0, 0)
+	if callErr != 0 {
+		return Direct3D{}, callErr
+	}
+	if result == 0 {
+		return Direct3D{}, errors.New("Direct3DCreate9 returned nil")
+	}
+	return Direct3D{(*C.IDirect3D9)(unsafe.Pointer(result))}, nil
 }
 
 func (obj Direct3D) CheckDepthStencilMatch(Adapter uint, DeviceType DEVTYPE, AdapterFormat FORMAT, RenderTargetFormat FORMAT, DepthStencilFormat FORMAT) (err error) {
