@@ -47,3 +47,25 @@ func (obj IndexBuffer) Unlock() (err error) {
 	err = toErr(C.IDirect3DIndexBuffer9Unlock(obj.handle))
 	return
 }
+
+func (obj IndexBuffer) LockedSetFloats(OffsetToLock uint, Flags uint32, data []float32) (err error) {
+	var buffer unsafe.Pointer
+	byteCount := uint(len(data) * 4)
+	buffer, err = obj.Lock(OffsetToLock, byteCount, Flags)
+	if err != nil {
+		return
+	}
+	C.memcpy(buffer, unsafe.Pointer(&data[0]), C.size_t(byteCount))
+	return obj.Unlock()
+}
+
+func (obj IndexBuffer) LockedSetUints(OffsetToLock uint, Flags uint32, data []uint32) (err error) {
+	var buffer unsafe.Pointer
+	byteCount := uint(len(data) * 4)
+	buffer, err = obj.Lock(OffsetToLock, byteCount, Flags)
+	if err != nil {
+		return
+	}
+	C.memcpy(buffer, unsafe.Pointer(&data[0]), C.size_t(byteCount))
+	return obj.Unlock()
+}

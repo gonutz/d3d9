@@ -560,6 +560,13 @@ func (obj Device) CreatePixelShader(pFunction unsafe.Pointer) (ppShader PixelSha
 	return
 }
 
+func (obj Device) CreatePixelShaderFromBytes(pFunction []byte) (ppShader PixelShader, err error) {
+	var c_ppShader *C.IDirect3DPixelShader9
+	err = toErr(C.IDirect3DDevice9CreatePixelShader(obj.handle, (*C.DWORD)(unsafe.Pointer(&pFunction[0])), &c_ppShader))
+	ppShader = PixelShader{c_ppShader}
+	return
+}
+
 func (obj Device) CreateQuery(Type QUERYTYPE) (ppQuery Query, err error) {
 	var c_ppQuery *C.IDirect3DQuery9
 	err = toErr(C.IDirect3DDevice9CreateQuery(obj.handle, (C.D3DQUERYTYPE)(Type), &c_ppQuery))
@@ -617,6 +624,13 @@ func DeclEnd() VERTEXELEMENT {
 func (obj Device) CreateVertexShader(pFunction unsafe.Pointer) (ppShader VertexShader, err error) {
 	var c_ppShader *C.IDirect3DVertexShader9
 	err = toErr(C.IDirect3DDevice9CreateVertexShader(obj.handle, (*C.DWORD)(pFunction), &c_ppShader))
+	ppShader = VertexShader{c_ppShader}
+	return
+}
+
+func (obj Device) CreateVertexShaderFromBytes(pFunction []byte) (ppShader VertexShader, err error) {
+	var c_ppShader *C.IDirect3DVertexShader9
+	err = toErr(C.IDirect3DDevice9CreateVertexShader(obj.handle, (*C.DWORD)(unsafe.Pointer(&pFunction[0])), &c_ppShader))
 	ppShader = VertexShader{c_ppShader}
 	return
 }
