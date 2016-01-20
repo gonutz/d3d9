@@ -830,32 +830,6 @@ func (s *PRESENT_PARAMETERS) fromC(c *C.D3DPRESENT_PARAMETERS) {
 	s.PresentationInterval = (uint)(c.PresentationInterval)
 }
 
-type PRESENTSTATS struct {
-	PresentCount        uint
-	PresentRefreshCount uint
-	SyncRefreshCount    uint
-	SyncQPCTime         int64
-	SyncGPUTime         int64
-}
-
-func (s *PRESENTSTATS) toC() C.D3DPRESENTSTATS {
-	var c C.D3DPRESENTSTATS
-	c.PresentCount = (C.UINT)(s.PresentCount)
-	c.PresentRefreshCount = (C.UINT)(s.PresentRefreshCount)
-	c.SyncRefreshCount = (C.UINT)(s.SyncRefreshCount)
-	C.setLargeInteger((unsafe.Pointer)(&c.SyncQPCTime), (C.longlong)(s.SyncQPCTime))
-	C.setLargeInteger((unsafe.Pointer)(&c.SyncGPUTime), (C.longlong)(s.SyncGPUTime))
-	return c
-}
-
-func (s *PRESENTSTATS) fromC(c *C.D3DPRESENTSTATS) {
-	s.PresentCount = (uint)(c.PresentCount)
-	s.PresentRefreshCount = (uint)(c.PresentRefreshCount)
-	s.SyncRefreshCount = (uint)(c.SyncRefreshCount)
-	s.SyncQPCTime = (int64)(C.getLargeInteger((unsafe.Pointer)(&c.SyncQPCTime)))
-	s.SyncGPUTime = (int64)(C.getLargeInteger((unsafe.Pointer)(&c.SyncGPUTime)))
-}
-
 type PSHADERCAPS2_0 struct {
 	Caps                    uint32
 	DynamicFlowControlDepth int
