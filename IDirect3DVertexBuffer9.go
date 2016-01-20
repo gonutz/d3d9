@@ -1,8 +1,7 @@
 package d3d9
 
 /*
-#include <d3d9.h>
-#include <string.h>
+#include "d3d9wrapper.h"
 
 HRESULT IDirect3DVertexBuffer9GetDesc(IDirect3DVertexBuffer9* obj, D3DVERTEXBUFFER_DESC* pDesc) {
 	return obj->lpVtbl->GetDesc(obj, pDesc);
@@ -18,6 +17,13 @@ HRESULT IDirect3DVertexBuffer9Unlock(IDirect3DVertexBuffer9* obj) {
 
 void IDirect3DVertexBuffer9Release(IDirect3DVertexBuffer9* obj) {
 	obj->lpVtbl->Release(obj);
+}
+
+void copyBytes(void* to, void* from, unsigned int byteCount) {
+	char* d = (char*)to;
+	char* s = (char*)from;
+	for (; byteCount > 0; --byteCount)
+		*d++ = *s++;
 }
 */
 import "C"
@@ -67,6 +73,6 @@ func (obj VertexBuffer) LockedSetUints(OffsetToLock uint, Flags uint32, data []u
 	if err != nil {
 		return
 	}
-	C.memcpy(buffer, unsafe.Pointer(&data[0]), C.size_t(byteCount))
+	C.copyBytes(buffer, unsafe.Pointer(&data[0]), C.uint(byteCount))
 	return obj.Unlock()
 }

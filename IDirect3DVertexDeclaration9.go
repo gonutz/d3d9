@@ -1,7 +1,7 @@
 package d3d9
 
 /*
-#include <d3d9.h>
+#include "d3d9wrapper.h"
 
 HRESULT IDirect3DVertexDeclaration9GetDeclaration(IDirect3DVertexDeclaration9* obj, D3DVERTEXELEMENT9* pDecl, UINT* pNumElements) {
 	return obj->lpVtbl->GetDeclaration(obj, pDecl, pNumElements);

@@ -1,48 +1,54 @@
 package d3d9
 
-//#include <d3d9.h>
-//void setLargeInteger(void* i, long long to) {
-//  *(LARGE_INTEGER*)i = (LARGE_INTEGER)to;
-//}
-//long long getLargeInteger(void* i) {
-//  return *((long long*)i);
-//}
-//void toCMatrix(D3DMATRIX* m, float* values) {
-//  m->_11 = *values;
-//  m->_12 = *(values+1);
-//  m->_13 = *(values+2);
-//  m->_14 = *(values+3);
-//  m->_21 = *(values+4);
-//  m->_22 = *(values+5);
-//  m->_23 = *(values+6);
-//  m->_24 = *(values+7);
-//  m->_31 = *(values+8);
-//  m->_32 = *(values+9);
-//  m->_33 = *(values+10);
-//  m->_34 = *(values+11);
-//  m->_41 = *(values+12);
-//  m->_42 = *(values+13);
-//  m->_43 = *(values+14);
-//  m->_44 = *(values+15);
-//}
-//void toGoMatrix(D3DMATRIX* m, float* values) {
-//  *values      = m->_11;
-//  *(values+1)  = m->_12;
-//  *(values+2)  = m->_13;
-//  *(values+3)  = m->_14;
-//  *(values+4)  = m->_21;
-//  *(values+5)  = m->_22;
-//  *(values+6)  = m->_23;
-//  *(values+7)  = m->_24;
-//  *(values+8)  = m->_31;
-//  *(values+9)  = m->_32;
-//  *(values+10) = m->_33;
-//  *(values+11) = m->_34;
-//  *(values+12) = m->_41;
-//  *(values+13) = m->_42;
-//  *(values+14) = m->_43;
-//  *(values+15) = m->_44;
-//}
+/*
+#include "d3d9wrapper.h"
+
+void setLargeInteger(void* i, long long to) {
+  *(LARGE_INTEGER*)i = (LARGE_INTEGER)to;
+}
+
+long long getLargeInteger(void* i) {
+  return *((long long*)i);
+}
+
+void toCMatrix(D3DMATRIX* m, float* values) {
+  m->_11 = *values;
+  m->_12 = *(values+1);
+  m->_13 = *(values+2);
+  m->_14 = *(values+3);
+  m->_21 = *(values+4);
+  m->_22 = *(values+5);
+  m->_23 = *(values+6);
+  m->_24 = *(values+7);
+  m->_31 = *(values+8);
+  m->_32 = *(values+9);
+  m->_33 = *(values+10);
+  m->_34 = *(values+11);
+  m->_41 = *(values+12);
+  m->_42 = *(values+13);
+  m->_43 = *(values+14);
+  m->_44 = *(values+15);
+}
+
+void toGoMatrix(D3DMATRIX* m, float* values) {
+  *values      = m->_11;
+  *(values+1)  = m->_12;
+  *(values+2)  = m->_13;
+  *(values+3)  = m->_14;
+  *(values+4)  = m->_21;
+  *(values+5)  = m->_22;
+  *(values+6)  = m->_23;
+  *(values+7)  = m->_24;
+  *(values+8)  = m->_31;
+  *(values+9)  = m->_32;
+  *(values+10) = m->_33;
+  *(values+11) = m->_34;
+  *(values+12) = m->_41;
+  *(values+13) = m->_42;
+  *(values+14) = m->_43;
+  *(values+15) = m->_44;
+}
+*/
 import "C"
 import "unsafe"
 
@@ -586,55 +592,6 @@ func (s *DISPLAYMODE) fromC(c *C.D3DDISPLAYMODE) {
 	s.Height = (uint)(c.Height)
 	s.RefreshRate = (uint)(c.RefreshRate)
 	s.Format = (FORMAT)(c.Format)
-}
-
-type DISPLAYMODEEX struct {
-	Size             uint
-	Width            uint
-	Height           uint
-	RefreshRate      uint
-	Format           FORMAT
-	ScanLineOrdering SCANLINEORDERING
-}
-
-func (s *DISPLAYMODEEX) toC() C.D3DDISPLAYMODEEX {
-	var c C.D3DDISPLAYMODEEX
-	c.Size = (C.UINT)(s.Size)
-	c.Width = (C.UINT)(s.Width)
-	c.Height = (C.UINT)(s.Height)
-	c.RefreshRate = (C.UINT)(s.RefreshRate)
-	c.Format = (C.D3DFORMAT)(s.Format)
-	c.ScanLineOrdering = (C.D3DSCANLINEORDERING)(s.ScanLineOrdering)
-	return c
-}
-
-func (s *DISPLAYMODEEX) fromC(c *C.D3DDISPLAYMODEEX) {
-	s.Size = (uint)(c.Size)
-	s.Width = (uint)(c.Width)
-	s.Height = (uint)(c.Height)
-	s.RefreshRate = (uint)(c.RefreshRate)
-	s.Format = (FORMAT)(c.Format)
-	s.ScanLineOrdering = (SCANLINEORDERING)(c.ScanLineOrdering)
-}
-
-type DISPLAYMODEFILTER struct {
-	Size             uint
-	Format           FORMAT
-	ScanLineOrdering SCANLINEORDERING
-}
-
-func (s *DISPLAYMODEFILTER) toC() C.D3DDISPLAYMODEFILTER {
-	var c C.D3DDISPLAYMODEFILTER
-	c.Size = (C.UINT)(s.Size)
-	c.Format = (C.D3DFORMAT)(s.Format)
-	c.ScanLineOrdering = (C.D3DSCANLINEORDERING)(s.ScanLineOrdering)
-	return c
-}
-
-func (s *DISPLAYMODEFILTER) fromC(c *C.D3DDISPLAYMODEFILTER) {
-	s.Size = (uint)(c.Size)
-	s.Format = (FORMAT)(c.Format)
-	s.ScanLineOrdering = (SCANLINEORDERING)(c.ScanLineOrdering)
 }
 
 type GAMMARAMP struct {

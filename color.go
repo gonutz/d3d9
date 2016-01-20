@@ -1,6 +1,6 @@
 package d3d9
 
-//#include <d3d9.h>
+//#include "d3d9wrapper.h"
 import "C"
 
 type COLOR uint32

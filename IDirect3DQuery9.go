@@ -1,7 +1,7 @@
 package d3d9
 
 /*
-#include <d3d9.h>
+#include "d3d9wrapper.h"
 
 HRESULT IDirect3DQuery9GetData(IDirect3DQuery9* obj, void* pData, DWORD dwSize, DWORD dwGetDataFlags) {
 	return obj->lpVtbl->GetData(obj, pData, dwSize, dwGetDataFlags);

@@ -1,7 +1,7 @@
 package d3d9
 
 /*
-#include <d3d9.h>
+#include "d3d9wrapper.h"
 
 VOID IDirect3DBaseTexture9GenerateMipSubLevels(IDirect3DBaseTexture9* obj) {
 	obj->lpVtbl->GenerateMipSubLevels(obj);

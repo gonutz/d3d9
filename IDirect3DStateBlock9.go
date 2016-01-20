@@ -1,7 +1,7 @@
 package d3d9
 
 /*
-#include <d3d9.h>
+#include "d3d9wrapper.h"
 
 HRESULT IDirect3DStateBlock9Apply(IDirect3DStateBlock9* obj) {
 	return obj->lpVtbl->Apply(obj);

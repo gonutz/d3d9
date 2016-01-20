@@ -1,7 +1,7 @@
 package d3d9
 
 /*
-#include <d3d9.h>
+#include "d3d9wrapper.h"
 
 HRESULT IDirect3DTexture9AddDirtyRect(IDirect3DTexture9* obj, RECT* pDirtyRect) {
 	return obj->lpVtbl->AddDirtyRect(obj, pDirtyRect);

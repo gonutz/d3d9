@@ -15,8 +15,8 @@ func main() {
 	defer window.Destroy()
 
 	// this gets the Windows window handle for the native window
-	var info sdl.SysWMInfo
-	window.GetWMInfo(&info)
+	info, err := window.GetWMInfo()
+	check(err)
 	windowHandle := info.GetWindowsInfo().Window
 
 	// set up Direct3D9

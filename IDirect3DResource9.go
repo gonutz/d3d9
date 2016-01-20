@@ -1,7 +1,7 @@
 package d3d9
 
 /*
-#include <d3d9.h>
+#include "d3d9wrapper.h"
 
 HRESULT IDirect3DResource9FreePrivateData(IDirect3DResource9* obj, GUID* refguid) {
 	return obj->lpVtbl->FreePrivateData(obj, refguid);

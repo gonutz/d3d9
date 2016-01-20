@@ -1,7 +1,7 @@
 package d3d9
 
 /*
-#include <d3d9.h>
+#include "d3d9wrapper.h"
 
 HRESULT IDirect3DIndexBuffer9GetDesc(IDirect3DIndexBuffer9* obj, D3DINDEXBUFFER_DESC* pDesc) {
 	return obj->lpVtbl->GetDesc(obj, pDesc);

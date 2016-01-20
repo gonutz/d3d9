@@ -1,7 +1,7 @@
 package d3d9
 
 /*
-#include <d3d9.h>
+#include "d3d9wrapper.h"
 
 HRESULT IDirect3D9CheckDepthStencilMatch(IDirect3D9* obj, UINT Adapter, D3DDEVTYPE DeviceType, D3DFORMAT AdapterFormat, D3DFORMAT RenderTargetFormat, D3DFORMAT DepthStencilFormat) {
 	return obj->lpVtbl->CheckDepthStencilMatch(obj, Adapter, DeviceType, AdapterFormat, RenderTargetFormat, DepthStencilFormat);

@@ -1,7 +1,7 @@
 package d3d9
 
 /*
-#include <d3d9.h>
+#include "d3d9wrapper.h"
 
 HRESULT IDirect3DDevice9BeginScene(IDirect3DDevice9* obj) {
 	return obj->lpVtbl->BeginScene(obj);

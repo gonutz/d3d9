@@ -1,7 +1,7 @@
 package d3d9
 
 /*
-#include <d3d9.h>
+#include "d3d9wrapper.h"
 
 HRESULT IDirect3DSurface9GetContainer(IDirect3DSurface9* obj, REFIID riid, void** ppContainer) {
 	return obj->lpVtbl->GetContainer(obj, riid, ppContainer);

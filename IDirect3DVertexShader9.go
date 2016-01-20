@@ -1,7 +1,7 @@
 package d3d9
 
 /*
-#include <d3d9.h>
+#include "d3d9wrapper.h"
 
 HRESULT IDirect3DVertexShader9GetDevice(IDirect3DVertexShader9* obj, IDirect3DDevice9** ppDevice) {
 	return obj->lpVtbl->GetDevice(obj, ppDevice);

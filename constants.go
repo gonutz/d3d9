@@ -1,8 +1,5 @@
 package d3d9
 
-//#include <d3d9.h>
-import "C"
-
 const (
 	ADAPTER_DEFAULT                             = 0
 	CAPS_READ_SCANLINE                          = 131072

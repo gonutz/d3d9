@@ -1,7 +1,7 @@
 package d3d9
 
 /*
-#include <d3d9.h>
+#include "d3d9wrapper.h"
 
 HRESULT IDirect3DSwapChain9GetBackBuffer(IDirect3DSwapChain9* obj, UINT BackBuffer, D3DBACKBUFFER_TYPE Type, IDirect3DSurface9** ppBackBuffer) {
 	return obj->lpVtbl->GetBackBuffer(obj, BackBuffer, Type, ppBackBuffer);

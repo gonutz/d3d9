@@ -1,7 +1,7 @@
 package d3d9
 
 /*
-#include <d3d9.h>
+#include "d3d9wrapper.h"
 
 HRESULT IDirect3DVolumeTexture9AddDirtyBox(IDirect3DVolumeTexture9* obj, D3DBOX* pDirtyBox) {
 	return obj->lpVtbl->AddDirtyBox(obj, pDirtyBox);

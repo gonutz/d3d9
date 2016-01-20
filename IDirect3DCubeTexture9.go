@@ -1,7 +1,7 @@
 package d3d9
 
 /*
-#include <d3d9.h>
+#include "d3d9wrapper.h"
 
 HRESULT IDirect3DCubeTexture9AddDirtyRect(IDirect3DCubeTexture9* obj, D3DCUBEMAP_FACES FaceType, RECT* pDirtyRect) {
 	return obj->lpVtbl->AddDirtyRect(obj, FaceType, pDirtyRect);
