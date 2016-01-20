@@ -59,20 +59,6 @@ func (r hResultError) Error() string {
 		return "driver invalid call"
 	case C.D3DERR_WASSTILLDRAWING:
 		return "was still drawing"
-	case C.D3DERR_DEVICEREMOVED:
-		return "device removed"
-	case C.D3DERR_DEVICEHUNG:
-		return "device hung"
-	case C.D3DERR_UNSUPPORTEDOVERLAY:
-		return "unsupported overlay"
-	case C.D3DERR_UNSUPPORTEDOVERLAYFORMAT:
-		return "unsupported ovleray format"
-	case C.D3DERR_CANNOTPROTECTCONTENT:
-		return "cannot protect content"
-	case C.D3DERR_UNSUPPORTEDCRYPTO:
-		return "unsupported crypto"
-	case C.D3DERR_PRESENT_STATISTICS_DISJOINT:
-		return "present statistics disjoint"
 
 	default:
 		return "unknown error code " + strconv.Itoa(int(r))
