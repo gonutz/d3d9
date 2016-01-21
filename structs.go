@@ -1242,10 +1242,10 @@ type GUID struct {
 func (s *GUID) toC() C.GUID {
 	var c C.GUID
 	c.Data1 = (C.ulong)(s.Data1)
-	c.Data2 = (C.USHORT)(s.Data2)
-	c.Data3 = (C.USHORT)(s.Data3)
+	c.Data2 = (C.ushort)(s.Data2)
+	c.Data3 = (C.ushort)(s.Data3)
 	for i := range s.Data4 {
-		c.Data4[i] = (C.UCHAR)(s.Data4[i])
+		c.Data4[i] = (C.uchar)(s.Data4[i])
 	}
 	return c
 }
