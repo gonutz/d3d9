@@ -19,8 +19,6 @@ func main() {
 	form.OnClose().Bind(func(*gform.EventArg) {
 		w32.DestroyWindow(form.Handle())
 	})
-	// create a timer that ticks every 10ms
-	C.SetTimer(C.HWND(windowHandle), 1, 10, nil)
 
 	// set up Direct3D9
 	check(d3d9.Init())
@@ -40,9 +38,11 @@ func main() {
 	check(err)
 	defer device.Release()
 
-	// register a callback for the timer and then draw the current color
+	// create a timer that ticks every 10ms and register a callback for it
+	C.SetTimer(C.HWND(windowHandle), 1, 10, nil)
 	red, dRed := 255, -1
 	form.Bind(C.WM_TIMER, func(*gform.EventArg) {
+		// clear the screen to the current color
 		check(device.Clear(
 			nil,
 			d3d9.CLEAR_TARGET,
