@@ -1,23 +1,26 @@
 package main
 
+//#include <windows.h>
+import "C"
 import (
+	"github.com/AllenDang/gform"
+	"github.com/AllenDang/w32"
 	"github.com/gonutz/d3d9"
-	"github.com/veandco/go-sdl2/sdl"
+	"unsafe"
 )
 
 func main() {
-	// set up SDL2, init nothing as we will be initializing D3D ourselves
-	check(sdl.Init(0))
-	defer sdl.Quit()
+	// setup gform and create a window
+	gform.Init()
 
-	window, err := sdl.CreateWindow("D3D9 in Go", 100, 100, 640, 480, 0)
-	check(err)
-	defer window.Destroy()
-
-	// this gets the Windows window handle for the native window
-	info, err := window.GetWMInfo()
-	check(err)
-	windowHandle := info.GetWindowsInfo().Window
+	form := gform.NewForm(nil)
+	windowHandle := unsafe.Pointer(form.Handle())
+	form.Show()
+	form.OnClose().Bind(func(*gform.EventArg) {
+		w32.DestroyWindow(form.Handle())
+	})
+	// create a timer that ticks every 10ms
+	C.SetTimer(C.HWND(windowHandle), 1, 10, nil)
 
 	// set up Direct3D9
 	check(d3d9.Init())
@@ -37,19 +40,16 @@ func main() {
 	check(err)
 	defer device.Release()
 
-	// run the main event loop
+	// register a callback for the timer and then draw the current color
 	red, dRed := 255, -1
-	running := true
-	for running {
-		for e := sdl.PollEvent(); e != nil; e = sdl.PollEvent() {
-			switch e.(type) {
-			case *sdl.QuitEvent:
-				running = false
-			}
-		}
-
-		// simply clear the screen
-		check(device.Clear(nil, d3d9.CLEAR_TARGET, d3d9.ColorRGB(uint(red), 92, 128), 0, 0))
+	form.Bind(C.WM_TIMER, func(*gform.EventArg) {
+		check(device.Clear(
+			nil,
+			d3d9.CLEAR_TARGET,
+			d3d9.ColorRGB(uint(red), 92, 128),
+			0,
+			0,
+		))
 		if red == 0 {
 			dRed = +1
 		}
@@ -58,7 +58,9 @@ func main() {
 		}
 		red += dRed
 		check(device.Present(nil, nil, nil, nil))
-	}
+	})
+
+	gform.RunMainLoop()
 }
 
 func check(err error) {
