@@ -1,2 +1,1 @@
-//#define D3D_DISABLE_9EX
-#include <d3d9.h>
+#include "d3d9_mingw.h"

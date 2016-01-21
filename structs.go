@@ -52,17 +52,11 @@ void toGoMatrix(D3DMATRIX* m, float* values) {
 import "C"
 import "unsafe"
 
-func toWINBOOL(b bool) C.WINBOOL {
-	if b {
-		return C.WINBOOL(1)
-	}
-	return C.WINBOOL(0)
-}
 func toBOOL(b bool) C.BOOL {
 	if b {
-		return C.BOOL(1)
+		return 1
 	}
-	return C.BOOL(0)
+	return 0
 }
 
 type ADAPTER_IDENTIFIER struct {
@@ -710,8 +704,8 @@ type LOCKED_BOX struct {
 
 func (s *LOCKED_BOX) toC() C.D3DLOCKED_BOX {
 	var c C.D3DLOCKED_BOX
-	c.RowPitch = (C.int)(s.RowPitch)
-	c.SlicePitch = (C.int)(s.SlicePitch)
+	c.RowPitch = (C.INT)(s.RowPitch)
+	c.SlicePitch = (C.INT)(s.SlicePitch)
 	c.pBits = s.PBits
 	return c
 }
@@ -804,8 +798,14 @@ func (s *PRESENT_PARAMETERS) toC() C.D3DPRESENT_PARAMETERS {
 	c.MultiSampleQuality = (C.DWORD)(s.MultiSampleQuality)
 	c.SwapEffect = (C.D3DSWAPEFFECT)(s.SwapEffect)
 	c.hDeviceWindow = (C.HWND)(s.HDeviceWindow)
-	c.Windowed = toWINBOOL(s.Windowed)
-	c.EnableAutoDepthStencil = toWINBOOL(s.EnableAutoDepthStencil)
+	c.Windowed = 0
+	if s.Windowed {
+		c.Windowed = 1
+	}
+	c.EnableAutoDepthStencil = 0
+	if s.EnableAutoDepthStencil {
+		c.EnableAutoDepthStencil = 1
+	}
 	c.AutoDepthStencilFormat = (C.D3DFORMAT)(s.AutoDepthStencilFormat)
 	c.Flags = (C.DWORD)(s.Flags)
 	c.FullScreen_RefreshRateInHz = (C.UINT)(s.FullScreen_RefreshRateInHz)
@@ -880,7 +880,10 @@ type RASTER_STATUS struct {
 
 func (s *RASTER_STATUS) toC() C.D3DRASTER_STATUS {
 	var c C.D3DRASTER_STATUS
-	c.InVBlank = toWINBOOL(s.InVBlank)
+	c.InVBlank = 0
+	if s.InVBlank {
+		c.InVBlank = 1
+	}
 	c.ScanLine = (C.UINT)(s.ScanLine)
 	return c
 }
@@ -961,7 +964,10 @@ type RESOURCESTATS struct {
 
 func (s *RESOURCESTATS) toC() C.D3DRESOURCESTATS {
 	var c C.D3DRESOURCESTATS
-	c.bThrashing = toWINBOOL(s.BThrashing)
+	c.bThrashing = 0
+	if s.BThrashing {
+		c.bThrashing = 1
+	}
 	c.ApproxBytesDownloaded = (C.DWORD)(s.ApproxBytesDownloaded)
 	c.NumEvicts = (C.DWORD)(s.NumEvicts)
 	c.NumVidCreates = (C.DWORD)(s.NumVidCreates)

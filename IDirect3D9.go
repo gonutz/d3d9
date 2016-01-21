@@ -1,6 +1,8 @@
 package d3d9
 
 /*
+#cgo CFLAGS: -DD3D_DISABLE_9EX
+
 #include "d3d9wrapper.h"
 
 HRESULT IDirect3D9CheckDepthStencilMatch(IDirect3D9* obj, UINT Adapter, D3DDEVTYPE DeviceType, D3DFORMAT AdapterFormat, D3DFORMAT RenderTargetFormat, D3DFORMAT DepthStencilFormat) {
@@ -121,7 +123,14 @@ func (obj Direct3D) CheckDeviceFormatConversion(Adapter uint, DeviceType DEVTYPE
 
 func (obj Direct3D) CheckDeviceMultiSampleType(Adapter uint, DeviceType DEVTYPE, SurfaceFormat FORMAT, Windowed bool, MultiSampleType MULTISAMPLE_TYPE) (pQualityLevels uint32, err error) {
 	var c_pQualityLevels C.DWORD
-	err = toErr(C.IDirect3D9CheckDeviceMultiSampleType(obj.handle, (C.UINT)(Adapter), (C.D3DDEVTYPE)(DeviceType), (C.D3DFORMAT)(SurfaceFormat), toBOOL(Windowed), (C.D3DMULTISAMPLE_TYPE)(MultiSampleType), &c_pQualityLevels))
+	err = toErr(C.IDirect3D9CheckDeviceMultiSampleType(obj.handle,
+		(C.UINT)(Adapter),
+		(C.D3DDEVTYPE)(DeviceType),
+		(C.D3DFORMAT)(SurfaceFormat),
+		toBOOL(Windowed),
+		(C.D3DMULTISAMPLE_TYPE)(MultiSampleType),
+		&c_pQualityLevels),
+	)
 	pQualityLevels = (uint32)(c_pQualityLevels)
 	return
 }
