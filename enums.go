@@ -6,303 +6,305 @@ import "C"
 type BACKBUFFER_TYPE uint32
 
 const (
-	BACKBUFFER_TYPE_MONO  BACKBUFFER_TYPE = C.D3DBACKBUFFER_TYPE_MONO
-	BACKBUFFER_TYPE_LEFT                  = C.D3DBACKBUFFER_TYPE_LEFT
-	BACKBUFFER_TYPE_RIGHT                 = C.D3DBACKBUFFER_TYPE_RIGHT
+	BACKBUFFER_TYPE_MONO  BACKBUFFER_TYPE = 0
+	BACKBUFFER_TYPE_LEFT                  = 1
+	BACKBUFFER_TYPE_RIGHT                 = 2
 )
 
 type BASISTYPE uint32
 
 const (
-	BASIS_BEZIER  BASISTYPE = C.D3DBASIS_BEZIER
-	BASIS_BSPLINE           = C.D3DBASIS_BSPLINE
+	BASIS_BEZIER      BASISTYPE = 0
+	BASIS_BSPLINE               = 1
+	BASIS_CATMULL_ROM           = 2
 )
 
 type BLEND uint32
 
 const (
-	BLEND_ZERO            BLEND = C.D3DBLEND_ZERO
-	BLEND_ONE                   = C.D3DBLEND_ONE
-	BLEND_SRCCOLOR              = C.D3DBLEND_SRCCOLOR
-	BLEND_INVSRCCOLOR           = C.D3DBLEND_INVSRCCOLOR
-	BLEND_SRCALPHA              = C.D3DBLEND_SRCALPHA
-	BLEND_INVSRCALPHA           = C.D3DBLEND_INVSRCALPHA
-	BLEND_DESTALPHA             = C.D3DBLEND_DESTALPHA
-	BLEND_INVDESTALPHA          = C.D3DBLEND_INVDESTALPHA
-	BLEND_DESTCOLOR             = C.D3DBLEND_DESTCOLOR
-	BLEND_INVDESTCOLOR          = C.D3DBLEND_INVDESTCOLOR
-	BLEND_SRCALPHASAT           = C.D3DBLEND_SRCALPHASAT
-	BLEND_BOTHSRCALPHA          = C.D3DBLEND_BOTHSRCALPHA
-	BLEND_BOTHINVSRCALPHA       = C.D3DBLEND_BOTHINVSRCALPHA
-	BLEND_BLENDFACTOR           = C.D3DBLEND_BLENDFACTOR
-	BLEND_INVBLENDFACTOR        = C.D3DBLEND_INVBLENDFACTOR
+	BLEND_ZERO            BLEND = 1
+	BLEND_ONE                   = 2
+	BLEND_SRCCOLOR              = 3
+	BLEND_INVSRCCOLOR           = 4
+	BLEND_SRCALPHA              = 5
+	BLEND_INVSRCALPHA           = 6
+	BLEND_DESTALPHA             = 7
+	BLEND_INVDESTALPHA          = 8
+	BLEND_DESTCOLOR             = 9
+	BLEND_INVDESTCOLOR          = 10
+	BLEND_SRCALPHASAT           = 11
+	BLEND_BOTHSRCALPHA          = 12
+	BLEND_BOTHINVSRCALPHA       = 13
+	BLEND_BLENDFACTOR           = 14
+	BLEND_INVBLENDFACTOR        = 15
 )
 
 type BLENDOP uint32
 
 const (
-	BLENDOP_ADD         BLENDOP = C.D3DBLENDOP_ADD
-	BLENDOP_SUBTRACT            = C.D3DBLENDOP_SUBTRACT
-	BLENDOP_REVSUBTRACT         = C.D3DBLENDOP_REVSUBTRACT
-	BLENDOP_MIN                 = C.D3DBLENDOP_MIN
-	BLENDOP_MAX                 = C.D3DBLENDOP_MAX
+	BLENDOP_ADD         BLENDOP = 1
+	BLENDOP_SUBTRACT            = 2
+	BLENDOP_REVSUBTRACT         = 3
+	BLENDOP_MIN                 = 4
+	BLENDOP_MAX                 = 5
 )
 
 type CMPFUNC uint32
 
 const (
-	CMP_NEVER        CMPFUNC = C.D3DCMP_NEVER
-	CMP_LESS                 = C.D3DCMP_LESS
-	CMP_EQUAL                = C.D3DCMP_EQUAL
-	CMP_LESSEQUAL            = C.D3DCMP_LESSEQUAL
-	CMP_GREATER              = C.D3DCMP_GREATER
-	CMP_NOTEQUAL             = C.D3DCMP_NOTEQUAL
-	CMP_GREATEREQUAL         = C.D3DCMP_GREATEREQUAL
-	CMP_ALWAYS               = C.D3DCMP_ALWAYS
+	CMP_NEVER        CMPFUNC = 1
+	CMP_LESS                 = 2
+	CMP_EQUAL                = 3
+	CMP_LESSEQUAL            = 4
+	CMP_GREATER              = 5
+	CMP_NOTEQUAL             = 6
+	CMP_GREATEREQUAL         = 7
+	CMP_ALWAYS               = 8
 )
 
 type CUBEMAP_FACES uint32
 
 const (
-	CUBEMAP_FACE_POSITIVE_X CUBEMAP_FACES = C.D3DCUBEMAP_FACE_POSITIVE_X
-	CUBEMAP_FACE_NEGATIVE_X               = C.D3DCUBEMAP_FACE_NEGATIVE_X
-	CUBEMAP_FACE_POSITIVE_Y               = C.D3DCUBEMAP_FACE_POSITIVE_Y
-	CUBEMAP_FACE_NEGATIVE_Y               = C.D3DCUBEMAP_FACE_NEGATIVE_Y
-	CUBEMAP_FACE_POSITIVE_Z               = C.D3DCUBEMAP_FACE_POSITIVE_Z
-	CUBEMAP_FACE_NEGATIVE_Z               = C.D3DCUBEMAP_FACE_NEGATIVE_Z
+	CUBEMAP_FACE_POSITIVE_X CUBEMAP_FACES = 0
+	CUBEMAP_FACE_NEGATIVE_X               = 1
+	CUBEMAP_FACE_POSITIVE_Y               = 2
+	CUBEMAP_FACE_NEGATIVE_Y               = 3
+	CUBEMAP_FACE_POSITIVE_Z               = 4
+	CUBEMAP_FACE_NEGATIVE_Z               = 5
 )
 
 type CULL uint32
 
 const (
-	CULL_NONE CULL = C.D3DCULL_NONE
-	CULL_CW        = C.D3DCULL_CW
-	CULL_CCW       = C.D3DCULL_CCW
+	CULL_NONE CULL = 1
+	CULL_CW        = 2
+	CULL_CCW       = 3
 )
 
 type DEBUGMONITORTOKENS uint32
 
 const (
-	DMT_ENABLE  DEBUGMONITORTOKENS = C.D3DDMT_ENABLE
-	DMT_DISABLE                    = C.D3DDMT_DISABLE
+	DMT_ENABLE  DEBUGMONITORTOKENS = 0
+	DMT_DISABLE                    = 1
 )
 
 type DECLMETHOD byte
 
 const (
-	DECLMETHOD_DEFAULT          DECLMETHOD = C.D3DDECLMETHOD_DEFAULT
-	DECLMETHOD_PARTIALU                    = C.D3DDECLMETHOD_PARTIALU
-	DECLMETHOD_PARTIALV                    = C.D3DDECLMETHOD_PARTIALV
-	DECLMETHOD_CROSSUV                     = C.D3DDECLMETHOD_CROSSUV
-	DECLMETHOD_UV                          = C.D3DDECLMETHOD_UV
-	DECLMETHOD_LOOKUP                      = C.D3DDECLMETHOD_LOOKUP
-	DECLMETHOD_LOOKUPPRESAMPLED            = C.D3DDECLMETHOD_LOOKUPPRESAMPLED
+	DECLMETHOD_DEFAULT          DECLMETHOD = 0
+	DECLMETHOD_PARTIALU                    = 1
+	DECLMETHOD_PARTIALV                    = 2
+	DECLMETHOD_CROSSUV                     = 3
+	DECLMETHOD_UV                          = 4
+	DECLMETHOD_LOOKUP                      = 5
+	DECLMETHOD_LOOKUPPRESAMPLED            = 6
 )
 
 type DECLTYPE byte
 
 const (
-	DECLTYPE_FLOAT1    DECLTYPE = C.D3DDECLTYPE_FLOAT1
-	DECLTYPE_FLOAT2             = C.D3DDECLTYPE_FLOAT2
-	DECLTYPE_FLOAT3             = C.D3DDECLTYPE_FLOAT3
-	DECLTYPE_FLOAT4             = C.D3DDECLTYPE_FLOAT4
-	DECLTYPE_D3DCOLOR           = C.D3DDECLTYPE_D3DCOLOR
-	DECLTYPE_UBYTE4             = C.D3DDECLTYPE_UBYTE4
-	DECLTYPE_SHORT2             = C.D3DDECLTYPE_SHORT2
-	DECLTYPE_SHORT4             = C.D3DDECLTYPE_SHORT4
-	DECLTYPE_UBYTE4N            = C.D3DDECLTYPE_UBYTE4N
-	DECLTYPE_SHORT2N            = C.D3DDECLTYPE_SHORT2N
-	DECLTYPE_SHORT4N            = C.D3DDECLTYPE_SHORT4N
-	DECLTYPE_USHORT2N           = C.D3DDECLTYPE_USHORT2N
-	DECLTYPE_USHORT4N           = C.D3DDECLTYPE_USHORT4N
-	DECLTYPE_UDEC3              = C.D3DDECLTYPE_UDEC3
-	DECLTYPE_DEC3N              = C.D3DDECLTYPE_DEC3N
-	DECLTYPE_FLOAT16_2          = C.D3DDECLTYPE_FLOAT16_2
-	DECLTYPE_FLOAT16_4          = C.D3DDECLTYPE_FLOAT16_4
-	DECLTYPE_UNUSED             = C.D3DDECLTYPE_UNUSED
+	DECLTYPE_FLOAT1    DECLTYPE = 0
+	DECLTYPE_FLOAT2             = 1
+	DECLTYPE_FLOAT3             = 2
+	DECLTYPE_FLOAT4             = 3
+	DECLTYPE_D3DCOLOR           = 4
+	DECLTYPE_UBYTE4             = 5
+	DECLTYPE_SHORT2             = 6
+	DECLTYPE_SHORT4             = 7
+	DECLTYPE_UBYTE4N            = 8
+	DECLTYPE_SHORT2N            = 9
+	DECLTYPE_SHORT4N            = 10
+	DECLTYPE_USHORT2N           = 11
+	DECLTYPE_USHORT4N           = 12
+	DECLTYPE_UDEC3              = 13
+	DECLTYPE_DEC3N              = 14
+	DECLTYPE_FLOAT16_2          = 15
+	DECLTYPE_FLOAT16_4          = 16
+	DECLTYPE_UNUSED             = 17
 )
 
 type DECLUSAGE byte
 
 const (
-	DECLUSAGE_POSITION     DECLUSAGE = C.D3DDECLUSAGE_POSITION
-	DECLUSAGE_BLENDWEIGHT            = C.D3DDECLUSAGE_BLENDWEIGHT
-	DECLUSAGE_BLENDINDICES           = C.D3DDECLUSAGE_BLENDINDICES
-	DECLUSAGE_NORMAL                 = C.D3DDECLUSAGE_NORMAL
-	DECLUSAGE_PSIZE                  = C.D3DDECLUSAGE_PSIZE
-	DECLUSAGE_TEXCOORD               = C.D3DDECLUSAGE_TEXCOORD
-	DECLUSAGE_TANGENT                = C.D3DDECLUSAGE_TANGENT
-	DECLUSAGE_BINORMAL               = C.D3DDECLUSAGE_BINORMAL
-	DECLUSAGE_TESSFACTOR             = C.D3DDECLUSAGE_TESSFACTOR
-	DECLUSAGE_POSITIONT              = C.D3DDECLUSAGE_POSITIONT
-	DECLUSAGE_COLOR                  = C.D3DDECLUSAGE_COLOR
-	DECLUSAGE_FOG                    = C.D3DDECLUSAGE_FOG
-	DECLUSAGE_DEPTH                  = C.D3DDECLUSAGE_DEPTH
-	DECLUSAGE_SAMPLE                 = C.D3DDECLUSAGE_SAMPLE
+	DECLUSAGE_POSITION     DECLUSAGE = 0
+	DECLUSAGE_BLENDWEIGHT            = 1
+	DECLUSAGE_BLENDINDICES           = 2
+	DECLUSAGE_NORMAL                 = 3
+	DECLUSAGE_PSIZE                  = 4
+	DECLUSAGE_TEXCOORD               = 5
+	DECLUSAGE_TANGENT                = 6
+	DECLUSAGE_BINORMAL               = 7
+	DECLUSAGE_TESSFACTOR             = 8
+	DECLUSAGE_POSITIONT              = 9
+	DECLUSAGE_COLOR                  = 10
+	DECLUSAGE_FOG                    = 11
+	DECLUSAGE_DEPTH                  = 12
+	DECLUSAGE_SAMPLE                 = 13
 )
 
 type DEGREETYPE uint32
 
 const (
-	DEGREE_LINEAR    DEGREETYPE = C.D3DDEGREE_LINEAR
-	DEGREE_QUADRATIC            = C.D3DDEGREE_QUADRATIC
-	DEGREE_CUBIC                = C.D3DDEGREE_CUBIC
-	DEGREE_QUINTIC              = C.D3DDEGREE_QUINTIC
+	DEGREE_LINEAR    DEGREETYPE = 1
+	DEGREE_QUADRATIC            = 2
+	DEGREE_CUBIC                = 3
+	DEGREE_QUINTIC              = 5
 )
 
 type DEVTYPE uint32
 
 const (
 	DEVTYPE_HAL     DEVTYPE = 1
-	DEVTYPE_NULLREF         = 4
 	DEVTYPE_REF             = 2
 	DEVTYPE_SW              = 3
+	DEVTYPE_NULLREF         = 4
 )
 
 type FILLMODE uint32
 
 const (
-	FILL_POINT     FILLMODE = C.D3DFILL_POINT
-	FILL_WIREFRAME          = C.D3DFILL_WIREFRAME
-	FILL_SOLID              = C.D3DFILL_SOLID
+	FILL_POINT     FILLMODE = 1
+	FILL_WIREFRAME          = 2
+	FILL_SOLID              = 3
 )
 
 type FOGMODE uint32
 
 const (
-	FOG_NONE   FOGMODE = C.D3DFOG_NONE
-	FOG_EXP            = C.D3DFOG_EXP
-	FOG_EXP2           = C.D3DFOG_EXP2
-	FOG_LINEAR         = C.D3DFOG_LINEAR
+	FOG_NONE   FOGMODE = 0
+	FOG_EXP            = 1
+	FOG_EXP2           = 2
+	FOG_LINEAR         = 3
 )
 
 type FORMAT uint32
 
 const (
-	FMT_UNKNOWN       FORMAT = C.D3DFMT_UNKNOWN
-	FMT_R8G8B8               = C.D3DFMT_R8G8B8
-	FMT_A8R8G8B8             = C.D3DFMT_A8R8G8B8
-	FMT_X8R8G8B8             = C.D3DFMT_X8R8G8B8
-	FMT_R5G6B5               = C.D3DFMT_R5G6B5
-	FMT_X1R5G5B5             = C.D3DFMT_X1R5G5B5
-	FMT_A4R4G4B4             = C.D3DFMT_A4R4G4B4
-	FMT_R3G3B2               = C.D3DFMT_R3G3B2
-	FMT_A8                   = C.D3DFMT_A8
-	FMT_A8R3G3B2             = C.D3DFMT_A8R3G3B2
-	FMT_X4R4G4B4             = C.D3DFMT_X4R4G4B4
-	FMT_A2B10G10R10          = C.D3DFMT_A2B10G10R10
-	FMT_A8B8G8R8             = C.D3DFMT_A8B8G8R8
-	FMT_X8B8G8R8             = C.D3DFMT_X8B8G8R8
-	FMT_G16R16               = C.D3DFMT_G16R16
-	FMT_A2R10G10B10          = C.D3DFMT_A2R10G10B10
-	FMT_A16B16G16R16         = C.D3DFMT_A16B16G16R16
-	FMT_A8P8                 = C.D3DFMT_A8P8
-	FMT_P8                   = C.D3DFMT_P8
-	FMT_L8                   = C.D3DFMT_L8
-	FMT_A8L8                 = C.D3DFMT_A8L8
-	FMT_A4L4                 = C.D3DFMT_A4L4
-	FMT_V8U8                 = C.D3DFMT_V8U8
-	FMT_L6V5U5               = C.D3DFMT_L6V5U5
-	FMT_X8L8V8U8             = C.D3DFMT_X8L8V8U8
-	FMT_Q8W8V8U8             = C.D3DFMT_Q8W8V8U8
-	FMT_V16U16               = C.D3DFMT_V16U16
-	FMT_A2W10V10U10          = C.D3DFMT_A2W10V10U10
-	FMT_UYVY                 = C.D3DFMT_UYVY
-	FMT_R8G8_B8G8            = C.D3DFMT_R8G8_B8G8
-	FMT_YUY2                 = C.D3DFMT_YUY2
-	FMT_G8R8_G8B8            = C.D3DFMT_G8R8_G8B8
-	FMT_DXT1                 = C.D3DFMT_DXT1
-	FMT_DXT2                 = C.D3DFMT_DXT2
-	FMT_DXT3                 = C.D3DFMT_DXT3
-	FMT_DXT4                 = C.D3DFMT_DXT4
-	FMT_DXT5                 = C.D3DFMT_DXT5
-	FMT_D16_LOCKABLE         = C.D3DFMT_D16_LOCKABLE
-	FMT_D32                  = C.D3DFMT_D32
-	FMT_D15S1                = C.D3DFMT_D15S1
-	FMT_D24S8                = C.D3DFMT_D24S8
-	FMT_D24X8                = C.D3DFMT_D24X8
-	FMT_D24X4S4              = C.D3DFMT_D24X4S4
-	FMT_D16                  = C.D3DFMT_D16
-	FMT_D32F_LOCKABLE        = C.D3DFMT_D32F_LOCKABLE
-	FMT_D24FS8               = C.D3DFMT_D24FS8
-	FMT_L16                  = C.D3DFMT_L16
-	FMT_VERTEXDATA           = C.D3DFMT_VERTEXDATA
-	FMT_INDEX16              = C.D3DFMT_INDEX16
-	FMT_INDEX32              = C.D3DFMT_INDEX32
-	FMT_Q16W16V16U16         = C.D3DFMT_Q16W16V16U16
-	FMT_MULTI2_ARGB8         = C.D3DFMT_MULTI2_ARGB8
-	FMT_R16F                 = C.D3DFMT_R16F
-	FMT_G16R16F              = C.D3DFMT_G16R16F
-	FMT_A16B16G16R16F        = C.D3DFMT_A16B16G16R16F
-	FMT_R32F                 = C.D3DFMT_R32F
-	FMT_G32R32F              = C.D3DFMT_G32R32F
-	FMT_A32B32G32R32F        = C.D3DFMT_A32B32G32R32F
-	FMT_CxV8U8               = C.D3DFMT_CxV8U8
+	FMT_UNKNOWN       FORMAT = 0
+	FMT_R8G8B8               = 20
+	FMT_A8R8G8B8             = 21
+	FMT_X8R8G8B8             = 22
+	FMT_R5G6B5               = 23
+	FMT_X1R5G5B5             = 24
+	FMT_A1R5G5B5             = 25
+	FMT_A4R4G4B4             = 26
+	FMT_R3G3B2               = 27
+	FMT_A8                   = 28
+	FMT_A8R3G3B2             = 29
+	FMT_X4R4G4B4             = 30
+	FMT_A2B10G10R10          = 31
+	FMT_A8B8G8R8             = 32
+	FMT_X8B8G8R8             = 33
+	FMT_G16R16               = 34
+	FMT_A2R10G10B10          = 35
+	FMT_A16B16G16R16         = 36
+	FMT_A8P8                 = 40
+	FMT_P8                   = 41
+	FMT_L8                   = 50
+	FMT_A8L8                 = 51
+	FMT_A4L4                 = 52
+	FMT_V8U8                 = 60
+	FMT_L6V5U5               = 61
+	FMT_X8L8V8U8             = 62
+	FMT_Q8W8V8U8             = 63
+	FMT_V16U16               = 64
+	FMT_A2W10V10U10          = 67
+	FMT_UYVY                 = 1498831189
+	FMT_R8G8_B8G8            = 1195525970
+	FMT_YUY2                 = 844715353
+	FMT_G8R8_G8B8            = 1111970375
+	FMT_DXT1                 = 827611204
+	FMT_DXT2                 = 844388420
+	FMT_DXT3                 = 861165636
+	FMT_DXT4                 = 877942852
+	FMT_DXT5                 = 894720068
+	FMT_D16_LOCKABLE         = 70
+	FMT_D32                  = 71
+	FMT_D15S1                = 73
+	FMT_D24S8                = 75
+	FMT_D24X8                = 77
+	FMT_D24X4S4              = 79
+	FMT_D16                  = 80
+	FMT_L16                  = 81
+	FMT_D32F_LOCKABLE        = 82
+	FMT_D24FS8               = 83
+	FMT_VERTEXDATA           = 100
+	FMT_INDEX16              = 101
+	FMT_INDEX32              = 102
+	FMT_Q16W16V16U16         = 110
+	FMT_MULTI2_ARGB8         = 827606349
+	FMT_R16F                 = 111
+	FMT_G16R16F              = 112
+	FMT_A16B16G16R16F        = 113
+	FMT_R32F                 = 114
+	FMT_G32R32F              = 115
+	FMT_A32B32G32R32F        = 116
+	FMT_CxV8U8               = 117
 )
 
 type LIGHTTYPE uint32
 
 const (
-	LIGHT_POINT       LIGHTTYPE = C.D3DLIGHT_POINT
-	LIGHT_SPOT                  = C.D3DLIGHT_SPOT
-	LIGHT_DIRECTIONAL           = C.D3DLIGHT_DIRECTIONAL
+	LIGHT_POINT       LIGHTTYPE = 1
+	LIGHT_SPOT                  = 2
+	LIGHT_DIRECTIONAL           = 3
 )
 
 type MATERIALCOLORSOURCE uint32
 
 const (
-	MCS_MATERIAL MATERIALCOLORSOURCE = C.D3DMCS_MATERIAL
-	MCS_COLOR1                       = C.D3DMCS_COLOR1
-	MCS_COLOR2                       = C.D3DMCS_COLOR2
+	MCS_MATERIAL MATERIALCOLORSOURCE = 0
+	MCS_COLOR1                       = 1
+	MCS_COLOR2                       = 2
 )
 
 type MULTISAMPLE_TYPE uint32
 
 const (
-	MULTISAMPLE_NONE        MULTISAMPLE_TYPE = C.D3DMULTISAMPLE_NONE
-	MULTISAMPLE_NONMASKABLE                  = C.D3DMULTISAMPLE_NONMASKABLE
-	MULTISAMPLE_2_SAMPLES                    = C.D3DMULTISAMPLE_2_SAMPLES
-	MULTISAMPLE_3_SAMPLES                    = C.D3DMULTISAMPLE_3_SAMPLES
-	MULTISAMPLE_4_SAMPLES                    = C.D3DMULTISAMPLE_4_SAMPLES
-	MULTISAMPLE_5_SAMPLES                    = C.D3DMULTISAMPLE_5_SAMPLES
-	MULTISAMPLE_6_SAMPLES                    = C.D3DMULTISAMPLE_6_SAMPLES
-	MULTISAMPLE_7_SAMPLES                    = C.D3DMULTISAMPLE_7_SAMPLES
-	MULTISAMPLE_8_SAMPLES                    = C.D3DMULTISAMPLE_8_SAMPLES
-	MULTISAMPLE_9_SAMPLES                    = C.D3DMULTISAMPLE_9_SAMPLES
-	MULTISAMPLE_10_SAMPLES                   = C.D3DMULTISAMPLE_10_SAMPLES
-	MULTISAMPLE_11_SAMPLES                   = C.D3DMULTISAMPLE_11_SAMPLES
-	MULTISAMPLE_12_SAMPLES                   = C.D3DMULTISAMPLE_12_SAMPLES
-	MULTISAMPLE_13_SAMPLES                   = C.D3DMULTISAMPLE_13_SAMPLES
-	MULTISAMPLE_14_SAMPLES                   = C.D3DMULTISAMPLE_14_SAMPLES
-	MULTISAMPLE_15_SAMPLES                   = C.D3DMULTISAMPLE_15_SAMPLES
-	MULTISAMPLE_16_SAMPLES                   = C.D3DMULTISAMPLE_16_SAMPLES
+	MULTISAMPLE_NONE        MULTISAMPLE_TYPE = 0
+	MULTISAMPLE_NONMASKABLE                  = 1
+	MULTISAMPLE_2_SAMPLES                    = 2
+	MULTISAMPLE_3_SAMPLES                    = 3
+	MULTISAMPLE_4_SAMPLES                    = 4
+	MULTISAMPLE_5_SAMPLES                    = 5
+	MULTISAMPLE_6_SAMPLES                    = 6
+	MULTISAMPLE_7_SAMPLES                    = 7
+	MULTISAMPLE_8_SAMPLES                    = 8
+	MULTISAMPLE_9_SAMPLES                    = 9
+	MULTISAMPLE_10_SAMPLES                   = 10
+	MULTISAMPLE_11_SAMPLES                   = 11
+	MULTISAMPLE_12_SAMPLES                   = 12
+	MULTISAMPLE_13_SAMPLES                   = 13
+	MULTISAMPLE_14_SAMPLES                   = 14
+	MULTISAMPLE_15_SAMPLES                   = 15
+	MULTISAMPLE_16_SAMPLES                   = 16
 )
 
 type PATCHEDGESTYLE uint32
 
 const (
-	PATCHEDGE_DISCRETE   PATCHEDGESTYLE = C.D3DPATCHEDGE_DISCRETE
-	PATCHEDGE_CONTINUOUS                = C.D3DPATCHEDGE_CONTINUOUS
+	PATCHEDGE_DISCRETE   PATCHEDGESTYLE = 0
+	PATCHEDGE_CONTINUOUS                = 1
 )
 
 type POOL uint32
 
 const (
-	POOL_DEFAULT   POOL = C.D3DPOOL_DEFAULT
-	POOL_MANAGED        = C.D3DPOOL_MANAGED
-	POOL_SYSTEMMEM      = C.D3DPOOL_SYSTEMMEM
-	POOL_SCRATCH        = C.D3DPOOL_SCRATCH
+	POOL_DEFAULT   POOL = 0
+	POOL_MANAGED        = 1
+	POOL_SYSTEMMEM      = 2
+	POOL_SCRATCH        = 3
 )
 
 type PRIMITIVETYPE uint32
 
 const (
-	PT_POINTLIST     PRIMITIVETYPE = C.D3DPT_POINTLIST
-	PT_LINELIST                    = C.D3DPT_LINELIST
-	PT_LINESTRIP                   = C.D3DPT_LINESTRIP
-	PT_TRIANGLELIST                = C.D3DPT_TRIANGLELIST
-	PT_TRIANGLESTRIP               = C.D3DPT_TRIANGLESTRIP
-	PT_TRIANGLEFAN                 = C.D3DPT_TRIANGLEFAN
+	PT_POINTLIST     PRIMITIVETYPE = 0
+	PT_LINELIST                    = 1
+	PT_LINESTRIP                   = 2
+	PT_TRIANGLELIST                = 3
+	PT_TRIANGLESTRIP               = 4
+	PT_TRIANGLEFAN                 = 5
 )
 
 type QUERYTYPE byte
@@ -327,302 +329,303 @@ const (
 type RENDERSTATETYPE uint32
 
 const (
-	RS_ZENABLE                    RENDERSTATETYPE = C.D3DRS_ZENABLE
-	RS_FILLMODE                                   = C.D3DRS_FILLMODE
-	RS_SHADEMODE                                  = C.D3DRS_SHADEMODE
-	RS_ZWRITEENABLE                               = C.D3DRS_ZWRITEENABLE
-	RS_ALPHATESTENABLE                            = C.D3DRS_ALPHATESTENABLE
-	RS_LASTPIXEL                                  = C.D3DRS_LASTPIXEL
-	RS_SRCBLEND                                   = C.D3DRS_SRCBLEND
-	RS_DESTBLEND                                  = C.D3DRS_DESTBLEND
-	RS_CULLMODE                                   = C.D3DRS_CULLMODE
-	RS_ZFUNC                                      = C.D3DRS_ZFUNC
-	RS_ALPHAREF                                   = C.D3DRS_ALPHAREF
-	RS_ALPHAFUNC                                  = C.D3DRS_ALPHAFUNC
-	RS_DITHERENABLE                               = C.D3DRS_DITHERENABLE
-	RS_ALPHABLENDENABLE                           = C.D3DRS_ALPHABLENDENABLE
-	RS_FOGENABLE                                  = C.D3DRS_FOGENABLE
-	RS_SPECULARENABLE                             = C.D3DRS_SPECULARENABLE
-	RS_FOGCOLOR                                   = C.D3DRS_FOGCOLOR
-	RS_FOGTABLEMODE                               = C.D3DRS_FOGTABLEMODE
-	RS_FOGSTART                                   = C.D3DRS_FOGSTART
-	RS_FOGEND                                     = C.D3DRS_FOGEND
-	RS_FOGDENSITY                                 = C.D3DRS_FOGDENSITY
-	RS_RANGEFOGENABLE                             = C.D3DRS_RANGEFOGENABLE
-	RS_STENCILENABLE                              = C.D3DRS_STENCILENABLE
-	RS_STENCILFAIL                                = C.D3DRS_STENCILFAIL
-	RS_STENCILZFAIL                               = C.D3DRS_STENCILZFAIL
-	RS_STENCILPASS                                = C.D3DRS_STENCILPASS
-	RS_STENCILFUNC                                = C.D3DRS_STENCILFUNC
-	RS_STENCILREF                                 = C.D3DRS_STENCILREF
-	RS_STENCILMASK                                = C.D3DRS_STENCILMASK
-	RS_STENCILWRITEMASK                           = C.D3DRS_STENCILWRITEMASK
-	RS_TEXTUREFACTOR                              = C.D3DRS_TEXTUREFACTOR
-	RS_WRAP0                                      = C.D3DRS_WRAP0
-	RS_WRAP1                                      = C.D3DRS_WRAP1
-	RS_WRAP2                                      = C.D3DRS_WRAP2
-	RS_WRAP3                                      = C.D3DRS_WRAP3
-	RS_WRAP4                                      = C.D3DRS_WRAP4
-	RS_WRAP5                                      = C.D3DRS_WRAP5
-	RS_WRAP6                                      = C.D3DRS_WRAP6
-	RS_WRAP7                                      = C.D3DRS_WRAP7
-	RS_CLIPPING                                   = C.D3DRS_CLIPPING
-	RS_LIGHTING                                   = C.D3DRS_LIGHTING
-	RS_AMBIENT                                    = C.D3DRS_AMBIENT
-	RS_FOGVERTEXMODE                              = C.D3DRS_FOGVERTEXMODE
-	RS_COLORVERTEX                                = C.D3DRS_COLORVERTEX
-	RS_LOCALVIEWER                                = C.D3DRS_LOCALVIEWER
-	RS_NORMALIZENORMALS                           = C.D3DRS_NORMALIZENORMALS
-	RS_DIFFUSEMATERIALSOURCE                      = C.D3DRS_DIFFUSEMATERIALSOURCE
-	RS_SPECULARMATERIALSOURCE                     = C.D3DRS_SPECULARMATERIALSOURCE
-	RS_AMBIENTMATERIALSOURCE                      = C.D3DRS_AMBIENTMATERIALSOURCE
-	RS_EMISSIVEMATERIALSOURCE                     = C.D3DRS_EMISSIVEMATERIALSOURCE
-	RS_VERTEXBLEND                                = C.D3DRS_VERTEXBLEND
-	RS_CLIPPLANEENABLE                            = C.D3DRS_CLIPPLANEENABLE
-	RS_POINTSIZE                                  = C.D3DRS_POINTSIZE
-	RS_POINTSIZE_MIN                              = C.D3DRS_POINTSIZE_MIN
-	RS_POINTSPRITEENABLE                          = C.D3DRS_POINTSPRITEENABLE
-	RS_POINTSCALEENABLE                           = C.D3DRS_POINTSCALEENABLE
-	RS_POINTSCALE_A                               = C.D3DRS_POINTSCALE_A
-	RS_POINTSCALE_B                               = C.D3DRS_POINTSCALE_B
-	RS_POINTSCALE_C                               = C.D3DRS_POINTSCALE_C
-	RS_MULTISAMPLEANTIALIAS                       = C.D3DRS_MULTISAMPLEANTIALIAS
-	RS_MULTISAMPLEMASK                            = C.D3DRS_MULTISAMPLEMASK
-	RS_PATCHEDGESTYLE                             = C.D3DRS_PATCHEDGESTYLE
-	RS_DEBUGMONITORTOKEN                          = C.D3DRS_DEBUGMONITORTOKEN
-	RS_POINTSIZE_MAX                              = C.D3DRS_POINTSIZE_MAX
-	RS_INDEXEDVERTEXBLENDENABLE                   = C.D3DRS_INDEXEDVERTEXBLENDENABLE
-	RS_COLORWRITEENABLE                           = C.D3DRS_COLORWRITEENABLE
-	RS_TWEENFACTOR                                = C.D3DRS_TWEENFACTOR
-	RS_BLENDOP                                    = C.D3DRS_BLENDOP
-	RS_POSITIONDEGREE                             = C.D3DRS_POSITIONDEGREE
-	RS_NORMALDEGREE                               = C.D3DRS_NORMALDEGREE
-	RS_SCISSORTESTENABLE                          = C.D3DRS_SCISSORTESTENABLE
-	RS_SLOPESCALEDEPTHBIAS                        = C.D3DRS_SLOPESCALEDEPTHBIAS
-	RS_ANTIALIASEDLINEENABLE                      = C.D3DRS_ANTIALIASEDLINEENABLE
-	RS_MINTESSELLATIONLEVEL                       = C.D3DRS_MINTESSELLATIONLEVEL
-	RS_MAXTESSELLATIONLEVEL                       = C.D3DRS_MAXTESSELLATIONLEVEL
-	RS_ADAPTIVETESS_X                             = C.D3DRS_ADAPTIVETESS_X
-	RS_ADAPTIVETESS_Y                             = C.D3DRS_ADAPTIVETESS_Y
-	RS_ADAPTIVETESS_Z                             = C.D3DRS_ADAPTIVETESS_Z
-	RS_ADAPTIVETESS_W                             = C.D3DRS_ADAPTIVETESS_W
-	RS_ENABLEADAPTIVETESSELLATION                 = C.D3DRS_ENABLEADAPTIVETESSELLATION
-	RS_TWOSIDEDSTENCILMODE                        = C.D3DRS_TWOSIDEDSTENCILMODE
-	RS_CCW_STENCILFAIL                            = C.D3DRS_CCW_STENCILFAIL
-	RS_CCW_STENCILZFAIL                           = C.D3DRS_CCW_STENCILZFAIL
-	RS_CCW_STENCILPASS                            = C.D3DRS_CCW_STENCILPASS
-	RS_CCW_STENCILFUNC                            = C.D3DRS_CCW_STENCILFUNC
-	RS_COLORWRITEENABLE1                          = C.D3DRS_COLORWRITEENABLE1
-	RS_COLORWRITEENABLE2                          = C.D3DRS_COLORWRITEENABLE2
-	RS_COLORWRITEENABLE3                          = C.D3DRS_COLORWRITEENABLE3
-	RS_BLENDFACTOR                                = C.D3DRS_BLENDFACTOR
-	RS_SRGBWRITEENABLE                            = C.D3DRS_SRGBWRITEENABLE
-	RS_DEPTHBIAS                                  = C.D3DRS_DEPTHBIAS
-	RS_WRAP8                                      = C.D3DRS_WRAP8
-	RS_WRAP9                                      = C.D3DRS_WRAP9
-	RS_WRAP10                                     = C.D3DRS_WRAP10
-	RS_WRAP11                                     = C.D3DRS_WRAP11
-	RS_WRAP12                                     = C.D3DRS_WRAP12
-	RS_WRAP13                                     = C.D3DRS_WRAP13
-	RS_WRAP14                                     = C.D3DRS_WRAP14
-	RS_WRAP15                                     = C.D3DRS_WRAP15
-	RS_SEPARATEALPHABLENDENABLE                   = C.D3DRS_SEPARATEALPHABLENDENABLE
-	RS_SRCBLENDALPHA                              = C.D3DRS_SRCBLENDALPHA
-	RS_DESTBLENDALPHA                             = C.D3DRS_DESTBLENDALPHA
-	RS_BLENDOPALPHA                               = C.D3DRS_BLENDOPALPHA
+	RS_ZENABLE                    RENDERSTATETYPE = 7
+	RS_FILLMODE                                   = 8
+	RS_SHADEMODE                                  = 9
+	RS_ZWRITEENABLE                               = 14
+	RS_ALPHATESTENABLE                            = 15
+	RS_LASTPIXEL                                  = 16
+	RS_SRCBLEND                                   = 19
+	RS_DESTBLEND                                  = 20
+	RS_CULLMODE                                   = 22
+	RS_ZFUNC                                      = 23
+	RS_ALPHAREF                                   = 24
+	RS_ALPHAFUNC                                  = 25
+	RS_DITHERENABLE                               = 26
+	RS_ALPHABLENDENABLE                           = 27
+	RS_FOGENABLE                                  = 28
+	RS_SPECULARENABLE                             = 29
+	RS_FOGCOLOR                                   = 34
+	RS_FOGTABLEMODE                               = 35
+	RS_FOGSTART                                   = 36
+	RS_FOGEND                                     = 37
+	RS_FOGDENSITY                                 = 38
+	RS_RANGEFOGENABLE                             = 48
+	RS_STENCILENABLE                              = 52
+	RS_STENCILFAIL                                = 53
+	RS_STENCILZFAIL                               = 54
+	RS_STENCILPASS                                = 55
+	RS_STENCILFUNC                                = 56
+	RS_STENCILREF                                 = 57
+	RS_STENCILMASK                                = 58
+	RS_STENCILWRITEMASK                           = 59
+	RS_TEXTUREFACTOR                              = 60
+	RS_WRAP0                                      = 128
+	RS_WRAP1                                      = 129
+	RS_WRAP2                                      = 130
+	RS_WRAP3                                      = 131
+	RS_WRAP4                                      = 132
+	RS_WRAP5                                      = 133
+	RS_WRAP6                                      = 134
+	RS_WRAP7                                      = 135
+	RS_CLIPPING                                   = 136
+	RS_LIGHTING                                   = 137
+	RS_AMBIENT                                    = 139
+	RS_FOGVERTEXMODE                              = 140
+	RS_COLORVERTEX                                = 141
+	RS_LOCALVIEWER                                = 142
+	RS_NORMALIZENORMALS                           = 143
+	RS_DIFFUSEMATERIALSOURCE                      = 145
+	RS_SPECULARMATERIALSOURCE                     = 146
+	RS_AMBIENTMATERIALSOURCE                      = 147
+	RS_EMISSIVEMATERIALSOURCE                     = 148
+	RS_VERTEXBLEND                                = 151
+	RS_CLIPPLANEENABLE                            = 152
+	RS_POINTSIZE                                  = 154
+	RS_POINTSIZE_MIN                              = 155
+	RS_POINTSPRITEENABLE                          = 156
+	RS_POINTSCALEENABLE                           = 157
+	RS_POINTSCALE_A                               = 158
+	RS_POINTSCALE_B                               = 159
+	RS_POINTSCALE_C                               = 160
+	RS_MULTISAMPLEANTIALIAS                       = 161
+	RS_MULTISAMPLEMASK                            = 162
+	RS_PATCHEDGESTYLE                             = 163
+	RS_DEBUGMONITORTOKEN                          = 165
+	RS_POINTSIZE_MAX                              = 166
+	RS_INDEXEDVERTEXBLENDENABLE                   = 167
+	RS_COLORWRITEENABLE                           = 168
+	RS_TWEENFACTOR                                = 170
+	RS_BLENDOP                                    = 171
+	RS_POSITIONDEGREE                             = 172
+	RS_NORMALDEGREE                               = 173
+	RS_SCISSORTESTENABLE                          = 174
+	RS_SLOPESCALEDEPTHBIAS                        = 175
+	RS_ANTIALIASEDLINEENABLE                      = 176
+	RS_MINTESSELLATIONLEVEL                       = 178
+	RS_MAXTESSELLATIONLEVEL                       = 179
+	RS_ADAPTIVETESS_X                             = 180
+	RS_ADAPTIVETESS_Y                             = 181
+	RS_ADAPTIVETESS_Z                             = 182
+	RS_ADAPTIVETESS_W                             = 183
+	RS_ENABLEADAPTIVETESSELLATION                 = 184
+	RS_TWOSIDEDSTENCILMODE                        = 185
+	RS_CCW_STENCILFAIL                            = 186
+	RS_CCW_STENCILZFAIL                           = 187
+	RS_CCW_STENCILPASS                            = 188
+	RS_CCW_STENCILFUNC                            = 189
+	RS_COLORWRITEENABLE1                          = 190
+	RS_COLORWRITEENABLE2                          = 191
+	RS_COLORWRITEENABLE3                          = 192
+	RS_BLENDFACTOR                                = 193
+	RS_SRGBWRITEENABLE                            = 194
+	RS_DEPTHBIAS                                  = 195
+	RS_WRAP8                                      = 198
+	RS_WRAP9                                      = 199
+	RS_WRAP10                                     = 200
+	RS_WRAP11                                     = 201
+	RS_WRAP12                                     = 202
+	RS_WRAP13                                     = 203
+	RS_WRAP14                                     = 204
+	RS_WRAP15                                     = 205
+	RS_SEPARATEALPHABLENDENABLE                   = 206
+	RS_SRCBLENDALPHA                              = 207
+	RS_DESTBLENDALPHA                             = 208
+	RS_BLENDOPALPHA                               = 209
 )
 
 type RESOURCETYPE uint32
 
 const (
-	RTYPE_SURFACE       RESOURCETYPE = C.D3DRTYPE_SURFACE
-	RTYPE_VOLUME                     = C.D3DRTYPE_VOLUME
-	RTYPE_TEXTURE                    = C.D3DRTYPE_TEXTURE
-	RTYPE_VOLUMETEXTURE              = C.D3DRTYPE_VOLUMETEXTURE
-	RTYPE_VERTEXBUFFER               = C.D3DRTYPE_VERTEXBUFFER
-	RTYPE_INDEXBUFFER                = C.D3DRTYPE_INDEXBUFFER
+	RTYPE_SURFACE       RESOURCETYPE = 1
+	RTYPE_VOLUME                     = 2
+	RTYPE_TEXTURE                    = 3
+	RTYPE_VOLUMETEXTURE              = 4
+	RTYPE_CUBETEXTURE                = 5
+	RTYPE_VERTEXBUFFER               = 6
+	RTYPE_INDEXBUFFER                = 7
 )
 
 type SAMPLER_TEXTURE_TYPE uint32
 
 const (
-	STT_UNKNOWN SAMPLER_TEXTURE_TYPE = C.D3DSTT_UNKNOWN
-	STT_2D                           = C.D3DSTT_2D
-	STT_CUBE                         = C.D3DSTT_CUBE
-	STT_VOLUME                       = C.D3DSTT_VOLUME
+	STT_UNKNOWN SAMPLER_TEXTURE_TYPE = 0
+	STT_2D                           = 268435456
+	STT_CUBE                         = 402653184
+	STT_VOLUME                       = 536870912
 )
 
 type SAMPLERSTATETYPE uint32
 
 const (
-	SAMP_ADDRESSU      SAMPLERSTATETYPE = C.D3DSAMP_ADDRESSU
-	SAMP_ADDRESSV                       = C.D3DSAMP_ADDRESSV
-	SAMP_ADDRESSW                       = C.D3DSAMP_ADDRESSW
-	SAMP_BORDERCOLOR                    = C.D3DSAMP_BORDERCOLOR
-	SAMP_MAGFILTER                      = C.D3DSAMP_MAGFILTER
-	SAMP_MINFILTER                      = C.D3DSAMP_MINFILTER
-	SAMP_MIPFILTER                      = C.D3DSAMP_MIPFILTER
-	SAMP_MIPMAPLODBIAS                  = C.D3DSAMP_MIPMAPLODBIAS
-	SAMP_MAXMIPLEVEL                    = C.D3DSAMP_MAXMIPLEVEL
-	SAMP_MAXANISOTROPY                  = C.D3DSAMP_MAXANISOTROPY
-	SAMP_SRGBTEXTURE                    = C.D3DSAMP_SRGBTEXTURE
-	SAMP_ELEMENTINDEX                   = C.D3DSAMP_ELEMENTINDEX
-	SAMP_DMAPOFFSET                     = C.D3DSAMP_DMAPOFFSET
+	SAMP_ADDRESSU      SAMPLERSTATETYPE = 1
+	SAMP_ADDRESSV                       = 2
+	SAMP_ADDRESSW                       = 3
+	SAMP_BORDERCOLOR                    = 4
+	SAMP_MAGFILTER                      = 5
+	SAMP_MINFILTER                      = 6
+	SAMP_MIPFILTER                      = 7
+	SAMP_MIPMAPLODBIAS                  = 8
+	SAMP_MAXMIPLEVEL                    = 9
+	SAMP_MAXANISOTROPY                  = 10
+	SAMP_SRGBTEXTURE                    = 11
+	SAMP_ELEMENTINDEX                   = 12
+	SAMP_DMAPOFFSET                     = 13
 )
 
 type SHADEMODE uint32
 
 const (
-	SHADE_FLAT    SHADEMODE = C.D3DSHADE_FLAT
-	SHADE_GOURAUD           = C.D3DSHADE_GOURAUD
-	SHADE_PHONG             = C.D3DSHADE_PHONG
+	SHADE_FLAT    SHADEMODE = 1
+	SHADE_GOURAUD           = 2
+	SHADE_PHONG             = 3
 )
 
 type STATEBLOCKTYPE uint32
 
 const (
-	SBT_ALL         STATEBLOCKTYPE = C.D3DSBT_ALL
-	SBT_PIXELSTATE                 = C.D3DSBT_PIXELSTATE
-	SBT_VERTEXSTATE                = C.D3DSBT_VERTEXSTATE
+	SBT_ALL         STATEBLOCKTYPE = 1
+	SBT_PIXELSTATE                 = 2
+	SBT_VERTEXSTATE                = 3
 )
 
 type STENCILOP uint32
 
 const (
-	STENCILOP_KEEP    STENCILOP = C.D3DSTENCILOP_KEEP
-	STENCILOP_ZERO              = C.D3DSTENCILOP_ZERO
-	STENCILOP_REPLACE           = C.D3DSTENCILOP_REPLACE
-	STENCILOP_INCRSAT           = C.D3DSTENCILOP_INCRSAT
-	STENCILOP_DECRSAT           = C.D3DSTENCILOP_DECRSAT
-	STENCILOP_INVERT            = C.D3DSTENCILOP_INVERT
-	STENCILOP_INCR              = C.D3DSTENCILOP_INCR
-	STENCILOP_DECR              = C.D3DSTENCILOP_DECR
+	STENCILOP_KEEP    STENCILOP = 1
+	STENCILOP_ZERO              = 2
+	STENCILOP_REPLACE           = 3
+	STENCILOP_INCRSAT           = 4
+	STENCILOP_DECRSAT           = 5
+	STENCILOP_INVERT            = 6
+	STENCILOP_INCR              = 7
+	STENCILOP_DECR              = 8
 )
 
 type SWAPEFFECT uint32
 
 const (
-	SWAPEFFECT_DISCARD SWAPEFFECT = C.D3DSWAPEFFECT_DISCARD
-	SWAPEFFECT_FLIP               = C.D3DSWAPEFFECT_FLIP
-	SWAPEFFECT_COPY               = C.D3DSWAPEFFECT_COPY
+	SWAPEFFECT_DISCARD SWAPEFFECT = 1
+	SWAPEFFECT_FLIP               = 2
+	SWAPEFFECT_COPY               = 3
 )
 
 type TEXTUREADDRESS uint32
 
 const (
-	TADDRESS_WRAP       TEXTUREADDRESS = C.D3DTADDRESS_WRAP
-	TADDRESS_MIRROR                    = C.D3DTADDRESS_MIRROR
-	TADDRESS_CLAMP                     = C.D3DTADDRESS_CLAMP
-	TADDRESS_BORDER                    = C.D3DTADDRESS_BORDER
-	TADDRESS_MIRRORONCE                = C.D3DTADDRESS_MIRRORONCE
+	TADDRESS_WRAP       TEXTUREADDRESS = 1
+	TADDRESS_MIRROR                    = 2
+	TADDRESS_CLAMP                     = 3
+	TADDRESS_BORDER                    = 4
+	TADDRESS_MIRRORONCE                = 5
 )
 
 type TEXTUREFILTERTYPE uint32
 
 const (
-	TEXF_NONE          TEXTUREFILTERTYPE = C.D3DTEXF_NONE
-	TEXF_POINT                           = C.D3DTEXF_POINT
-	TEXF_LINEAR                          = C.D3DTEXF_LINEAR
-	TEXF_ANISOTROPIC                     = C.D3DTEXF_ANISOTROPIC
-	TEXF_PYRAMIDALQUAD                   = C.D3DTEXF_PYRAMIDALQUAD
-	TEXF_GAUSSIANQUAD                    = C.D3DTEXF_GAUSSIANQUAD
+	TEXF_NONE          TEXTUREFILTERTYPE = 0
+	TEXF_POINT                           = 1
+	TEXF_LINEAR                          = 2
+	TEXF_ANISOTROPIC                     = 3
+	TEXF_PYRAMIDALQUAD                   = 6
+	TEXF_GAUSSIANQUAD                    = 7
 )
 
 type TEXTUREOP uint32
 
 const (
-	TOP_DISABLE                   TEXTUREOP = C.D3DTOP_DISABLE
-	TOP_SELECTARG1                          = C.D3DTOP_SELECTARG1
-	TOP_SELECTARG2                          = C.D3DTOP_SELECTARG2
-	TOP_MODULATE                            = C.D3DTOP_MODULATE
-	TOP_MODULATE2X                          = C.D3DTOP_MODULATE2X
-	TOP_MODULATE4X                          = C.D3DTOP_MODULATE4X
-	TOP_ADD                                 = C.D3DTOP_ADD
-	TOP_ADDSIGNED                           = C.D3DTOP_ADDSIGNED
-	TOP_ADDSIGNED2X                         = C.D3DTOP_ADDSIGNED2X
-	TOP_SUBTRACT                            = C.D3DTOP_SUBTRACT
-	TOP_ADDSMOOTH                           = C.D3DTOP_ADDSMOOTH
-	TOP_BLENDDIFFUSEALPHA                   = C.D3DTOP_BLENDDIFFUSEALPHA
-	TOP_BLENDTEXTUREALPHA                   = C.D3DTOP_BLENDTEXTUREALPHA
-	TOP_BLENDFACTORALPHA                    = C.D3DTOP_BLENDFACTORALPHA
-	TOP_BLENDTEXTUREALPHAPM                 = C.D3DTOP_BLENDTEXTUREALPHAPM
-	TOP_BLENDCURRENTALPHA                   = C.D3DTOP_BLENDCURRENTALPHA
-	TOP_PREMODULATE                         = C.D3DTOP_PREMODULATE
-	TOP_MODULATEALPHA_ADDCOLOR              = C.D3DTOP_MODULATEALPHA_ADDCOLOR
-	TOP_MODULATECOLOR_ADDALPHA              = C.D3DTOP_MODULATECOLOR_ADDALPHA
-	TOP_MODULATEINVALPHA_ADDCOLOR           = C.D3DTOP_MODULATEINVALPHA_ADDCOLOR
-	TOP_MODULATEINVCOLOR_ADDALPHA           = C.D3DTOP_MODULATEINVCOLOR_ADDALPHA
-	TOP_BUMPENVMAP                          = C.D3DTOP_BUMPENVMAP
-	TOP_BUMPENVMAPLUMINANCE                 = C.D3DTOP_BUMPENVMAPLUMINANCE
-	TOP_DOTPRODUCT3                         = C.D3DTOP_DOTPRODUCT3
-	TOP_MULTIPLYADD                         = C.D3DTOP_MULTIPLYADD
-	TOP_LERP                                = C.D3DTOP_LERP
+	TOP_DISABLE                   TEXTUREOP = 1
+	TOP_SELECTARG1                          = 2
+	TOP_SELECTARG2                          = 3
+	TOP_MODULATE                            = 4
+	TOP_MODULATE2X                          = 5
+	TOP_MODULATE4X                          = 6
+	TOP_ADD                                 = 7
+	TOP_ADDSIGNED                           = 8
+	TOP_ADDSIGNED2X                         = 9
+	TOP_SUBTRACT                            = 10
+	TOP_ADDSMOOTH                           = 11
+	TOP_BLENDDIFFUSEALPHA                   = 12
+	TOP_BLENDTEXTUREALPHA                   = 13
+	TOP_BLENDFACTORALPHA                    = 14
+	TOP_BLENDTEXTUREALPHAPM                 = 15
+	TOP_BLENDCURRENTALPHA                   = 16
+	TOP_PREMODULATE                         = 17
+	TOP_MODULATEALPHA_ADDCOLOR              = 18
+	TOP_MODULATECOLOR_ADDALPHA              = 19
+	TOP_MODULATEINVALPHA_ADDCOLOR           = 20
+	TOP_MODULATEINVCOLOR_ADDALPHA           = 21
+	TOP_BUMPENVMAP                          = 22
+	TOP_BUMPENVMAPLUMINANCE                 = 23
+	TOP_DOTPRODUCT3                         = 24
+	TOP_MULTIPLYADD                         = 25
+	TOP_LERP                                = 26
 )
 
 type TEXTURESTAGESTATETYPE uint32
 
 const (
-	TSS_COLOROP               TEXTURESTAGESTATETYPE = C.D3DTSS_COLOROP
-	TSS_COLORARG1                                   = C.D3DTSS_COLORARG1
-	TSS_COLORARG2                                   = C.D3DTSS_COLORARG2
-	TSS_ALPHAOP                                     = C.D3DTSS_ALPHAOP
-	TSS_ALPHAARG1                                   = C.D3DTSS_ALPHAARG1
-	TSS_ALPHAARG2                                   = C.D3DTSS_ALPHAARG2
-	TSS_BUMPENVMAT00                                = C.D3DTSS_BUMPENVMAT00
-	TSS_BUMPENVMAT01                                = C.D3DTSS_BUMPENVMAT01
-	TSS_BUMPENVMAT10                                = C.D3DTSS_BUMPENVMAT10
-	TSS_BUMPENVMAT11                                = C.D3DTSS_BUMPENVMAT11
-	TSS_TEXCOORDINDEX                               = C.D3DTSS_TEXCOORDINDEX
-	TSS_BUMPENVLSCALE                               = C.D3DTSS_BUMPENVLSCALE
-	TSS_BUMPENVLOFFSET                              = C.D3DTSS_BUMPENVLOFFSET
-	TSS_TEXTURETRANSFORMFLAGS                       = C.D3DTSS_TEXTURETRANSFORMFLAGS
-	TSS_COLORARG0                                   = C.D3DTSS_COLORARG0
-	TSS_ALPHAARG0                                   = C.D3DTSS_ALPHAARG0
-	TSS_RESULTARG                                   = C.D3DTSS_RESULTARG
-	TSS_CONSTANT                                    = C.D3DTSS_CONSTANT
+	TSS_COLOROP               TEXTURESTAGESTATETYPE = 1
+	TSS_COLORARG1                                   = 2
+	TSS_COLORARG2                                   = 3
+	TSS_ALPHAOP                                     = 4
+	TSS_ALPHAARG1                                   = 5
+	TSS_ALPHAARG2                                   = 6
+	TSS_BUMPENVMAT00                                = 7
+	TSS_BUMPENVMAT01                                = 8
+	TSS_BUMPENVMAT10                                = 9
+	TSS_BUMPENVMAT11                                = 10
+	TSS_TEXCOORDINDEX                               = 11
+	TSS_BUMPENVLSCALE                               = 22
+	TSS_BUMPENVLOFFSET                              = 23
+	TSS_TEXTURETRANSFORMFLAGS                       = 24
+	TSS_COLORARG0                                   = 26
+	TSS_ALPHAARG0                                   = 27
+	TSS_RESULTARG                                   = 28
+	TSS_CONSTANT                                    = 32
 )
 
 type TEXTURETRANSFORMFLAGS uint32
 
 const (
-	TTFF_DISABLE   TEXTURETRANSFORMFLAGS = C.D3DTTFF_DISABLE
-	TTFF_COUNT1                          = C.D3DTTFF_COUNT1
-	TTFF_COUNT2                          = C.D3DTTFF_COUNT2
-	TTFF_COUNT3                          = C.D3DTTFF_COUNT3
-	TTFF_COUNT4                          = C.D3DTTFF_COUNT4
-	TTFF_PROJECTED                       = C.D3DTTFF_PROJECTED
+	TTFF_DISABLE   TEXTURETRANSFORMFLAGS = 0
+	TTFF_COUNT1                          = 1
+	TTFF_COUNT2                          = 2
+	TTFF_COUNT3                          = 3
+	TTFF_COUNT4                          = 4
+	TTFF_PROJECTED                       = 256
 )
 
 type TRANSFORMSTATETYPE uint32
 
 const (
-	TS_VIEW       TRANSFORMSTATETYPE = C.D3DTS_VIEW
-	TS_PROJECTION                    = C.D3DTS_PROJECTION
-	TS_TEXTURE0                      = C.D3DTS_TEXTURE0
-	TS_TEXTURE1                      = C.D3DTS_TEXTURE1
-	TS_TEXTURE2                      = C.D3DTS_TEXTURE2
-	TS_TEXTURE3                      = C.D3DTS_TEXTURE3
-	TS_TEXTURE4                      = C.D3DTS_TEXTURE4
-	TS_TEXTURE5                      = C.D3DTS_TEXTURE5
-	TS_TEXTURE6                      = C.D3DTS_TEXTURE6
-	TS_TEXTURE7                      = C.D3DTS_TEXTURE7
+	TS_VIEW       TRANSFORMSTATETYPE = 2
+	TS_PROJECTION                    = 3
+	TS_TEXTURE0                      = 16
+	TS_TEXTURE1                      = 17
+	TS_TEXTURE2                      = 18
+	TS_TEXTURE3                      = 19
+	TS_TEXTURE4                      = 20
+	TS_TEXTURE5                      = 21
+	TS_TEXTURE6                      = 22
+	TS_TEXTURE7                      = 23
 )
 
 type VERTEXBLENDFLAGS uint16
 
 const (
-	VBF_DISABLE  VERTEXBLENDFLAGS = C.D3DVBF_DISABLE
-	VBF_1WEIGHTS                  = C.D3DVBF_1WEIGHTS
-	VBF_2WEIGHTS                  = C.D3DVBF_2WEIGHTS
-	VBF_3WEIGHTS                  = C.D3DVBF_3WEIGHTS
-	VBF_TWEENING                  = C.D3DVBF_TWEENING
-	VBF_0WEIGHTS                  = C.D3DVBF_0WEIGHTS
+	VBF_DISABLE  VERTEXBLENDFLAGS = 0
+	VBF_1WEIGHTS                  = 1
+	VBF_2WEIGHTS                  = 2
+	VBF_3WEIGHTS                  = 3
+	VBF_TWEENING                  = 255
+	VBF_0WEIGHTS                  = 256
 )
 
 type ZBUFFERTYPE uint32
 
 const (
-	ZB_FALSE ZBUFFERTYPE = C.D3DZB_FALSE
-	ZB_TRUE              = C.D3DZB_TRUE
-	ZB_USEW              = C.D3DZB_USEW
+	ZB_FALSE ZBUFFERTYPE = 0
+	ZB_TRUE              = 1
+	ZB_USEW              = 2
 )
