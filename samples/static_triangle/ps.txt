@@ -1,0 +1,9 @@
+struct input {};
+
+struct output {
+	float4 color : COLOR0;
+};
+
+void main(in input IN, out output OUT) {
+	OUT.color = float4(1, 0, 1, 1);
+}
