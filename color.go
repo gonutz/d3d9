@@ -11,7 +11,7 @@ func (c COLOR) toC() C.D3DCOLOR {
 }
 
 func ColorARGB(a, r, g, b uint8) COLOR {
-	return COLOR((a&0xFF)<<24 | (r&0xFF)<<16 | (g&0xFF)<<8 | b&0xFF)
+	return COLOR(a)<<24 | COLOR(r)<<16 | COLOR(g)<<8 | COLOR(b)
 }
 
 func ColorRGBA(r, g, b, a uint8) COLOR {
