@@ -19,6 +19,29 @@ HRESULT IDirect3DTexture9LockRect(IDirect3DTexture9* obj, UINT Level, D3DLOCKED_
 	return obj->lpVtbl->LockRect(obj, Level, pLockedRect, pRect, Flags);
 }
 
+void copyDataToLockedRect(
+		D3DLOCKED_RECT* pLockedRect,
+		void* data,
+		int stride,
+		//int width,
+		int height) {
+	int width = stride;
+	if (pLockedRect->Pitch < width) {
+		width = pLockedRect->Pitch;
+	}
+
+	char* dest;
+	char* src;
+	int x, y;
+	for (y = 0; y < height; y++) {
+		dest = (char*) (pLockedRect->pBits + y * pLockedRect->Pitch);
+		src = (char*) (data + y * stride);
+		for (x = 0; x < width; x++) {
+			*dest++ = *src++;
+		}
+	}
+}
+
 HRESULT IDirect3DTexture9UnlockRect(IDirect3DTexture9* obj, UINT Level) {
 	return obj->lpVtbl->UnlockRect(obj, Level);
 }
@@ -74,6 +97,33 @@ func (obj Texture) LockRect(Level uint, pRect *RECT, Flags uint32) (pLockedRect 
 	}
 	pLockedRect.fromC(&c_pLockedRect)
 	return
+}
+
+func (obj Texture) LockedSetData(
+	Level uint,
+	pRect *RECT,
+	Flags uint32,
+	data []uint8,
+	stride int,
+	height int,
+) (err error) {
+	locked, err := obj.LockRect(Level, pRect, Flags)
+	if err != nil {
+		return err
+	}
+
+	cLocked := locked.toC()
+	//width := len(data) / stride
+
+	C.copyDataToLockedRect(
+		&cLocked,
+		unsafe.Pointer(&data[0]),
+		C.int(stride),
+		//C.int(width),
+		C.int(height),
+	)
+
+	return obj.UnlockRect(Level)
 }
 
 func (obj Texture) UnlockRect(Level uint) (err error) {

@@ -49,6 +49,9 @@ func (obj IndexBuffer) Unlock() (err error) {
 }
 
 func (obj IndexBuffer) LockedSetFloats(OffsetToLock uint, Flags uint32, data []float32) (err error) {
+	if len(data) == 0 {
+		return nil
+	}
 	var buffer unsafe.Pointer
 	byteCount := uint(len(data) * 4)
 	buffer, err = obj.Lock(OffsetToLock, byteCount, Flags)
@@ -60,6 +63,9 @@ func (obj IndexBuffer) LockedSetFloats(OffsetToLock uint, Flags uint32, data []f
 }
 
 func (obj IndexBuffer) LockedSetUints(OffsetToLock uint, Flags uint32, data []uint32) (err error) {
+	if len(data) == 0 {
+		return nil
+	}
 	var buffer unsafe.Pointer
 	byteCount := uint(len(data) * 4)
 	buffer, err = obj.Lock(OffsetToLock, byteCount, Flags)
