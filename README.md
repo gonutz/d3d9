@@ -16,6 +16,12 @@ For initialization the `d3d9.dll` is loaded so it must be installed on the targe
 
 Note that Direct3D9 needs a window handle for setting it up. This means that you need some way to create a native window and get the handle to pass it to d3d9. In the samples you can see how to do it using the [SDL2 Go wrapper](https://github.com/veandco/go-sdl2). You can also use another Windows wrapper library, like [Allen Dang's w32](https://github.com/AllenDang/w32) or the [walk library](https://github.com/lxn/walk). You could even write a little Cgo code to set up a window yourself. This library does not provide window creation or event handling functionality, only a Direct3D9 wrapper.
 
+When you write a program using this library, make sure to add this code in your main package:
+
+    func init() {
+	    runtime.LockOSThread()
+	}
+
 # Status
 Right now the code is mostly generated from the MSDN documentation and will need more tweaks and refinement to work more fluently with Go.
 
@@ -23,4 +29,4 @@ For example, to transfer data to and from the GPU, like shader object code or ve
 
 # Help improve this library
 
-Only real world use and feedback can improve the usability of this library, so please use it, fork it, send pull requests and issue issues to help bring Direct3D to Go!
+Only real world use and feedback can improve the usability of this library, so please use it, fork it, send pull requests and create issues to help bring Direct3D to Go!
