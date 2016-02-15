@@ -48,6 +48,26 @@ void toGoMatrix(D3DMATRIX* m, float* values) {
   *(values+14) = m->_43;
   *(values+15) = m->_44;
 }
+
+void setWholeLockedRect(
+		void* dest,
+		int destStride,
+		void* source,
+		int sourceStride,
+		int height) {
+	int stride = sourceStride;
+	if (destStride < sourceStride)
+		stride = destStride;
+	int x, y;
+	char* d = (char*) dest;
+	char* s = (char*) source;
+	for (y = 0; y < height; ++y) {
+		for (x = 0; x < stride; ++x)
+			*d++ = *s++;
+		d += destStride - stride;
+		s += sourceStride - stride;
+	}
+}
 */
 import "C"
 import "unsafe"
@@ -731,6 +751,16 @@ func (s *LOCKED_RECT) toC() C.D3DLOCKED_RECT {
 func (s *LOCKED_RECT) fromC(c *C.D3DLOCKED_RECT) {
 	s.Pitch = (int)(c.Pitch)
 	s.PBits = (unsafe.Pointer)(c.pBits)
+}
+
+func (r LOCKED_RECT) SetAllBytes(data []byte, stride int) {
+	C.setWholeLockedRect(
+		r.PBits,
+		C.int(r.Pitch),
+		unsafe.Pointer(&data[0]),
+		C.int(stride),
+		C.int(len(data)/stride),
+	)
 }
 
 type MATERIAL struct {

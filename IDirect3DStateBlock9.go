@@ -11,7 +11,9 @@ HRESULT IDirect3DStateBlock9Capture(IDirect3DStateBlock9* obj) {
 	return obj->lpVtbl->Capture(obj);
 }
 
-HRESULT IDirect3DStateBlock9GetDevice(IDirect3DStateBlock9* obj, IDirect3DDevice9** ppDevice) {
+HRESULT IDirect3DStateBlock9GetDevice(
+		IDirect3DStateBlock9* obj,
+		IDirect3DDevice9** ppDevice) {
 	return obj->lpVtbl->GetDevice(obj, ppDevice);
 }
 
@@ -29,16 +31,20 @@ func (obj StateBlock) Release() {
 	C.IDirect3DStateBlock9Release(obj.handle)
 }
 
+// Apply applies the state block to the current device state.
 func (obj StateBlock) Apply() (err error) {
 	err = toErr(C.IDirect3DStateBlock9Apply(obj.handle))
 	return
 }
 
+// Capture captures the current value of states that are included in a
+// stateblock.
 func (obj StateBlock) Capture() (err error) {
 	err = toErr(C.IDirect3DStateBlock9Capture(obj.handle))
 	return
 }
 
+// GetDevice returns the device.
 func (obj StateBlock) GetDevice() (ppDevice Device, err error) {
 	var c_ppDevice *C.IDirect3DDevice9
 	err = toErr(C.IDirect3DStateBlock9GetDevice(obj.handle, &c_ppDevice))

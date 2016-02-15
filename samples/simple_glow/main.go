@@ -46,7 +46,7 @@ func main() {
 		check(device.Clear(
 			nil,
 			d3d9.CLEAR_TARGET,
-			d3d9.ColorRGB(uint(red), 92, 128),
+			d3d9.ColorRGB(uint8(red), 92, 128),
 			0,
 			0,
 		))

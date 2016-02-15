@@ -7,7 +7,8 @@ VOID IDirect3DBaseTexture9GenerateMipSubLevels(IDirect3DBaseTexture9* obj) {
 	obj->lpVtbl->GenerateMipSubLevels(obj);
 }
 
-D3DTEXTUREFILTERTYPE IDirect3DBaseTexture9GetAutoGenFilterType(IDirect3DBaseTexture9* obj) {
+D3DTEXTUREFILTERTYPE IDirect3DBaseTexture9GetAutoGenFilterType(
+		IDirect3DBaseTexture9* obj) {
 	return obj->lpVtbl->GetAutoGenFilterType(obj);
 }
 
@@ -19,7 +20,9 @@ DWORD IDirect3DBaseTexture9GetLOD(IDirect3DBaseTexture9* obj) {
 	return obj->lpVtbl->GetLOD(obj);
 }
 
-HRESULT IDirect3DBaseTexture9SetAutoGenFilterType(IDirect3DBaseTexture9* obj, D3DTEXTUREFILTERTYPE FilterType) {
+HRESULT IDirect3DBaseTexture9SetAutoGenFilterType(
+		IDirect3DBaseTexture9* obj,
+		D3DTEXTUREFILTERTYPE FilterType) {
 	return obj->lpVtbl->SetAutoGenFilterType(obj, FilterType);
 }
 
@@ -42,27 +45,48 @@ func (obj BaseTexture) Release() {
 	C.IDirect3DBaseTexture9Release(obj.handle)
 }
 
+// GenerateMipSubLevels generates mip sub levels.
 func (obj BaseTexture) GenerateMipSubLevels() {
 	C.IDirect3DBaseTexture9GenerateMipSubLevels(obj.handle)
 }
 
+// GetAutoGenFilterType returns the filter type that is used for automatically
+// generated mipmap sublevels.
 func (obj BaseTexture) GetAutoGenFilterType() TEXTUREFILTERTYPE {
-	return (TEXTUREFILTERTYPE)(C.IDirect3DBaseTexture9GetAutoGenFilterType(obj.handle))
+	return (TEXTUREFILTERTYPE)(C.IDirect3DBaseTexture9GetAutoGenFilterType(
+		obj.handle,
+	))
 }
 
+// GetLevelCount returns the number of texture levels in a multilevel texture.
 func (obj BaseTexture) GetLevelCount() uint32 {
 	return (uint32)(C.IDirect3DBaseTexture9GetLevelCount(obj.handle))
 }
 
+// GetLOD returns a value clamped to the maximum level-of-detail set for a
+// managed texture (this method is not supported for an unmanaged texture).
 func (obj BaseTexture) GetLOD() uint32 {
 	return (uint32)(C.IDirect3DBaseTexture9GetLOD(obj.handle))
 }
 
-func (obj BaseTexture) SetAutoGenFilterType(FilterType TEXTUREFILTERTYPE) (err error) {
-	err = toErr(C.IDirect3DBaseTexture9SetAutoGenFilterType(obj.handle, (C.D3DTEXTUREFILTERTYPE)(FilterType)))
+// SetAutoGenFilterType sets the filter type that is used for automatically
+// generated mipmap sublevels.
+func (obj BaseTexture) SetAutoGenFilterType(
+	FilterType TEXTUREFILTERTYPE,
+) (
+	err error,
+) {
+	err = toErr(C.IDirect3DBaseTexture9SetAutoGenFilterType(
+		obj.handle,
+		(C.D3DTEXTUREFILTERTYPE)(FilterType),
+	))
 	return
 }
 
+// SetLOD sets the most detailed level-of-detail for a managed texture.
 func (obj BaseTexture) SetLOD(LODNew uint32) uint32 {
-	return (uint32)(C.IDirect3DBaseTexture9SetLOD(obj.handle, (C.DWORD)(LODNew)))
+	return (uint32)(C.IDirect3DBaseTexture9SetLOD(
+		obj.handle,
+		(C.DWORD)(LODNew),
+	))
 }

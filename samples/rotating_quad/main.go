@@ -48,7 +48,10 @@ func main() {
 		d3d9.USAGE_WRITEONLY, 0, d3d9.POOL_DEFAULT, nil)
 	check(err)
 	defer vb.Release()
-	check(vb.LockedSetFloats(0, 0, vertices))
+	vbMem, err := vb.Lock(0, 0, d3d9.LOCK_DISCARD)
+	check(err)
+	vbMem.SetFloat32s(0, vertices)
+	check(vb.Unlock())
 
 	check(device.SetStreamSource(0, vb, 0, 2*4))
 

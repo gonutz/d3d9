@@ -59,7 +59,6 @@ func (r hResultError) Error() string {
 		return "driver invalid call"
 	case ERR_WASSTILLDRAWING:
 		return "was still drawing"
-
 	default:
 		return "unknown error code " + strconv.Itoa(int(r))
 	}

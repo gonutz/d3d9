@@ -5,11 +5,6 @@ import "C"
 
 type COLOR uint32
 
-// TODO remove this eventually
-func (c COLOR) toC() C.D3DCOLOR {
-	return (C.D3DCOLOR)(c)
-}
-
 func ColorARGB(a, r, g, b uint8) COLOR {
 	return COLOR(a)<<24 | COLOR(r)<<16 | COLOR(g)<<8 | COLOR(b)
 }

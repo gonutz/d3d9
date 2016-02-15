@@ -3,32 +3,53 @@ package d3d9
 /*
 #include "d3d9wrapper.h"
 
-HRESULT IDirect3DSwapChain9GetBackBuffer(IDirect3DSwapChain9* obj, UINT BackBuffer, D3DBACKBUFFER_TYPE Type, IDirect3DSurface9** ppBackBuffer) {
+HRESULT IDirect3DSwapChain9GetBackBuffer(
+		IDirect3DSwapChain9* obj,
+		UINT BackBuffer,
+		D3DBACKBUFFER_TYPE Type,
+		IDirect3DSurface9** ppBackBuffer) {
 	return obj->lpVtbl->GetBackBuffer(obj, BackBuffer, Type, ppBackBuffer);
 }
 
-HRESULT IDirect3DSwapChain9GetDevice(IDirect3DSwapChain9* obj, IDirect3DDevice9** ppDevice) {
+HRESULT IDirect3DSwapChain9GetDevice(
+		IDirect3DSwapChain9* obj,
+		IDirect3DDevice9** ppDevice) {
 	return obj->lpVtbl->GetDevice(obj, ppDevice);
 }
 
-HRESULT IDirect3DSwapChain9GetDisplayMode(IDirect3DSwapChain9* obj, D3DDISPLAYMODE* pMode) {
+HRESULT IDirect3DSwapChain9GetDisplayMode(
+		IDirect3DSwapChain9* obj,
+		D3DDISPLAYMODE* pMode) {
 	return obj->lpVtbl->GetDisplayMode(obj, pMode);
 }
 
-HRESULT IDirect3DSwapChain9GetFrontBufferData(IDirect3DSwapChain9* obj, IDirect3DSurface9* pDestSurface) {
+HRESULT IDirect3DSwapChain9GetFrontBufferData(
+		IDirect3DSwapChain9* obj,
+		IDirect3DSurface9* pDestSurface) {
 	return obj->lpVtbl->GetFrontBufferData(obj, pDestSurface);
 }
 
-HRESULT IDirect3DSwapChain9GetPresentParameters(IDirect3DSwapChain9* obj, D3DPRESENT_PARAMETERS* pPresentationParameters) {
+HRESULT IDirect3DSwapChain9GetPresentParameters(
+		IDirect3DSwapChain9* obj,
+		D3DPRESENT_PARAMETERS* pPresentationParameters) {
 	return obj->lpVtbl->GetPresentParameters(obj, pPresentationParameters);
 }
 
-HRESULT IDirect3DSwapChain9GetRasterStatus(IDirect3DSwapChain9* obj, D3DRASTER_STATUS* pRasterStatus) {
+HRESULT IDirect3DSwapChain9GetRasterStatus(
+		IDirect3DSwapChain9* obj,
+		D3DRASTER_STATUS* pRasterStatus) {
 	return obj->lpVtbl->GetRasterStatus(obj, pRasterStatus);
 }
 
-HRESULT IDirect3DSwapChain9Present(IDirect3DSwapChain9* obj, RECT* pSourceRect, RECT* pDestRect, HWND hDestWindowOverride, RGNDATA* pDirtyRegion, DWORD dwFlags) {
-	return obj->lpVtbl->Present(obj, pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion, dwFlags);
+HRESULT IDirect3DSwapChain9Present(
+		IDirect3DSwapChain9* obj,
+		RECT* pSourceRect,
+		RECT* pDestRect,
+		HWND hDestWindowOverride,
+		RGNDATA* pDirtyRegion,
+		DWORD dwFlags) {
+	return obj->lpVtbl->Present(obj, pSourceRect, pDestRect,
+		hDestWindowOverride, pDirtyRegion, dwFlags);
 }
 
 void IDirect3DSwapChain9Release(IDirect3DSwapChain9* obj) {
@@ -46,14 +67,31 @@ func (obj SwapChain) Release() {
 	C.IDirect3DSwapChain9Release(obj.handle)
 }
 
-func (obj SwapChain) GetBackBuffer(BackBuffer uint, Type BACKBUFFER_TYPE) (ppBackBuffer Surface, err error) {
+// GetBackBuffer retrieves a back buffer from the swap chain of the device.
+// Call Release on the returned surface when finished using it.
+func (obj SwapChain) GetBackBuffer(
+	BackBuffer uint,
+	Type BACKBUFFER_TYPE,
+) (
+	ppBackBuffer Surface,
+	err error,
+) {
 	var c_ppBackBuffer *C.IDirect3DSurface9
-	err = toErr(C.IDirect3DSwapChain9GetBackBuffer(obj.handle, (C.UINT)(BackBuffer), (C.D3DBACKBUFFER_TYPE)(Type), &c_ppBackBuffer))
-	resource := Resource{(*C.IDirect3DResource9)(unsafe.Pointer(c_ppBackBuffer))}
+	err = toErr(C.IDirect3DSwapChain9GetBackBuffer(
+		obj.handle,
+		(C.UINT)(BackBuffer),
+		(C.D3DBACKBUFFER_TYPE)(Type),
+		&c_ppBackBuffer,
+	))
+	resource := Resource{
+		(*C.IDirect3DResource9)(unsafe.Pointer(c_ppBackBuffer)),
+	}
 	ppBackBuffer = Surface{resource, c_ppBackBuffer}
 	return
 }
 
+// GetDevice retrieves the device associated with the swap chain.
+// Call Release on the returned device when finished using it.
 func (obj SwapChain) GetDevice() (ppDevice Device, err error) {
 	var c_ppDevice *C.IDirect3DDevice9
 	err = toErr(C.IDirect3DSwapChain9GetDevice(obj.handle, &c_ppDevice))
@@ -61,6 +99,8 @@ func (obj SwapChain) GetDevice() (ppDevice Device, err error) {
 	return
 }
 
+// GetDisplayMode retrieves the display mode's spatial resolution, color
+// resolution, and refresh frequency.
 func (obj SwapChain) GetDisplayMode() (pMode DISPLAYMODE, err error) {
 	var c_pMode C.D3DDISPLAYMODE
 	err = toErr(C.IDirect3DSwapChain9GetDisplayMode(obj.handle, &c_pMode))
@@ -68,51 +108,98 @@ func (obj SwapChain) GetDisplayMode() (pMode DISPLAYMODE, err error) {
 	return
 }
 
+// GetFrontBufferData generates a copy of the swapchain's front buffer and
+// places that copy in a system memory buffer provided by the application.
+// Call Release on the returned surface when finished using it.
 func (obj SwapChain) GetFrontBufferData(pDestSurface Surface) (err error) {
-	err = toErr(C.IDirect3DSwapChain9GetFrontBufferData(obj.handle, pDestSurface.handle))
+	err = toErr(C.IDirect3DSwapChain9GetFrontBufferData(
+		obj.handle,
+		pDestSurface.handle,
+	))
 	return
 }
 
-func (obj SwapChain) GetPresentParameters() (pPresentationParameters PRESENT_PARAMETERS, err error) {
+// GetPresentParameters retrieves the presentation parameters associated with a
+// swap chain.
+func (obj SwapChain) GetPresentParameters() (
+	pPresentationParameters PRESENT_PARAMETERS,
+	err error,
+) {
 	var c_pPresentationParameters C.D3DPRESENT_PARAMETERS
-	err = toErr(C.IDirect3DSwapChain9GetPresentParameters(obj.handle, &c_pPresentationParameters))
+	err = toErr(C.IDirect3DSwapChain9GetPresentParameters(
+		obj.handle,
+		&c_pPresentationParameters,
+	))
 	pPresentationParameters.fromC(&c_pPresentationParameters)
 	return
 }
 
-func (obj SwapChain) GetRasterStatus() (pRasterStatus RASTER_STATUS, err error) {
+// GetRasterStatus returns information describing the raster of the monitor on
+// which the swap chain is presented.
+func (obj SwapChain) GetRasterStatus() (
+	pRasterStatus RASTER_STATUS,
+	err error,
+) {
 	var c_pRasterStatus C.D3DRASTER_STATUS
-	err = toErr(C.IDirect3DSwapChain9GetRasterStatus(obj.handle, &c_pRasterStatus))
+	err = toErr(C.IDirect3DSwapChain9GetRasterStatus(
+		obj.handle,
+		&c_pRasterStatus,
+	))
 	pRasterStatus.fromC(&c_pRasterStatus)
 	return
 }
 
-func (obj SwapChain) Present(pSourceRect *RECT, pDestRect *RECT, hDestWindowOverride unsafe.Pointer, pDirtyRegion *RGNDATA, dwFlags uint32) (err error) {
+// Present presents the contents of the next buffer in the sequence of back
+// buffers owned by the swap chain.
+func (obj SwapChain) Present(
+	pSourceRect *RECT,
+	pDestRect *RECT,
+	hDestWindowOverride unsafe.Pointer,
+	pDirtyRegion *RGNDATA,
+	dwFlags uint32,
+) (
+	err error,
+) {
 	if pSourceRect == nil && pDestRect == nil && pDirtyRegion == nil {
-		err = toErr(C.IDirect3DSwapChain9Present(obj.handle, nil, nil, (C.HWND)(hDestWindowOverride), nil, C.DWORD(dwFlags)))
+		err = toErr(C.IDirect3DSwapChain9Present(
+			obj.handle,
+			nil,
+			nil,
+			(C.HWND)(hDestWindowOverride),
+			nil,
+			C.DWORD(dwFlags),
+		))
 		return
 	}
-	// TODO what if some are nil and some are not?
-	var c_sourceRect, c_destRect C.RECT
-	var c_dirtyRegion C.RGNDATA
 
+	var c_sourceRect C.RECT
 	var c_pSourceRect *C.RECT = nil
-	var c_pDestRect *C.RECT = nil
-	var c_pDirtyRegion *C.RGNDATA = nil
-
 	if pSourceRect != nil {
 		c_sourceRect = pSourceRect.toC()
 		c_pSourceRect = &c_sourceRect
 	}
+
+	var c_destRect C.RECT
+	var c_pDestRect *C.RECT = nil
 	if pDestRect != nil {
 		c_destRect = pDestRect.toC()
 		c_pDestRect = &c_destRect
 	}
+
+	var c_dirtyRegion C.RGNDATA
+	var c_pDirtyRegion *C.RGNDATA = nil
 	if pDirtyRegion != nil {
 		c_dirtyRegion = pDirtyRegion.toC()
 		c_pDirtyRegion = &c_dirtyRegion
 	}
 
-	err = toErr(C.IDirect3DSwapChain9Present(obj.handle, c_pSourceRect, c_pDestRect, (C.HWND)(hDestWindowOverride), c_pDirtyRegion, C.DWORD(dwFlags)))
+	err = toErr(C.IDirect3DSwapChain9Present(
+		obj.handle,
+		c_pSourceRect,
+		c_pDestRect,
+		(C.HWND)(hDestWindowOverride),
+		c_pDirtyRegion,
+		C.DWORD(dwFlags),
+	))
 	return
 }

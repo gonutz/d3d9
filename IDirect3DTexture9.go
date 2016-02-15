@@ -3,43 +3,33 @@ package d3d9
 /*
 #include "d3d9wrapper.h"
 
-HRESULT IDirect3DTexture9AddDirtyRect(IDirect3DTexture9* obj, RECT* pDirtyRect) {
+HRESULT IDirect3DTexture9AddDirtyRect(
+		IDirect3DTexture9* obj,
+		RECT* pDirtyRect) {
 	return obj->lpVtbl->AddDirtyRect(obj, pDirtyRect);
 }
 
-HRESULT IDirect3DTexture9GetLevelDesc(IDirect3DTexture9* obj, UINT Level, D3DSURFACE_DESC* pDesc) {
+HRESULT IDirect3DTexture9GetLevelDesc(
+		IDirect3DTexture9* obj,
+		UINT Level,
+		D3DSURFACE_DESC* pDesc) {
 	return obj->lpVtbl->GetLevelDesc(obj, Level, pDesc);
 }
 
-HRESULT IDirect3DTexture9GetSurfaceLevel(IDirect3DTexture9* obj, UINT Level, IDirect3DSurface9** ppSurfaceLevel) {
+HRESULT IDirect3DTexture9GetSurfaceLevel(
+		IDirect3DTexture9* obj,
+		UINT Level,
+		IDirect3DSurface9** ppSurfaceLevel) {
 	return obj->lpVtbl->GetSurfaceLevel(obj, Level, ppSurfaceLevel);
 }
 
-HRESULT IDirect3DTexture9LockRect(IDirect3DTexture9* obj, UINT Level, D3DLOCKED_RECT* pLockedRect, RECT* pRect, DWORD Flags) {
-	return obj->lpVtbl->LockRect(obj, Level, pLockedRect, pRect, Flags);
-}
-
-void copyDataToLockedRect(
+HRESULT IDirect3DTexture9LockRect(
+		IDirect3DTexture9* obj,
+		UINT Level,
 		D3DLOCKED_RECT* pLockedRect,
-		void* data,
-		int stride,
-		//int width,
-		int height) {
-	int width = stride;
-	if (pLockedRect->Pitch < width) {
-		width = pLockedRect->Pitch;
-	}
-
-	char* dest;
-	char* src;
-	int x, y;
-	for (y = 0; y < height; y++) {
-		dest = (char*) (pLockedRect->pBits + y * pLockedRect->Pitch);
-		src = (char*) (data + y * stride);
-		for (x = 0; x < width; x++) {
-			*dest++ = *src++;
-		}
-	}
+		RECT* pRect,
+		DWORD Flags) {
+	return obj->lpVtbl->LockRect(obj, Level, pLockedRect, pRect, Flags);
 }
 
 HRESULT IDirect3DTexture9UnlockRect(IDirect3DTexture9* obj, UINT Level) {
@@ -62,6 +52,7 @@ func (obj Texture) Release() {
 	C.IDirect3DTexture9Release(obj.handle)
 }
 
+// AddDirtyRect adds a dirty region to a texture resource.
 func (obj Texture) AddDirtyRect(pDirtyRect *RECT) (err error) {
 	if pDirtyRect == nil {
 		err = toErr(C.IDirect3DTexture9AddDirtyRect(obj.handle, nil))
@@ -72,60 +63,71 @@ func (obj Texture) AddDirtyRect(pDirtyRect *RECT) (err error) {
 	return
 }
 
+// GetLevelDesc retrieves a level description of a texture resource.
 func (obj Texture) GetLevelDesc(Level uint) (pDesc SURFACE_DESC, err error) {
 	var c_pDesc C.D3DSURFACE_DESC
-	err = toErr(C.IDirect3DTexture9GetLevelDesc(obj.handle, (C.UINT)(Level), &c_pDesc))
+	err = toErr(C.IDirect3DTexture9GetLevelDesc(
+		obj.handle,
+		(C.UINT)(Level),
+		&c_pDesc,
+	))
 	pDesc.fromC(&c_pDesc)
 	return
 }
 
-func (obj Texture) GetSurfaceLevel(Level uint) (ppSurfaceLevel Surface, err error) {
+// GetSurfaceLevel retrieves the specified texture surface level.
+func (obj Texture) GetSurfaceLevel(
+	Level uint,
+) (
+	ppSurfaceLevel Surface,
+	err error,
+) {
 	var c_ppSurfaceLevel *C.IDirect3DSurface9
-	err = toErr(C.IDirect3DTexture9GetSurfaceLevel(obj.handle, (C.UINT)(Level), &c_ppSurfaceLevel))
-	resource := Resource{(*C.IDirect3DResource9)(unsafe.Pointer(c_ppSurfaceLevel))}
+	err = toErr(C.IDirect3DTexture9GetSurfaceLevel(
+		obj.handle,
+		(C.UINT)(Level),
+		&c_ppSurfaceLevel,
+	))
+	resource := Resource{
+		(*C.IDirect3DResource9)(unsafe.Pointer(c_ppSurfaceLevel)),
+	}
 	ppSurfaceLevel = Surface{resource, c_ppSurfaceLevel}
 	return
 }
 
-func (obj Texture) LockRect(Level uint, pRect *RECT, Flags uint32) (pLockedRect LOCKED_RECT, err error) {
+// LockRect locks a rectangle on a texture resource.
+func (obj Texture) LockRect(
+	Level uint,
+	pRect *RECT,
+	Flags uint32,
+) (
+	pLockedRect LOCKED_RECT,
+	err error,
+) {
 	var c_pLockedRect C.D3DLOCKED_RECT
 	if pRect == nil {
-		err = toErr(C.IDirect3DTexture9LockRect(obj.handle, (C.UINT)(Level), &c_pLockedRect, nil, (C.DWORD)(Flags)))
+		err = toErr(C.IDirect3DTexture9LockRect(
+			obj.handle,
+			(C.UINT)(Level),
+			&c_pLockedRect,
+			nil,
+			(C.DWORD)(Flags),
+		))
 	} else {
 		c_pRect := pRect.toC()
-		err = toErr(C.IDirect3DTexture9LockRect(obj.handle, (C.UINT)(Level), &c_pLockedRect, &c_pRect, (C.DWORD)(Flags)))
+		err = toErr(C.IDirect3DTexture9LockRect(
+			obj.handle,
+			(C.UINT)(Level),
+			&c_pLockedRect,
+			&c_pRect,
+			(C.DWORD)(Flags),
+		))
 	}
 	pLockedRect.fromC(&c_pLockedRect)
 	return
 }
 
-func (obj Texture) LockedSetData(
-	Level uint,
-	pRect *RECT,
-	Flags uint32,
-	data []uint8,
-	stride int,
-	height int,
-) (err error) {
-	locked, err := obj.LockRect(Level, pRect, Flags)
-	if err != nil {
-		return err
-	}
-
-	cLocked := locked.toC()
-	//width := len(data) / stride
-
-	C.copyDataToLockedRect(
-		&cLocked,
-		unsafe.Pointer(&data[0]),
-		C.int(stride),
-		//C.int(width),
-		C.int(height),
-	)
-
-	return obj.UnlockRect(Level)
-}
-
+// UnlockRect unlocks a rectangle on a texture resource.
 func (obj Texture) UnlockRect(Level uint) (err error) {
 	err = toErr(C.IDirect3DTexture9UnlockRect(obj.handle, (C.UINT)(Level)))
 	return

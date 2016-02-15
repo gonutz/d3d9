@@ -3,11 +3,15 @@ package d3d9
 /*
 #include "d3d9wrapper.h"
 
-HRESULT IDirect3DResource9FreePrivateData(IDirect3DResource9* obj, GUID* refguid) {
+HRESULT IDirect3DResource9FreePrivateData(
+		IDirect3DResource9* obj,
+		GUID* refguid) {
 	return obj->lpVtbl->FreePrivateData(obj, refguid);
 }
 
-HRESULT IDirect3DResource9GetDevice(IDirect3DResource9* obj, IDirect3DDevice9** ppDevice) {
+HRESULT IDirect3DResource9GetDevice(
+		IDirect3DResource9* obj,
+		IDirect3DDevice9** ppDevice) {
 	return obj->lpVtbl->GetDevice(obj, ppDevice);
 }
 
@@ -15,7 +19,11 @@ DWORD IDirect3DResource9GetPriority(IDirect3DResource9* obj) {
 	return obj->lpVtbl->GetPriority(obj);
 }
 
-HRESULT IDirect3DResource9GetPrivateData(IDirect3DResource9* obj, GUID* refguid, void* pData, DWORD* pSizeOfData) {
+HRESULT IDirect3DResource9GetPrivateData(
+		IDirect3DResource9* obj,
+		GUID* refguid,
+		void* pData,
+		DWORD* pSizeOfData) {
 	return obj->lpVtbl->GetPrivateData(obj, refguid, pData, pSizeOfData);
 }
 
@@ -27,11 +35,18 @@ void IDirect3DResource9PreLoad(IDirect3DResource9* obj) {
 	obj->lpVtbl->PreLoad(obj);
 }
 
-DWORD IDirect3DResource9SetPriority(IDirect3DResource9* obj, DWORD PriorityNew) {
+DWORD IDirect3DResource9SetPriority(
+		IDirect3DResource9* obj,
+		DWORD PriorityNew) {
 	return obj->lpVtbl->SetPriority(obj, PriorityNew);
 }
 
-HRESULT IDirect3DResource9SetPrivateData(IDirect3DResource9* obj, GUID* refguid, void* pData, DWORD SizeOfData, DWORD Flags) {
+HRESULT IDirect3DResource9SetPrivateData(
+		IDirect3DResource9* obj,
+		GUID* refguid,
+		void* pData,
+		DWORD SizeOfData,
+		DWORD Flags) {
 	return obj->lpVtbl->SetPrivateData(obj, refguid, pData, SizeOfData, Flags);
 }
 
@@ -50,12 +65,16 @@ func (obj Resource) Release() {
 	C.IDirect3DResource9Release(obj.handle)
 }
 
+// FreePrivateData frees the specified private data associated with this
+// resource.
 func (obj Resource) FreePrivateData(refguid GUID) (err error) {
 	c_refguid := refguid.toC()
 	err = toErr(C.IDirect3DResource9FreePrivateData(obj.handle, &c_refguid))
 	return
 }
 
+// GetDevice retrieves the device associated with a resource.
+// Call Release on the returned device when finished using it.
 func (obj Resource) GetDevice() (ppDevice Device, err error) {
 	var c_ppDevice *C.IDirect3DDevice9
 	err = toErr(C.IDirect3DResource9GetDevice(obj.handle, &c_ppDevice))
@@ -63,36 +82,90 @@ func (obj Resource) GetDevice() (ppDevice Device, err error) {
 	return
 }
 
+// GetPriority retrieves the priority for this resource.
 func (obj Resource) GetPriority() uint32 {
 	return (uint32)(C.IDirect3DResource9GetPriority(obj.handle))
 }
 
+// GetPrivateData copies the private data associated with the resource to a
+// provided buffer.
 func (obj Resource) GetPrivateData(refguid GUID) (data []byte, err error) {
+	// first get the data size by passing nil as the data pointer
 	c_refguid := refguid.toC()
 	var c_pSizeOfData C.DWORD
-	err = toErr(C.IDirect3DResource9GetPrivateData(obj.handle, &c_refguid, nil, &c_pSizeOfData))
+	err = toErr(C.IDirect3DResource9GetPrivateData(
+		obj.handle,
+		&c_refguid,
+		nil,
+		&c_pSizeOfData,
+	))
 	if err != nil {
 		return
 	}
 	data = make([]byte, c_pSizeOfData)
-	err = toErr(C.IDirect3DResource9GetPrivateData(obj.handle, &c_refguid, unsafe.Pointer(&data[0]), &c_pSizeOfData))
+	err = toErr(C.IDirect3DResource9GetPrivateData(
+		obj.handle,
+		&c_refguid,
+		unsafe.Pointer(&data[0]),
+		&c_pSizeOfData,
+	))
 	return
 }
 
+// GetType returns the type of the resource.
 func (obj Resource) GetType() RESOURCETYPE {
 	return (RESOURCETYPE)(C.IDirect3DResource9GetType(obj.handle))
 }
 
+// PreLoad preloads a managed resource.
 func (obj Resource) PreLoad() {
 	C.IDirect3DResource9PreLoad(obj.handle)
 }
 
+// SetPriority assigns the priority of a resource for scheduling purposes.
 func (obj Resource) SetPriority(PriorityNew uint32) uint32 {
-	return (uint32)(C.IDirect3DResource9SetPriority(obj.handle, (C.DWORD)(PriorityNew)))
+	return (uint32)(C.IDirect3DResource9SetPriority(
+		obj.handle,
+		(C.DWORD)(PriorityNew),
+	))
 }
 
-func (obj Resource) SetPrivateData(refguid GUID, pData unsafe.Pointer, SizeOfData uint32, Flags uint32) (err error) {
+// SetPrivateData associates data with the resource that is intended for use by
+// the application, not by Direct3D. Data is passed by value, and multiple sets
+// of data can be associated with a single resource.
+func (obj Resource) SetPrivateData(
+	refguid GUID,
+	pData unsafe.Pointer,
+	SizeOfData uint32,
+	Flags uint32,
+) (
+	err error,
+) {
 	c_refguid := refguid.toC()
-	err = toErr(C.IDirect3DResource9SetPrivateData(obj.handle, &c_refguid, pData, (C.DWORD)(SizeOfData), (C.DWORD)(Flags)))
+	err = toErr(C.IDirect3DResource9SetPrivateData(
+		obj.handle,
+		&c_refguid,
+		pData,
+		(C.DWORD)(SizeOfData),
+		(C.DWORD)(Flags),
+	))
 	return
+}
+
+// SetPrivateData associates data with the resource that is intended for use by
+// the application, not by Direct3D. Data is passed by value, and multiple sets
+// of data can be associated with a single resource.
+func (obj Resource) SetPrivateDataBytes(
+	refguid GUID,
+	data []byte,
+	Flags uint32,
+) (
+	err error,
+) {
+	return obj.SetPrivateData(
+		refguid,
+		unsafe.Pointer(&data[0]),
+		uint32(len(data)),
+		Flags,
+	)
 }

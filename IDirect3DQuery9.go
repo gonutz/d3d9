@@ -3,7 +3,11 @@ package d3d9
 /*
 #include "d3d9wrapper.h"
 
-HRESULT IDirect3DQuery9GetData(IDirect3DQuery9* obj, void* pData, DWORD dwSize, DWORD dwGetDataFlags) {
+HRESULT IDirect3DQuery9GetData(
+		IDirect3DQuery9* obj,
+		void* pData,
+		DWORD dwSize,
+		DWORD dwGetDataFlags) {
 	return obj->lpVtbl->GetData(obj, pData, dwSize, dwGetDataFlags);
 }
 
@@ -11,7 +15,9 @@ DWORD IDirect3DQuery9GetDataSize(IDirect3DQuery9* obj) {
 	return obj->lpVtbl->GetDataSize(obj);
 }
 
-HRESULT IDirect3DQuery9GetDevice(IDirect3DQuery9* obj, IDirect3DDevice9** pDevice) {
+HRESULT IDirect3DQuery9GetDevice(
+		IDirect3DQuery9* obj,
+		IDirect3DDevice9** pDevice) {
 	return obj->lpVtbl->GetDevice(obj, pDevice);
 }
 
@@ -38,15 +44,32 @@ func (obj Query) Release() {
 	C.IDirect3DQuery9Release(obj.handle)
 }
 
-func (obj Query) GetData(pData unsafe.Pointer, dwSize uint32, dwGetDataFlags uint32) (err error) {
-	err = toErr(C.IDirect3DQuery9GetData(obj.handle, pData, (C.DWORD)(dwSize), (C.DWORD)(dwGetDataFlags)))
+// GetData polls a queried resource to get the query state or a query result.
+func (obj Query) GetData(pData []byte, dwGetDataFlags uint32) (err error) {
+	if len(pData) == 0 {
+		err = toErr(C.IDirect3DQuery9GetData(
+			obj.handle,
+			nil,
+			0,
+			(C.DWORD)(dwGetDataFlags),
+		))
+	} else {
+		err = toErr(C.IDirect3DQuery9GetData(
+			obj.handle,
+			unsafe.Pointer(&pData[0]),
+			(C.DWORD)(len(pData)),
+			(C.DWORD)(dwGetDataFlags),
+		))
+	}
 	return
 }
 
+// GetDataSize returns the number of bytes in the query data.
 func (obj Query) GetDataSize() uint32 {
 	return uint32(C.IDirect3DQuery9GetDataSize(obj.handle))
 }
 
+// GetDevice returns the device that is being queried.
 func (obj Query) GetDevice() (pDevice Device, err error) {
 	var c_pDevice *C.IDirect3DDevice9
 	err = toErr(C.IDirect3DQuery9GetDevice(obj.handle, &c_pDevice))
@@ -54,10 +77,12 @@ func (obj Query) GetDevice() (pDevice Device, err error) {
 	return
 }
 
+// GetType returns the query type.
 func (obj Query) GetType() QUERYTYPE {
 	return (QUERYTYPE)(C.IDirect3DQuery9GetType(obj.handle))
 }
 
+// Issue issues a query.
 func (obj Query) Issue(dwIssueFlags uint32) (err error) {
 	err = toErr(C.IDirect3DQuery9Issue(obj.handle, (C.DWORD)(dwIssueFlags)))
 	return

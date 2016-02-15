@@ -3,11 +3,16 @@ package d3d9
 /*
 #include "d3d9wrapper.h"
 
-HRESULT IDirect3DVertexDeclaration9GetDeclaration(IDirect3DVertexDeclaration9* obj, D3DVERTEXELEMENT9* pDecl, UINT* pNumElements) {
+HRESULT IDirect3DVertexDeclaration9GetDeclaration(
+		IDirect3DVertexDeclaration9* obj,
+		D3DVERTEXELEMENT9* pDecl,
+		UINT* pNumElements) {
 	return obj->lpVtbl->GetDeclaration(obj, pDecl, pNumElements);
 }
 
-HRESULT IDirect3DVertexDeclaration9GetDevice(IDirect3DVertexDeclaration9* obj, IDirect3DDevice9** ppDevice) {
+HRESULT IDirect3DVertexDeclaration9GetDevice(
+		IDirect3DVertexDeclaration9* obj,
+		IDirect3DDevice9** ppDevice) {
 	return obj->lpVtbl->GetDevice(obj, ppDevice);
 }
 
@@ -25,14 +30,27 @@ func (obj VertexDeclaration) Release() {
 	C.IDirect3DVertexDeclaration9Release(obj.handle)
 }
 
-func (obj VertexDeclaration) GetDeclaration() (pDecl []VERTEXELEMENT, err error) {
+// GetDeclaration returns the vertex shader declaration.
+func (obj VertexDeclaration) GetDeclaration() (
+	pDecl []VERTEXELEMENT,
+	err error,
+) {
+	// first pass nil for the elements to get the count
 	var c_pNumElements C.UINT
-	err = toErr(C.IDirect3DVertexDeclaration9GetDeclaration(obj.handle, nil, &c_pNumElements))
+	err = toErr(C.IDirect3DVertexDeclaration9GetDeclaration(
+		obj.handle,
+		nil,
+		&c_pNumElements,
+	))
 	if err != nil {
 		return
 	}
 	c_pDecl := make([]C.D3DVERTEXELEMENT9, c_pNumElements)
-	err = toErr(C.IDirect3DVertexDeclaration9GetDeclaration(obj.handle, &c_pDecl[0], &c_pNumElements))
+	err = toErr(C.IDirect3DVertexDeclaration9GetDeclaration(
+		obj.handle,
+		&c_pDecl[0],
+		&c_pNumElements,
+	))
 	if err != nil {
 		return
 	}
@@ -43,6 +61,7 @@ func (obj VertexDeclaration) GetDeclaration() (pDecl []VERTEXELEMENT, err error)
 	return
 }
 
+// GetDevice returns the current device.
 func (obj VertexDeclaration) GetDevice() (ppDevice Device, err error) {
 	var c_ppDevice *C.IDirect3DDevice9
 	err = toErr(C.IDirect3DVertexDeclaration9GetDevice(obj.handle, &c_ppDevice))

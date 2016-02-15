@@ -3,11 +3,16 @@ package d3d9
 /*
 #include "d3d9wrapper.h"
 
-HRESULT IDirect3DVertexShader9GetDevice(IDirect3DVertexShader9* obj, IDirect3DDevice9** ppDevice) {
+HRESULT IDirect3DVertexShader9GetDevice(
+		IDirect3DVertexShader9* obj,
+		IDirect3DDevice9** ppDevice) {
 	return obj->lpVtbl->GetDevice(obj, ppDevice);
 }
 
-HRESULT IDirect3DVertexShader9GetFunction(IDirect3DVertexShader9* obj, void* pData, UINT* pSizeOfData) {
+HRESULT IDirect3DVertexShader9GetFunction(
+		IDirect3DVertexShader9* obj,
+		void* pData,
+		UINT* pSizeOfData) {
 	return obj->lpVtbl->GetFunction(obj, pData, pSizeOfData);
 }
 
@@ -33,13 +38,23 @@ func (obj VertexShader) GetDevice() (ppDevice Device, err error) {
 	return
 }
 
+// GetFunction returns the shader data.
 func (obj VertexShader) GetFunction() (pData []byte, err error) {
-	var c_pSizeOfData C.UINT
-	err = toErr(C.IDirect3DVertexShader9GetFunction(obj.handle, nil, &c_pSizeOfData))
+	// first get the needed buffer size, pass nil as the data pointer
+	var c_pSizeOfDataInBytes C.UINT
+	err = toErr(C.IDirect3DVertexShader9GetFunction(
+		obj.handle,
+		nil,
+		&c_pSizeOfDataInBytes,
+	))
 	if err != nil {
 		return
 	}
-	pData = make([]byte, c_pSizeOfData)
-	err = toErr(C.IDirect3DVertexShader9GetFunction(obj.handle, unsafe.Pointer(&pData[0]), &c_pSizeOfData))
+	pData = make([]byte, c_pSizeOfDataInBytes)
+	err = toErr(C.IDirect3DVertexShader9GetFunction(
+		obj.handle,
+		unsafe.Pointer(&pData[0]),
+		&c_pSizeOfDataInBytes,
+	))
 	return
 }
