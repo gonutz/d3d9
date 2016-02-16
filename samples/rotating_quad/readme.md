@@ -1,4 +1,4 @@
-This sample displays a rotating rectangle. It shows you how to use vertex buffers and shaders with a transformation matrix. The shaders were compiled with FXC.exe, the DirectX effects compiler, which is included in the DirectX SDK and the Windows Platform SDK. The compiled shader object code was then converted to a Go byte array to be used directly in the code.
+This sample displays a rotating rectangle. It shows you how to use vertex buffers and shaders with a transformation matrix. The shaders were compiled with `FXC.exe`, the DirectX effects compiler, which is included in the DirectX SDK and the Windows Platform SDK. The compiled shader object code was then converted to a Go byte array to be used directly in the code.
 
 For window creation this sample uses [SDL2](https://github.com/veandco/go-sdl2). Direct3D needs a handle to the window it runs in so you need a method for setting this up. Other libraries that you can use include [Allen Dang's w32 library](https://github.com/AllenDang/w32) and the [walk library](https://github.com/lxn/walk).
 

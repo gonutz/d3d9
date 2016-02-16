@@ -1,5 +1,5 @@
-This simple example initializes Direct3D9 and draws a static pink triangle in the center.
-It shows how to create and use vertex buffers and shaders.
+This simple example initializes Direct3D9 and draws a static pink triangle in the center. It shows how to create and use vertex buffers and shaders.
+For compiling shaders for Direct3D you need `FXC.exe`, the DirectX effects compiler, which is included in the DirectX SDK and the Windows Platform SDK. See `build_shaders.bat` for details.
 
 For window creation this sample uses [Allen Dang's w32 library](https://github.com/AllenDang/w32). Direct3D needs a handle to the window it runs in so you need a method for setting this up. Other libraries that you can use include [SDL2](https://github.com/veandco/go-sdl2) and the [walk library](https://github.com/lxn/walk).
 
