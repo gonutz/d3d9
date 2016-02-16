@@ -50,10 +50,19 @@ func main() {
 		check(err)
 		fmt.Printf(
 			"driver: %v (%v)\n",
-			string(id.Driver[:]),
-			string(id.Description[:]),
+			toString(id.Driver),
+			toString(id.Description),
 		)
 	}
+}
+
+func toString(cString [512]byte) string {
+	for i, b := range cString {
+		if b == 0 {
+			return string(cString[:i])
+		}
+	}
+	return string(cString[:])
 }
 
 func check(err error) {
