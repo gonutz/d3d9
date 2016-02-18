@@ -1,3 +1,13 @@
+/*
+Package d3d9 provides a wrapper for Microsoft's Direct3D9 API. The package can
+thus only be used on Windows.
+To build the package you need a working C compiler. It was tested with MinGW,
+both the 32 bit and 64 bit versions work. You do not need to install any
+additional libraries, this wrapper works with the standard MinGW installation.
+When running a Direct3D application you need to have d3d9.dll installed on the
+system, which fortunately has been deployed with all Windows versions since XP.
+This means if you have Go installed, you also have the DLL installed.
+*/
 package d3d9
 
 /*
