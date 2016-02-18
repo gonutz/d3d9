@@ -4,7 +4,12 @@ import (
 	"github.com/gonutz/d3d9"
 	"github.com/veandco/go-sdl2/sdl"
 	"math"
+	"runtime"
 )
+
+func init() {
+	runtime.LockOSThread()
+}
 
 func main() {
 	// set up SDL2, init nothing as we will be initializing D3D ourselves

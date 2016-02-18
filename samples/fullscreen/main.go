@@ -4,8 +4,13 @@ import (
 	"github.com/AllenDang/gform"
 	"github.com/AllenDang/w32"
 	"github.com/gonutz/d3d9"
+	"runtime"
 	"unsafe"
 )
+
+func init() {
+	runtime.LockOSThread()
+}
 
 func main() {
 	gform.Init()

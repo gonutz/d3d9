@@ -11,6 +11,8 @@ func toErr(result C.HRESULT) error {
 	return hResultError(result)
 }
 
+// TODO check that all errors are handled
+
 type hResultError C.HRESULT
 
 func (r hResultError) Error() string {
