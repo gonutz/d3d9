@@ -2,7 +2,7 @@
 This library is a Go wrapper for Microsoft's Direct3D9 API.
 
 # Build
-Besides a working Go installation you need to have a C compiler installed. The library was tested with MinGW (32 bit) on Windows XP and with MinGW (64 bit) on Windows 8.1. No additional Go or C libraries are needed to build, once you have set up your C compiler just use
+Besides a working Go installation you need to have a C compiler installed. The library was tested with [MinGW (32 bit)](https://sourceforge.net/projects/mingw/files/) on Windows XP and with MinGW (64 bit) on Windows 8.1. No additional Go or C libraries are needed to build, once you have set up your C compiler just use
 
     go get -u github.com/gonutz/d3d9
 
