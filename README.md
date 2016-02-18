@@ -1,20 +1,26 @@
 # d3d9
-This library allows you to use Direct3D9 from your Go programs. It is a thin wrapper around the C API. It was mostly generated from the MSDN documentation and then manually improved where necessary.
+This library is a Go wrapper for Microsoft's Direct3D9 API.
+
+# Build
+Besides a working Go installation you need to have a C compiler installed. The library was tested with MinGW (32 bit) on Windows XP and with MinGW (64 bit) on Windows 8.1. No additional Go or C libraries are needed to build, once you have set up your C compiler just use
+
+    go get -u github.com/gonutz/d3d9
+
+to build and install.
+
+To run a Direct3D9 application you need to have d3d9.dll installed on your system. Since Windows XP this is pre-installed with all Windows versions, so if you have Go installed you will have d3d9.dll as well. This also means that you will not need to ship any additional DLL when building with this library.
 
 # Usage
-All Direct3D9 interfaces are translated to Go types. The D3D9 part of the names was dropped, e.g. `IDirect3DDevice9` is now `d3d9.Device`.
-Interface methods are simply translated to methods on the Go types and have the same name.
+All Direct3D9 interfaces are translated to Go types and their methods are translated to functions on the types so the usage is very close to the C++ API.
 
-For structures the `D3D` prefix and `9` suffix was dropped, e.g. `D3DCAPS9` is `d3d9.CAPS`.
+There are some differences in the names in Go, since the package is named `d3d9`, all names in that package drop the `D3D` and `9` parts because they would be redundant. The changes are:
 
-Constants and enumerations were changed in the same way.
+- Interfaces drop the `IDirect3D` prefix and the `9` suffix, e.g. `IDirect3DDevice9` becomes `d3d9.Device`, `IDirect3DDevice9` becomes `d3d9.Device` etc.
+- Constants and enumerations drop the `D3D` prefix, otherwise they are the same and keep the upper case convention so users of Direct3D can easily find what they are looking for. For example `D3DADAPTER_DEFAULT` becomes `d3d9.ADAPTER_DEFAULT`, `D3DFMT_R8G8B8` becomes `d3d9.FMT_R8G8B8` etc.
+- Structs, like constants, only drop the `D3D` prefix, they too keep the upper case naming convention, so `D3DRANGE` becomes `RANGE`. There is one exception to this, `D3DRECT` is still `D3DRECT` because the API also uses Windows' `RECT` type and these are two distinct types.
+- Error constants also drop the `D3D` prefix so `D3DERR_OUTOFVIDEOMEMORY` becomes `ERR_OUTOFVIDEOMEMORY`. However, the interface functions do not return these constants, they return Go `error`s instead of `HRESULT`s.
 
-# Building
-This library provides a Cgo wrapper around the C++ API so make sure you have a C compiler and the DirectX header files included. Specifically you need `d3d9.h` in your include path.
-
-For initialization the `d3d9.dll` is loaded so it must be installed on the target PC (every version of Windows from XP up should include this, so if you can install Go on your PC, you probably already have it). No static `.lib` files are necessary for building.
-
-Note that Direct3D9 needs a window handle for setting it up. This means that you need some way to create a native window and get the handle to pass it to d3d9. In the samples you can see how to do it using the [SDL2 Go wrapper](https://github.com/veandco/go-sdl2). You can also use another Windows wrapper library, like [Allen Dang's w32](https://github.com/AllenDang/w32) or the [walk library](https://github.com/lxn/walk). You could even write a little Cgo code to set up a window yourself. This library does not provide window creation or event handling functionality, only a Direct3D9 wrapper.
+Note that Direct3D9 needs a window handle for setting it up. This means that you need some way to create a native window and get the handle to pass it to d3d9. In the samples you can see how to do it using the [SDL2 Go wrapper](https://github.com/veandco/go-sdl2) and [Allen Dang's w32](https://github.com/AllenDang/w32). You can also use another Windows wrapper library, like the [walk library](https://github.com/lxn/walk). You can also write a little CGo code to set up a window yourself. This library does not provide window creation or event handling functionality, only the Direct3D9 wrapper.
 
 When you write a program using this library, make sure to add this code in your main package:
 
@@ -23,10 +29,8 @@ When you write a program using this library, make sure to add this code in your 
 	}
 
 # Status
-Right now the code is mostly generated from the MSDN documentation and will need more tweaks and refinement to work more fluently with Go.
-
-For example, to transfer data to and from the GPU, like shader object code or vertex buffer data, the Direct3D9 API uses void* pointers which translate to unsafe.Pointers in Go. This is not a good interface to work with, though. That is why there are already some helper functions like `d3d9.Device.CreatePixelShaderFromBytes` which takes a byte slice and creates and sets a pixel shader in one call. For common operations like this, convenience methods come in very handy and reduce the friction when working in Go.
+The code started out as a rough version generated from the MSDN online documentation and was then manually refined to work well with Go and its conventions. It wraps the whole Direct3D9 API right now and adds some additional convenience functions for easy Go usage. However, LOCKED_RECT only has one function for setting the whole data rectangle at once, there is no simple way to set only sub-rectangles right now. Similarly the CubeTexture's LOCKED_BOX has no wrapper functions for getting and setting its data, yet. For now the raw unsafe.Pointer memory pointers can be used along with the pitch values and in the future such functions can be added when needed.
 
 # Help improve this library
 
-Only real world use and feedback can improve the usability of this library, so please use it, fork it, send pull requests and create issues to help bring Direct3D to Go!
+Only real world use and feedback can improve the usability of this library, so please use it, fork it, send pull requests and create issues to help improve this library.
