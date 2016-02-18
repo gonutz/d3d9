@@ -15,7 +15,7 @@ All Direct3D9 interfaces are translated to Go types and their methods are transl
 
 There are some differences in the names in Go, since the package is named `d3d9`, all names in that package drop the `D3D` and `9` parts because they would be redundant. The changes are:
 
-- Interfaces drop the `IDirect3D` prefix and the `9` suffix, e.g. `IDirect3DDevice9` becomes `d3d9.Device`. The only exceptions is `IDirect3D9` which in Go becomes `Direct3D`.
+- Interfaces drop the `IDirect3D` prefix and the `9` suffix, e.g. `IDirect3DDevice9` becomes `d3d9.Device`. The only exception is `IDirect3D9` which in Go becomes `Direct3D`.
 - Constants and enumerations drop the `D3D` prefix, otherwise they are the same and keep the upper case convention so users of Direct3D can easily find what they are looking for. For example `D3DADAPTER_DEFAULT` becomes `d3d9.ADAPTER_DEFAULT`, `D3DFMT_R8G8B8` becomes `d3d9.FMT_R8G8B8` etc.
 - Structs, like constants, only drop the `D3D` prefix, they too keep the upper case naming convention, so `D3DRANGE` becomes `RANGE`. There is one exception to this, `D3DRECT` is still `D3DRECT` because the API also uses Windows' `RECT` type and these are two distinct types.
 - Error constants also drop the `D3D` prefix so `D3DERR_OUTOFVIDEOMEMORY` becomes `ERR_OUTOFVIDEOMEMORY`. However, the interface functions do not return these constants, they return Go `error`s instead of `HRESULT`s.
