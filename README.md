@@ -28,6 +28,10 @@ When you write a program using this library, make sure to add this code in your 
 	    runtime.LockOSThread()
 	}
 
+There are some additional convenience functions. `IndexBuffer` and `VertexBuffer` have `Lock` functions which return void* pointers in the C API and would thus return unsafe.Pointers in Go. You can use these pointers to read and write various types from/to that memory. However, using unsafe.Pointer is not idiomatic Go so the `Lock` functions return a wrapper around the unsafe.Pointer instead. The wrapper provides functions of the form `GetFloat32s` and `SetFloat32s` which take a slice of `[]float32` and handles copying the data for you. See the functions for the documentation.
+
+Similarly, when locking a two-dimensional resource, like a texture, you will get a `d3d9.LOCKED_RECT`. It too has a wrapper function for setting its 2D data. There is however no function to read the data, yet, and no functions for reading and writing sub-rectangles which could be useful. These functions can be added when needed by a real application to see the use case first and implement the functions according to that instead of guessing what might work. If you need such a function, create a pull request or an issue and it can be incorporated in this library.
+
 # Documentation
 See the [GoDoc](https://godoc.org/github.com/gonutz/d3d9) for the Go API. The functions are only documented very generally, to get more detailed information about the Direct3D9 API see the [MSDN documentation](https://msdn.microsoft.com/en-us/library/windows/desktop/bb172964%28v=vs.85%29.aspx).
 
