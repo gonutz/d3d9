@@ -36,11 +36,15 @@ void IDirect3DBaseTexture9Release(IDirect3DBaseTexture9* obj) {
 */
 import "C"
 
+// BaseTexture and its methods are used to manipulate texture resources
+// including cube and volume textures.
 type BaseTexture struct {
 	Resource
 	handle *C.IDirect3DBaseTexture9
 }
 
+// Release has to be called when finished using the object to free its
+// associated resources.
 func (obj BaseTexture) Release() {
 	C.IDirect3DBaseTexture9Release(obj.handle)
 }

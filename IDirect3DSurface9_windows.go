@@ -57,11 +57,14 @@ void IDirect3DSurface9Release(IDirect3DSurface9* obj) {
 import "C"
 import "unsafe"
 
+// Surface and its methods are used to query and prepare surfaces.
 type Surface struct {
 	Resource
 	handle *C.IDirect3DSurface9
 }
 
+// Release has to be called when finished using the object to free its
+// associated resources.
 func (obj Surface) Release() {
 	C.IDirect3DSurface9Release(obj.handle)
 }
@@ -73,19 +76,19 @@ func (obj Surface) GetContainerCubeTexture(
 	cubeTex CubeTexture,
 	err error,
 ) {
-	c_riid := riid.toC()
-	var c_handle *C.IDirect3DCubeTexture9
+	criid := riid.toC()
+	var chandle *C.IDirect3DCubeTexture9
 	err = toErr(C.IDirect3DSurface9GetContainerCubeTexture(
 		obj.handle,
-		&c_riid,
-		&c_handle,
+		&criid,
+		&chandle,
 	))
-	resource := Resource{(*C.IDirect3DResource9)(unsafe.Pointer(c_handle))}
+	resource := Resource{(*C.IDirect3DResource9)(unsafe.Pointer(chandle))}
 	baseTexture := BaseTexture{
 		resource,
-		(*C.IDirect3DBaseTexture9)(unsafe.Pointer(c_handle)),
+		(*C.IDirect3DBaseTexture9)(unsafe.Pointer(chandle)),
 	}
-	cubeTex = CubeTexture{baseTexture, c_handle}
+	cubeTex = CubeTexture{baseTexture, chandle}
 	return
 }
 
@@ -96,19 +99,19 @@ func (obj Surface) GetContainerTexture(
 	tex Texture,
 	err error,
 ) {
-	c_riid := riid.toC()
-	var c_handle *C.IDirect3DTexture9
+	criid := riid.toC()
+	var chandle *C.IDirect3DTexture9
 	err = toErr(C.IDirect3DSurface9GetContainerTexture(
 		obj.handle,
-		&c_riid,
-		&c_handle,
+		&criid,
+		&chandle,
 	))
-	resource := Resource{(*C.IDirect3DResource9)(unsafe.Pointer(c_handle))}
+	resource := Resource{(*C.IDirect3DResource9)(unsafe.Pointer(chandle))}
 	baseTexture := BaseTexture{
 		resource,
-		(*C.IDirect3DBaseTexture9)(unsafe.Pointer(c_handle)),
+		(*C.IDirect3DBaseTexture9)(unsafe.Pointer(chandle)),
 	}
-	tex = Texture{baseTexture, c_handle}
+	tex = Texture{baseTexture, chandle}
 	return
 }
 
@@ -120,30 +123,30 @@ func (obj Surface) GetContainerSwapChain(
 	chain SwapChain,
 	err error,
 ) {
-	c_riid := riid.toC()
-	var c_handle *C.IDirect3DSwapChain9
+	criid := riid.toC()
+	var chandle *C.IDirect3DSwapChain9
 	err = toErr(C.IDirect3DSurface9GetContainerSwapChain(
 		obj.handle,
-		&c_riid,
-		&c_handle,
+		&criid,
+		&chandle,
 	))
-	chain = SwapChain{c_handle}
+	chain = SwapChain{chandle}
 	return
 }
 
 // GetDC retrieves a device context.
 func (obj Surface) GetDC() (phdc unsafe.Pointer, err error) {
-	var c_phdc C.HDC
-	err = toErr(C.IDirect3DSurface9GetDC(obj.handle, &c_phdc))
-	phdc = (unsafe.Pointer)(c_phdc)
+	var cphdc C.HDC
+	err = toErr(C.IDirect3DSurface9GetDC(obj.handle, &cphdc))
+	phdc = (unsafe.Pointer)(cphdc)
 	return
 }
 
 // GetDesc retrieves a description of the surface.
 func (obj Surface) GetDesc() (pDesc SURFACE_DESC, err error) {
-	var c_pDesc C.D3DSURFACE_DESC
-	err = toErr(C.IDirect3DSurface9GetDesc(obj.handle, &c_pDesc))
-	pDesc.fromC(&c_pDesc)
+	var cpDesc C.D3DSURFACE_DESC
+	err = toErr(C.IDirect3DSurface9GetDesc(obj.handle, &cpDesc))
+	pDesc.fromC(&cpDesc)
 	return
 }
 
@@ -155,24 +158,24 @@ func (obj Surface) LockRect(
 	pLockedRect LOCKED_RECT,
 	err error,
 ) {
-	var c_pLockedRect C.D3DLOCKED_RECT
+	var cpLockedRect C.D3DLOCKED_RECT
 	if pRect == nil {
 		err = toErr(C.IDirect3DSurface9LockRect(
 			obj.handle,
-			&c_pLockedRect,
+			&cpLockedRect,
 			nil,
 			(C.DWORD)(Flags),
 		))
 	} else {
-		c_pRect := pRect.toC()
+		cpRect := pRect.toC()
 		err = toErr(C.IDirect3DSurface9LockRect(
 			obj.handle,
-			&c_pLockedRect,
-			&c_pRect,
+			&cpLockedRect,
+			&cpRect,
 			(C.DWORD)(Flags),
 		))
 	}
-	pLockedRect.fromC(&c_pLockedRect)
+	pLockedRect.fromC(&cpLockedRect)
 	return
 }
 

@@ -36,10 +36,13 @@ void IDirect3DQuery9Release(IDirect3DQuery9* obj) {
 import "C"
 import "unsafe"
 
+// Query and its methods are used to perform asynchronous queries on a driver.
 type Query struct {
 	handle *C.IDirect3DQuery9
 }
 
+// Release has to be called when finished using the object to free its
+// associated resources.
 func (obj Query) Release() {
 	C.IDirect3DQuery9Release(obj.handle)
 }
@@ -71,9 +74,9 @@ func (obj Query) GetDataSize() uint32 {
 
 // GetDevice returns the device that is being queried.
 func (obj Query) GetDevice() (pDevice Device, err error) {
-	var c_pDevice *C.IDirect3DDevice9
-	err = toErr(C.IDirect3DQuery9GetDevice(obj.handle, &c_pDevice))
-	pDevice = Device{c_pDevice}
+	var cpDevice *C.IDirect3DDevice9
+	err = toErr(C.IDirect3DQuery9GetDevice(obj.handle, &cpDevice))
+	pDevice = Device{cpDevice}
 	return
 }
 

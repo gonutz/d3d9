@@ -23,10 +23,13 @@ void IDirect3DStateBlock9Release(IDirect3DStateBlock9* obj) {
 */
 import "C"
 
+// StateBlock and its methods are used to encapsulate render states.
 type StateBlock struct {
 	handle *C.IDirect3DStateBlock9
 }
 
+// Release has to be called when finished using the object to free its
+// associated resources.
 func (obj StateBlock) Release() {
 	C.IDirect3DStateBlock9Release(obj.handle)
 }
@@ -46,8 +49,8 @@ func (obj StateBlock) Capture() (err error) {
 
 // GetDevice returns the device.
 func (obj StateBlock) GetDevice() (ppDevice Device, err error) {
-	var c_ppDevice *C.IDirect3DDevice9
-	err = toErr(C.IDirect3DStateBlock9GetDevice(obj.handle, &c_ppDevice))
-	ppDevice = Device{c_ppDevice}
+	var cppDevice *C.IDirect3DDevice9
+	err = toErr(C.IDirect3DStateBlock9GetDevice(obj.handle, &cppDevice))
+	ppDevice = Device{cppDevice}
 	return
 }

@@ -60,18 +60,21 @@ void IDirect3DVolume9Release(IDirect3DVolume9* obj) {
 import "C"
 import "unsafe"
 
+// Volume and its methods are used to manipulate volume resources.
 type Volume struct {
 	handle *C.IDirect3DVolume9
 }
 
+// Release has to be called when finished using the object to free its
+// associated resources.
 func (obj Volume) Release() {
 	C.IDirect3DVolume9Release(obj.handle)
 }
 
 // FreePrivateData frees the specified private data associated with this volume.
 func (obj Volume) FreePrivateData(refguid GUID) (err error) {
-	c_refguid := refguid.toC()
-	err = toErr(C.IDirect3DVolume9FreePrivateData(obj.handle, &c_refguid))
+	crefguid := refguid.toC()
+	err = toErr(C.IDirect3DVolume9FreePrivateData(obj.handle, &crefguid))
 	return
 }
 
@@ -85,10 +88,10 @@ func (obj Volume) GetContainer(
 	err error,
 ) {
 	var handle *C.IDirect3DVolumeTexture9
-	c_riid := riid.toC()
+	criid := riid.toC()
 	err = toErr(C.IDirect3DVolume9GetContainer(
 		obj.handle,
-		&c_riid,
+		&criid,
 		&handle,
 	))
 	resource := Resource{(*C.IDirect3DResource9)(unsafe.Pointer(handle))}
@@ -105,17 +108,17 @@ func (obj Volume) GetContainer(
 
 // GetDesc retrieves a description of the volume.
 func (obj Volume) GetDesc() (pDesc VOLUME_DESC, err error) {
-	var c_pDesc C.D3DVOLUME_DESC
-	err = toErr(C.IDirect3DVolume9GetDesc(obj.handle, &c_pDesc))
-	pDesc.fromC(&c_pDesc)
+	var cpDesc C.D3DVOLUME_DESC
+	err = toErr(C.IDirect3DVolume9GetDesc(obj.handle, &cpDesc))
+	pDesc.fromC(&cpDesc)
 	return
 }
 
 // GetDevice retrieves the device associated with a volume.
 func (obj Volume) GetDevice() (ppDevice Device, err error) {
-	var c_ppDevice *C.IDirect3DDevice9
-	err = toErr(C.IDirect3DVolume9GetDevice(obj.handle, &c_ppDevice))
-	ppDevice = Device{c_ppDevice}
+	var cppDevice *C.IDirect3DDevice9
+	err = toErr(C.IDirect3DVolume9GetDevice(obj.handle, &cppDevice))
+	ppDevice = Device{cppDevice}
 	return
 }
 
@@ -123,23 +126,23 @@ func (obj Volume) GetDevice() (ppDevice Device, err error) {
 // provided buffer.
 func (obj Volume) GetPrivateData(refguid GUID) (pData []byte, err error) {
 	// first get the buffer size by passing nil as the data pointer
-	c_refguid := refguid.toC()
-	var c_pSizeOfDataInBytes C.DWORD
+	crefguid := refguid.toC()
+	var cpSizeOfDataInBytes C.DWORD
 	err = toErr(C.IDirect3DVolume9GetPrivateData(
 		obj.handle,
-		&c_refguid,
+		&crefguid,
 		nil,
-		&c_pSizeOfDataInBytes,
+		&cpSizeOfDataInBytes,
 	))
 	if err != nil {
 		return
 	}
-	pData = make([]byte, c_pSizeOfDataInBytes)
+	pData = make([]byte, cpSizeOfDataInBytes)
 	err = toErr(C.IDirect3DVolume9GetPrivateData(
 		obj.handle,
-		&c_refguid,
+		&crefguid,
 		unsafe.Pointer(&pData[0]),
-		&c_pSizeOfDataInBytes,
+		&cpSizeOfDataInBytes,
 	))
 	return
 }
@@ -152,24 +155,24 @@ func (obj Volume) LockBox(
 	pLockedVolume LOCKED_BOX,
 	err error,
 ) {
-	var c_pLockedVolume C.D3DLOCKED_BOX
+	var cpLockedVolume C.D3DLOCKED_BOX
 	if pBox == nil {
 		err = toErr(C.IDirect3DVolume9LockBox(
 			obj.handle,
-			&c_pLockedVolume,
+			&cpLockedVolume,
 			nil,
 			(C.DWORD)(Flags),
 		))
 	} else {
-		c_pBox := pBox.toC()
+		cpBox := pBox.toC()
 		err = toErr(C.IDirect3DVolume9LockBox(
 			obj.handle,
-			&c_pLockedVolume,
-			&c_pBox,
+			&cpLockedVolume,
+			&cpBox,
 			(C.DWORD)(Flags),
 		))
 	}
-	pLockedVolume.fromC(&c_pLockedVolume)
+	pLockedVolume.fromC(&cpLockedVolume)
 	return
 }
 
@@ -183,10 +186,10 @@ func (obj Volume) SetPrivateData(
 ) (
 	err error,
 ) {
-	c_refguid := refguid.toC()
+	crefguid := refguid.toC()
 	err = toErr(C.IDirect3DVolume9SetPrivateData(
 		obj.handle,
-		&c_refguid,
+		&crefguid,
 		pData,
 		(C.DWORD)(SizeOfData),
 		(C.DWORD)(Flags),

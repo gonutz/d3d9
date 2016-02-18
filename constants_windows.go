@@ -3,6 +3,8 @@ package d3d9
 //#include "d3d9wrapper.h"
 import "C"
 
+// These are all constants that are used in the Direct3D interface functions.
+// See the online documentation for their meanings and when to use them.
 const (
 	ADAPTER_DEFAULT                             = C.D3DADAPTER_DEFAULT
 	CAPS_READ_SCANLINE                          = C.D3DCAPS_READ_SCANLINE

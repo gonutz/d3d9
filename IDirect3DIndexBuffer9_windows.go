@@ -29,20 +29,23 @@ void IDirect3DIndexBuffer9Release(IDirect3DIndexBuffer9* obj) {
 import "C"
 import "unsafe"
 
+// IndexBuffer and its methods are used to manipulate an index buffer resource.
 type IndexBuffer struct {
 	Resource
 	handle *C.IDirect3DIndexBuffer9
 }
 
+// Release has to be called when finished using the object to free its
+// associated resources.
 func (obj IndexBuffer) Release() {
 	C.IDirect3DIndexBuffer9Release(obj.handle)
 }
 
 // GetDesc retrieves a description of the index buffer resource.
 func (obj IndexBuffer) GetDesc() (pDesc INDEXBUFFER_DESC, err error) {
-	var c_pDesc C.D3DINDEXBUFFER_DESC
-	err = toErr(C.IDirect3DIndexBuffer9GetDesc(obj.handle, &c_pDesc))
-	pDesc.fromC(&c_pDesc)
+	var cpDesc C.D3DINDEXBUFFER_DESC
+	err = toErr(C.IDirect3DIndexBuffer9GetDesc(obj.handle, &cpDesc))
+	pDesc.fromC(&cpDesc)
 	return
 }
 
@@ -68,10 +71,14 @@ func (obj IndexBuffer) Lock(
 	return
 }
 
+// IndexBufferMemory encapsulates a raw memory pointer and provides methods to
+// get and set typical slice types.
 type IndexBufferMemory struct {
 	Memory unsafe.Pointer
 }
 
+// SetUint32s copies the given slice to the memory, starting at the given
+// offset in items (not in bytes).
 func (m IndexBufferMemory) SetUint32s(offsetInInts int, data []uint32) {
 	C.memcpy(
 		unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*4)),
@@ -80,6 +87,8 @@ func (m IndexBufferMemory) SetUint32s(offsetInInts int, data []uint32) {
 	)
 }
 
+// GetUint32s copies data from memory to the given slice, starting at the given
+// offset in items (not in bytes).
 func (m IndexBufferMemory) GetUint32s(offsetInInts int, data []uint32) {
 	C.memcpy(
 		unsafe.Pointer(&data[0]),
@@ -88,6 +97,8 @@ func (m IndexBufferMemory) GetUint32s(offsetInInts int, data []uint32) {
 	)
 }
 
+// SetUint16s copies the given slice to the memory, starting at the given
+// offset in items (not in bytes).
 func (m IndexBufferMemory) SetUint16s(offsetInInts int, data []uint16) {
 	C.memcpy(
 		unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*2)),
@@ -96,6 +107,8 @@ func (m IndexBufferMemory) SetUint16s(offsetInInts int, data []uint16) {
 	)
 }
 
+// GetUint16s copies data from memory to the given slice, starting at the given
+// offset in items (not in bytes).
 func (m IndexBufferMemory) GetUint16s(offsetInInts int, data []uint16) {
 	C.memcpy(
 		unsafe.Pointer(&data[0]),

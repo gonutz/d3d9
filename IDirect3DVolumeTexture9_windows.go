@@ -43,11 +43,15 @@ void IDirect3DVolumeTexture9Release(IDirect3DVolumeTexture9* obj) {
 */
 import "C"
 
+// VolumeTexture and its methods are used to manipulate a volume texture
+// resource.
 type VolumeTexture struct {
 	BaseTexture
 	handle *C.IDirect3DVolumeTexture9
 }
 
+// Release has to be called when finished using the object to free its
+// associated resources.
 func (obj VolumeTexture) Release() {
 	C.IDirect3DVolumeTexture9Release(obj.handle)
 }
@@ -57,10 +61,10 @@ func (obj VolumeTexture) AddDirtyBox(pDirtyBox *BOX) (err error) {
 	if pDirtyBox == nil {
 		err = toErr(C.IDirect3DVolumeTexture9AddDirtyBox(obj.handle, nil))
 	} else {
-		c_pDirtyBox := pDirtyBox.toC()
+		cpDirtyBox := pDirtyBox.toC()
 		err = toErr(C.IDirect3DVolumeTexture9AddDirtyBox(
 			obj.handle,
-			&c_pDirtyBox,
+			&cpDirtyBox,
 		))
 	}
 	return
@@ -73,13 +77,13 @@ func (obj VolumeTexture) GetLevelDesc(
 	pDesc VOLUME_DESC,
 	err error,
 ) {
-	var c_pDesc C.D3DVOLUME_DESC
+	var cpDesc C.D3DVOLUME_DESC
 	err = toErr(C.IDirect3DVolumeTexture9GetLevelDesc(
 		obj.handle,
 		(C.UINT)(Level),
-		&c_pDesc,
+		&cpDesc,
 	))
-	pDesc.fromC(&c_pDesc)
+	pDesc.fromC(&cpDesc)
 	return
 }
 
@@ -91,13 +95,13 @@ func (obj VolumeTexture) GetVolumeLevel(
 	ppVolumeLevel Volume,
 	err error,
 ) {
-	var c_ppVolumeLevel *C.IDirect3DVolume9
+	var cppVolumeLevel *C.IDirect3DVolume9
 	err = toErr(C.IDirect3DVolumeTexture9GetVolumeLevel(
 		obj.handle,
 		(C.UINT)(Level),
-		&c_ppVolumeLevel,
+		&cppVolumeLevel,
 	))
-	ppVolumeLevel = Volume{c_ppVolumeLevel}
+	ppVolumeLevel = Volume{cppVolumeLevel}
 	return
 }
 
@@ -110,26 +114,26 @@ func (obj VolumeTexture) LockBox(
 	pLockedVolume LOCKED_BOX,
 	err error,
 ) {
-	var c_pLockedVolume C.D3DLOCKED_BOX
+	var cpLockedVolume C.D3DLOCKED_BOX
 	if pBox == nil {
 		err = toErr(C.IDirect3DVolumeTexture9LockBox(
 			obj.handle,
 			(C.UINT)(Level),
-			&c_pLockedVolume,
+			&cpLockedVolume,
 			nil,
 			(C.DWORD)(Flags),
 		))
 	} else {
-		c_pBox := pBox.toC()
+		cpBox := pBox.toC()
 		err = toErr(C.IDirect3DVolumeTexture9LockBox(
 			obj.handle,
 			(C.UINT)(Level),
-			&c_pLockedVolume,
-			&c_pBox,
+			&cpLockedVolume,
+			&cpBox,
 			(C.DWORD)(Flags),
 		))
 	}
-	pLockedVolume.fromC(&c_pLockedVolume)
+	pLockedVolume.fromC(&cpLockedVolume)
 	return
 }
 

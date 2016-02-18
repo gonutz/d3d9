@@ -59,10 +59,13 @@ void IDirect3DSwapChain9Release(IDirect3DSwapChain9* obj) {
 import "C"
 import "unsafe"
 
+// SwapChain and its methods are used to manipulate a swap chain.
 type SwapChain struct {
 	handle *C.IDirect3DSwapChain9
 }
 
+// Release has to be called when finished using the object to free its
+// associated resources.
 func (obj SwapChain) Release() {
 	C.IDirect3DSwapChain9Release(obj.handle)
 }
@@ -76,35 +79,35 @@ func (obj SwapChain) GetBackBuffer(
 	ppBackBuffer Surface,
 	err error,
 ) {
-	var c_ppBackBuffer *C.IDirect3DSurface9
+	var cppBackBuffer *C.IDirect3DSurface9
 	err = toErr(C.IDirect3DSwapChain9GetBackBuffer(
 		obj.handle,
 		(C.UINT)(BackBuffer),
 		(C.D3DBACKBUFFER_TYPE)(Type),
-		&c_ppBackBuffer,
+		&cppBackBuffer,
 	))
 	resource := Resource{
-		(*C.IDirect3DResource9)(unsafe.Pointer(c_ppBackBuffer)),
+		(*C.IDirect3DResource9)(unsafe.Pointer(cppBackBuffer)),
 	}
-	ppBackBuffer = Surface{resource, c_ppBackBuffer}
+	ppBackBuffer = Surface{resource, cppBackBuffer}
 	return
 }
 
 // GetDevice retrieves the device associated with the swap chain.
 // Call Release on the returned device when finished using it.
 func (obj SwapChain) GetDevice() (ppDevice Device, err error) {
-	var c_ppDevice *C.IDirect3DDevice9
-	err = toErr(C.IDirect3DSwapChain9GetDevice(obj.handle, &c_ppDevice))
-	ppDevice = Device{c_ppDevice}
+	var cppDevice *C.IDirect3DDevice9
+	err = toErr(C.IDirect3DSwapChain9GetDevice(obj.handle, &cppDevice))
+	ppDevice = Device{cppDevice}
 	return
 }
 
 // GetDisplayMode retrieves the display mode's spatial resolution, color
 // resolution, and refresh frequency.
 func (obj SwapChain) GetDisplayMode() (pMode DISPLAYMODE, err error) {
-	var c_pMode C.D3DDISPLAYMODE
-	err = toErr(C.IDirect3DSwapChain9GetDisplayMode(obj.handle, &c_pMode))
-	pMode.fromC(&c_pMode)
+	var cpMode C.D3DDISPLAYMODE
+	err = toErr(C.IDirect3DSwapChain9GetDisplayMode(obj.handle, &cpMode))
+	pMode.fromC(&cpMode)
 	return
 }
 
@@ -125,12 +128,12 @@ func (obj SwapChain) GetPresentParameters() (
 	pPresentationParameters PRESENT_PARAMETERS,
 	err error,
 ) {
-	var c_pPresentationParameters C.D3DPRESENT_PARAMETERS
+	var cpPresentationParameters C.D3DPRESENT_PARAMETERS
 	err = toErr(C.IDirect3DSwapChain9GetPresentParameters(
 		obj.handle,
-		&c_pPresentationParameters,
+		&cpPresentationParameters,
 	))
-	pPresentationParameters.fromC(&c_pPresentationParameters)
+	pPresentationParameters.fromC(&cpPresentationParameters)
 	return
 }
 
@@ -140,12 +143,12 @@ func (obj SwapChain) GetRasterStatus() (
 	pRasterStatus RASTER_STATUS,
 	err error,
 ) {
-	var c_pRasterStatus C.D3DRASTER_STATUS
+	var cpRasterStatus C.D3DRASTER_STATUS
 	err = toErr(C.IDirect3DSwapChain9GetRasterStatus(
 		obj.handle,
-		&c_pRasterStatus,
+		&cpRasterStatus,
 	))
-	pRasterStatus.fromC(&c_pRasterStatus)
+	pRasterStatus.fromC(&cpRasterStatus)
 	return
 }
 
@@ -172,33 +175,33 @@ func (obj SwapChain) Present(
 		return
 	}
 
-	var c_sourceRect C.RECT
-	var c_pSourceRect *C.RECT = nil
+	var csourceRect C.RECT
+	var cpSourceRect *C.RECT
 	if pSourceRect != nil {
-		c_sourceRect = pSourceRect.toC()
-		c_pSourceRect = &c_sourceRect
+		csourceRect = pSourceRect.toC()
+		cpSourceRect = &csourceRect
 	}
 
-	var c_destRect C.RECT
-	var c_pDestRect *C.RECT = nil
+	var cdestRect C.RECT
+	var cpDestRect *C.RECT
 	if pDestRect != nil {
-		c_destRect = pDestRect.toC()
-		c_pDestRect = &c_destRect
+		cdestRect = pDestRect.toC()
+		cpDestRect = &cdestRect
 	}
 
-	var c_dirtyRegion C.RGNDATA
-	var c_pDirtyRegion *C.RGNDATA = nil
+	var cdirtyRegion C.RGNDATA
+	var cpDirtyRegion *C.RGNDATA
 	if pDirtyRegion != nil {
-		c_dirtyRegion = pDirtyRegion.toC()
-		c_pDirtyRegion = &c_dirtyRegion
+		cdirtyRegion = pDirtyRegion.toC()
+		cpDirtyRegion = &cdirtyRegion
 	}
 
 	err = toErr(C.IDirect3DSwapChain9Present(
 		obj.handle,
-		c_pSourceRect,
-		c_pDestRect,
+		cpSourceRect,
+		cpDestRect,
 		(C.HWND)(hDestWindowOverride),
-		c_pDirtyRegion,
+		cpDirtyRegion,
 		C.DWORD(dwFlags),
 	))
 	return

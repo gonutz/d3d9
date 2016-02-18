@@ -57,10 +57,13 @@ void IDirect3DResource9Release(IDirect3DResource9* obj) {
 import "C"
 import "unsafe"
 
+// Resource and its methods are used to query and prepare resources.
 type Resource struct {
 	handle *C.IDirect3DResource9
 }
 
+// Release has to be called when finished using the object to free its
+// associated resources.
 func (obj Resource) Release() {
 	C.IDirect3DResource9Release(obj.handle)
 }
@@ -68,17 +71,17 @@ func (obj Resource) Release() {
 // FreePrivateData frees the specified private data associated with this
 // resource.
 func (obj Resource) FreePrivateData(refguid GUID) (err error) {
-	c_refguid := refguid.toC()
-	err = toErr(C.IDirect3DResource9FreePrivateData(obj.handle, &c_refguid))
+	crefguid := refguid.toC()
+	err = toErr(C.IDirect3DResource9FreePrivateData(obj.handle, &crefguid))
 	return
 }
 
 // GetDevice retrieves the device associated with a resource.
 // Call Release on the returned device when finished using it.
 func (obj Resource) GetDevice() (ppDevice Device, err error) {
-	var c_ppDevice *C.IDirect3DDevice9
-	err = toErr(C.IDirect3DResource9GetDevice(obj.handle, &c_ppDevice))
-	ppDevice = Device{c_ppDevice}
+	var cppDevice *C.IDirect3DDevice9
+	err = toErr(C.IDirect3DResource9GetDevice(obj.handle, &cppDevice))
+	ppDevice = Device{cppDevice}
 	return
 }
 
@@ -91,23 +94,23 @@ func (obj Resource) GetPriority() uint32 {
 // provided buffer.
 func (obj Resource) GetPrivateData(refguid GUID) (data []byte, err error) {
 	// first get the data size by passing nil as the data pointer
-	c_refguid := refguid.toC()
-	var c_pSizeOfData C.DWORD
+	crefguid := refguid.toC()
+	var cpSizeOfData C.DWORD
 	err = toErr(C.IDirect3DResource9GetPrivateData(
 		obj.handle,
-		&c_refguid,
+		&crefguid,
 		nil,
-		&c_pSizeOfData,
+		&cpSizeOfData,
 	))
 	if err != nil {
 		return
 	}
-	data = make([]byte, c_pSizeOfData)
+	data = make([]byte, cpSizeOfData)
 	err = toErr(C.IDirect3DResource9GetPrivateData(
 		obj.handle,
-		&c_refguid,
+		&crefguid,
 		unsafe.Pointer(&data[0]),
-		&c_pSizeOfData,
+		&cpSizeOfData,
 	))
 	return
 }
@@ -141,10 +144,10 @@ func (obj Resource) SetPrivateData(
 ) (
 	err error,
 ) {
-	c_refguid := refguid.toC()
+	crefguid := refguid.toC()
 	err = toErr(C.IDirect3DResource9SetPrivateData(
 		obj.handle,
-		&c_refguid,
+		&crefguid,
 		pData,
 		(C.DWORD)(SizeOfData),
 		(C.DWORD)(Flags),
@@ -152,9 +155,9 @@ func (obj Resource) SetPrivateData(
 	return
 }
 
-// SetPrivateData associates data with the resource that is intended for use by
-// the application, not by Direct3D. Data is passed by value, and multiple sets
-// of data can be associated with a single resource.
+// SetPrivateDataBytes associates data with the resource that is intended for
+// use by the application, not by Direct3D. Data is passed by value, and
+// multiple sets of data can be associated with a single resource.
 func (obj Resource) SetPrivateDataBytes(
 	refguid GUID,
 	data []byte,

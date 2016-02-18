@@ -23,38 +23,43 @@ void IDirect3DVertexShader9Release(IDirect3DVertexShader9* obj) {
 import "C"
 import "unsafe"
 
+// VertexShader and its methods are used to encapsulate the functionality of a
+// vertex shader.
 type VertexShader struct {
 	handle *C.IDirect3DVertexShader9
 }
 
+// Release has to be called when finished using the object to free its
+// associated resources.
 func (obj VertexShader) Release() {
 	C.IDirect3DVertexShader9Release(obj.handle)
 }
 
+// GetDevice retrieves the device.
 func (obj VertexShader) GetDevice() (ppDevice Device, err error) {
-	var c_ppDevice *C.IDirect3DDevice9
-	err = toErr(C.IDirect3DVertexShader9GetDevice(obj.handle, &c_ppDevice))
-	ppDevice = Device{c_ppDevice}
+	var cppDevice *C.IDirect3DDevice9
+	err = toErr(C.IDirect3DVertexShader9GetDevice(obj.handle, &cppDevice))
+	ppDevice = Device{cppDevice}
 	return
 }
 
 // GetFunction returns the shader data.
 func (obj VertexShader) GetFunction() (pData []byte, err error) {
 	// first get the needed buffer size, pass nil as the data pointer
-	var c_pSizeOfDataInBytes C.UINT
+	var cpSizeOfDataInBytes C.UINT
 	err = toErr(C.IDirect3DVertexShader9GetFunction(
 		obj.handle,
 		nil,
-		&c_pSizeOfDataInBytes,
+		&cpSizeOfDataInBytes,
 	))
 	if err != nil {
 		return
 	}
-	pData = make([]byte, c_pSizeOfDataInBytes)
+	pData = make([]byte, cpSizeOfDataInBytes)
 	err = toErr(C.IDirect3DVertexShader9GetFunction(
 		obj.handle,
 		unsafe.Pointer(&pData[0]),
-		&c_pSizeOfDataInBytes,
+		&cpSizeOfDataInBytes,
 	))
 	return
 }

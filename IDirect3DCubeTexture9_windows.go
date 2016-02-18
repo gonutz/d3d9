@@ -51,11 +51,14 @@ void IDirect3DCubeTexture9Release(IDirect3DCubeTexture9* obj) {
 import "C"
 import "unsafe"
 
+// CubeTexture and its methods are used to manipulate a cube texture resource.
 type CubeTexture struct {
 	BaseTexture
 	handle *C.IDirect3DCubeTexture9
 }
 
+// Release has to be called when finished using the object to free its
+// associated resources.
 func (obj CubeTexture) Release() {
 	C.IDirect3DCubeTexture9Release(obj.handle)
 }
@@ -74,11 +77,11 @@ func (obj CubeTexture) AddDirtyRect(
 			nil,
 		))
 	} else {
-		c_pDirtyRect := pDirtyRect.toC()
+		cpDirtyRect := pDirtyRect.toC()
 		err = toErr(C.IDirect3DCubeTexture9AddDirtyRect(
 			obj.handle,
 			(C.D3DCUBEMAP_FACES)(FaceType),
-			&c_pDirtyRect,
+			&cpDirtyRect,
 		))
 	}
 	return
@@ -92,17 +95,17 @@ func (obj CubeTexture) GetCubeMapSurface(
 	ppCubeMapSurface Surface,
 	err error,
 ) {
-	var c_ppCubeMapSurface *C.IDirect3DSurface9
+	var cppCubeMapSurface *C.IDirect3DSurface9
 	err = toErr(C.IDirect3DCubeTexture9GetCubeMapSurface(
 		obj.handle,
 		(C.D3DCUBEMAP_FACES)(FaceType),
 		(C.UINT)(Level),
-		&c_ppCubeMapSurface,
+		&cppCubeMapSurface,
 	))
 	resource := Resource{
-		(*C.IDirect3DResource9)(unsafe.Pointer(c_ppCubeMapSurface)),
+		(*C.IDirect3DResource9)(unsafe.Pointer(cppCubeMapSurface)),
 	}
-	ppCubeMapSurface = Surface{resource, c_ppCubeMapSurface}
+	ppCubeMapSurface = Surface{resource, cppCubeMapSurface}
 	return
 }
 
@@ -114,13 +117,13 @@ func (obj CubeTexture) GetLevelDesc(
 	pDesc SURFACE_DESC,
 	err error,
 ) {
-	var c_pDesc C.D3DSURFACE_DESC
+	var cpDesc C.D3DSURFACE_DESC
 	err = toErr(C.IDirect3DCubeTexture9GetLevelDesc(
 		obj.handle,
 		(C.UINT)(Level),
-		&c_pDesc,
+		&cpDesc,
 	))
-	pDesc.fromC(&c_pDesc)
+	pDesc.fromC(&cpDesc)
 	return
 }
 
@@ -134,28 +137,28 @@ func (obj CubeTexture) LockRect(
 	pLockedRect LOCKED_RECT,
 	err error,
 ) {
-	var c_pLockedRect C.D3DLOCKED_RECT
+	var cpLockedRect C.D3DLOCKED_RECT
 	if pRect == nil {
 		err = toErr(C.IDirect3DCubeTexture9LockRect(
 			obj.handle,
 			(C.D3DCUBEMAP_FACES)(FaceType),
 			(C.UINT)(Level),
-			&c_pLockedRect,
+			&cpLockedRect,
 			nil,
 			(C.DWORD)(Flags),
 		))
 	} else {
-		c_pRect := pRect.toC()
+		cpRect := pRect.toC()
 		err = toErr(C.IDirect3DCubeTexture9LockRect(
 			obj.handle,
 			(C.D3DCUBEMAP_FACES)(FaceType),
 			(C.UINT)(Level),
-			&c_pLockedRect,
-			&c_pRect,
+			&cpLockedRect,
+			&cpRect,
 			(C.DWORD)(Flags),
 		))
 	}
-	pLockedRect.fromC(&c_pLockedRect)
+	pLockedRect.fromC(&cpLockedRect)
 	return
 }
 

@@ -22,10 +22,14 @@ void IDirect3DVertexDeclaration9Release(IDirect3DVertexDeclaration9* obj) {
 */
 import "C"
 
+// VertexDeclaration and its methods are used to encapsulate the vertex shader
+// declaration.
 type VertexDeclaration struct {
 	handle *C.IDirect3DVertexDeclaration9
 }
 
+// Release has to be called when finished using the object to free its
+// associated resources.
 func (obj VertexDeclaration) Release() {
 	C.IDirect3DVertexDeclaration9Release(obj.handle)
 }
@@ -36,35 +40,35 @@ func (obj VertexDeclaration) GetDeclaration() (
 	err error,
 ) {
 	// first pass nil for the elements to get the count
-	var c_pNumElements C.UINT
+	var cpNumElements C.UINT
 	err = toErr(C.IDirect3DVertexDeclaration9GetDeclaration(
 		obj.handle,
 		nil,
-		&c_pNumElements,
+		&cpNumElements,
 	))
 	if err != nil {
 		return
 	}
-	c_pDecl := make([]C.D3DVERTEXELEMENT9, c_pNumElements)
+	cpDecl := make([]C.D3DVERTEXELEMENT9, cpNumElements)
 	err = toErr(C.IDirect3DVertexDeclaration9GetDeclaration(
 		obj.handle,
-		&c_pDecl[0],
-		&c_pNumElements,
+		&cpDecl[0],
+		&cpNumElements,
 	))
 	if err != nil {
 		return
 	}
-	pDecl = make([]VERTEXELEMENT, c_pNumElements)
+	pDecl = make([]VERTEXELEMENT, cpNumElements)
 	for i := range pDecl {
-		pDecl[i].fromC(&c_pDecl[i])
+		pDecl[i].fromC(&cpDecl[i])
 	}
 	return
 }
 
 // GetDevice returns the current device.
 func (obj VertexDeclaration) GetDevice() (ppDevice Device, err error) {
-	var c_ppDevice *C.IDirect3DDevice9
-	err = toErr(C.IDirect3DVertexDeclaration9GetDevice(obj.handle, &c_ppDevice))
-	ppDevice = Device{c_ppDevice}
+	var cppDevice *C.IDirect3DDevice9
+	err = toErr(C.IDirect3DVertexDeclaration9GetDevice(obj.handle, &cppDevice))
+	ppDevice = Device{cppDevice}
 	return
 }

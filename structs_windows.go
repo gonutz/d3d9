@@ -753,6 +753,10 @@ func (s *LOCKED_RECT) fromC(c *C.D3DLOCKED_RECT) {
 	s.PBits = (unsafe.Pointer)(c.pBits)
 }
 
+// SetAllBytes will fill the whole rect with the given data, taking into account
+// the rect's pitch. The given byte slice is expected to have the given stride
+// in bytes, i.e. one line in the given data is <stride> bytes in length. If the
+// byte slice is tightly packed, stride will be 0.
 func (r LOCKED_RECT) SetAllBytes(data []byte, stride int) {
 	C.setWholeLockedRect(
 		r.PBits,

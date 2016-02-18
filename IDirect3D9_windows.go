@@ -139,23 +139,35 @@ import (
 
 var dll syscall.Handle
 
+// Init loads the d3d9.dll and returns an error if it can not find it. Call
+// init once before using this library and call Close once when you are
+// finished.
 func Init() (err error) {
 	dll, err = syscall.LoadLibrary("d3d9.dll")
 	return
 }
 
+// Close has to be called once after using this library, call Init once before
+// calling any other function. Close will free the d3d9.dll library resource.
 func Close() {
 	syscall.FreeLibrary(dll)
 }
 
+// Direct3D and its methods are used to create Direct3D objects and set up the
+// environment. Its interface includes methods for enumerating and retrieving
+// capabilities of the device.
 type Direct3D struct {
 	handle *C.IDirect3D9
 }
 
+// Release has to be called when finished using the object to free its
+// associated resources.
 func (obj Direct3D) Release() {
 	C.IDirect3D9Release(obj.handle)
 }
 
+// Create takes the SDK version as argument and returns a new Direct3D object.
+// Use SDK_VERSION as the parameter.
 func Create(version uint) (obj Direct3D, err error) {
 	Direct3DCreate9, err := syscall.GetProcAddress(dll, "Direct3DCreate9")
 	if err != nil {
@@ -257,16 +269,16 @@ func (obj Direct3D) CheckDeviceMultiSampleType(
 	pQualityLevels uint32,
 	err error,
 ) {
-	var c_pQualityLevels C.DWORD
+	var cpQualityLevels C.DWORD
 	err = toErr(C.IDirect3D9CheckDeviceMultiSampleType(obj.handle,
 		(C.UINT)(Adapter),
 		(C.D3DDEVTYPE)(DeviceType),
 		(C.D3DFORMAT)(SurfaceFormat),
 		toBOOL(Windowed),
 		(C.D3DMULTISAMPLE_TYPE)(MultiSampleType),
-		&c_pQualityLevels,
+		&cpQualityLevels,
 	))
-	pQualityLevels = (uint32)(c_pQualityLevels)
+	pQualityLevels = (uint32)(cpQualityLevels)
 	return
 }
 
@@ -304,19 +316,19 @@ func (obj Direct3D) CreateDevice(
 	outpPresentationParameters PRESENT_PARAMETERS,
 	err error,
 ) {
-	c_pPresentationParameters := inpPresentationParameters.toC()
-	var c_ppReturnedDeviceInterface *C.IDirect3DDevice9
+	cpPresentationParameters := inpPresentationParameters.toC()
+	var cppReturnedDeviceInterface *C.IDirect3DDevice9
 	err = toErr(C.IDirect3D9CreateDevice(
 		obj.handle,
 		(C.UINT)(Adapter),
 		(C.D3DDEVTYPE)(DeviceType),
 		(C.HWND)(hFocusWindow),
 		(C.DWORD)(BehaviorFlags),
-		&c_pPresentationParameters,
-		&c_ppReturnedDeviceInterface,
+		&cpPresentationParameters,
+		&cppReturnedDeviceInterface,
 	))
-	outpPresentationParameters.fromC(&c_pPresentationParameters)
-	ppReturnedDeviceInterface = Device{c_ppReturnedDeviceInterface}
+	outpPresentationParameters.fromC(&cpPresentationParameters)
+	ppReturnedDeviceInterface = Device{cppReturnedDeviceInterface}
 	return
 }
 
@@ -331,15 +343,15 @@ func (obj Direct3D) EnumAdapterModes(
 	pMode DISPLAYMODE,
 	err error,
 ) {
-	var c_pMode C.D3DDISPLAYMODE
+	var cpMode C.D3DDISPLAYMODE
 	err = toErr(C.IDirect3D9EnumAdapterModes(
 		obj.handle,
 		(C.UINT)(Adapter),
 		(C.D3DFORMAT)(Format),
 		(C.UINT)(Mode),
-		&c_pMode,
+		&cpMode,
 	))
-	pMode.fromC(&c_pMode)
+	pMode.fromC(&cpMode)
 	return
 }
 
@@ -355,13 +367,13 @@ func (obj Direct3D) GetAdapterDisplayMode(
 	pMode DISPLAYMODE,
 	err error,
 ) {
-	var c_pMode C.D3DDISPLAYMODE
+	var cpMode C.D3DDISPLAYMODE
 	err = toErr(C.IDirect3D9GetAdapterDisplayMode(
 		obj.handle,
 		(C.UINT)(Adapter),
-		&c_pMode,
+		&cpMode,
 	))
-	pMode.fromC(&c_pMode)
+	pMode.fromC(&cpMode)
 	return
 }
 
@@ -375,14 +387,14 @@ func (obj Direct3D) GetAdapterIdentifier(
 	pIdentifier ADAPTER_IDENTIFIER,
 	err error,
 ) {
-	var c_pIdentifier C.D3DADAPTER_IDENTIFIER9
+	var cpIdentifier C.D3DADAPTER_IDENTIFIER9
 	err = toErr(C.IDirect3D9GetAdapterIdentifier(
 		obj.handle,
 		(C.UINT)(Adapter),
 		(C.DWORD)(Flags),
-		&c_pIdentifier,
+		&cpIdentifier,
 	))
-	pIdentifier.fromC(&c_pIdentifier)
+	pIdentifier.fromC(&cpIdentifier)
 	return
 }
 
@@ -413,14 +425,14 @@ func (obj Direct3D) GetDeviceCaps(
 	pCaps CAPS,
 	err error,
 ) {
-	var c_pCaps C.D3DCAPS9
+	var cpCaps C.D3DCAPS9
 	err = toErr(C.IDirect3D9GetDeviceCaps(
 		obj.handle,
 		(C.UINT)(Adapter),
 		(C.D3DDEVTYPE)(DeviceType),
-		&c_pCaps,
+		&cpCaps,
 	))
-	pCaps.fromC(&c_pCaps)
+	pCaps.fromC(&cpCaps)
 	return
 }
 

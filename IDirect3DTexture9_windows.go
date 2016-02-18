@@ -43,11 +43,14 @@ void IDirect3DTexture9Release(IDirect3DTexture9* obj) {
 import "C"
 import "unsafe"
 
+// Texture and its methods are used to manipulate a texture resource.
 type Texture struct {
 	BaseTexture
 	handle *C.IDirect3DTexture9
 }
 
+// Release has to be called when finished using the object to free its
+// associated resources.
 func (obj Texture) Release() {
 	C.IDirect3DTexture9Release(obj.handle)
 }
@@ -57,21 +60,21 @@ func (obj Texture) AddDirtyRect(pDirtyRect *RECT) (err error) {
 	if pDirtyRect == nil {
 		err = toErr(C.IDirect3DTexture9AddDirtyRect(obj.handle, nil))
 	} else {
-		c_pDirtyRect := pDirtyRect.toC()
-		err = toErr(C.IDirect3DTexture9AddDirtyRect(obj.handle, &c_pDirtyRect))
+		cpDirtyRect := pDirtyRect.toC()
+		err = toErr(C.IDirect3DTexture9AddDirtyRect(obj.handle, &cpDirtyRect))
 	}
 	return
 }
 
 // GetLevelDesc retrieves a level description of a texture resource.
 func (obj Texture) GetLevelDesc(Level uint) (pDesc SURFACE_DESC, err error) {
-	var c_pDesc C.D3DSURFACE_DESC
+	var cpDesc C.D3DSURFACE_DESC
 	err = toErr(C.IDirect3DTexture9GetLevelDesc(
 		obj.handle,
 		(C.UINT)(Level),
-		&c_pDesc,
+		&cpDesc,
 	))
-	pDesc.fromC(&c_pDesc)
+	pDesc.fromC(&cpDesc)
 	return
 }
 
@@ -82,16 +85,16 @@ func (obj Texture) GetSurfaceLevel(
 	ppSurfaceLevel Surface,
 	err error,
 ) {
-	var c_ppSurfaceLevel *C.IDirect3DSurface9
+	var cppSurfaceLevel *C.IDirect3DSurface9
 	err = toErr(C.IDirect3DTexture9GetSurfaceLevel(
 		obj.handle,
 		(C.UINT)(Level),
-		&c_ppSurfaceLevel,
+		&cppSurfaceLevel,
 	))
 	resource := Resource{
-		(*C.IDirect3DResource9)(unsafe.Pointer(c_ppSurfaceLevel)),
+		(*C.IDirect3DResource9)(unsafe.Pointer(cppSurfaceLevel)),
 	}
-	ppSurfaceLevel = Surface{resource, c_ppSurfaceLevel}
+	ppSurfaceLevel = Surface{resource, cppSurfaceLevel}
 	return
 }
 
@@ -104,26 +107,26 @@ func (obj Texture) LockRect(
 	pLockedRect LOCKED_RECT,
 	err error,
 ) {
-	var c_pLockedRect C.D3DLOCKED_RECT
+	var cpLockedRect C.D3DLOCKED_RECT
 	if pRect == nil {
 		err = toErr(C.IDirect3DTexture9LockRect(
 			obj.handle,
 			(C.UINT)(Level),
-			&c_pLockedRect,
+			&cpLockedRect,
 			nil,
 			(C.DWORD)(Flags),
 		))
 	} else {
-		c_pRect := pRect.toC()
+		cpRect := pRect.toC()
 		err = toErr(C.IDirect3DTexture9LockRect(
 			obj.handle,
 			(C.UINT)(Level),
-			&c_pLockedRect,
-			&c_pRect,
+			&cpLockedRect,
+			&cpRect,
 			(C.DWORD)(Flags),
 		))
 	}
-	pLockedRect.fromC(&c_pLockedRect)
+	pLockedRect.fromC(&cpLockedRect)
 	return
 }
 
