@@ -35,7 +35,7 @@ func (obj PixelShader) Release() {
 }
 
 // GetDevice returns the device.
-func (obj PixelShader) GetDevice() (ppDevice Device, err error) {
+func (obj PixelShader) GetDevice() (ppDevice Device, err Error) {
 	var cppDevice *C.IDirect3DDevice9
 	err = toErr(C.IDirect3DPixelShader9GetDevice(obj.handle, &cppDevice))
 	ppDevice = Device{cppDevice}
@@ -43,7 +43,7 @@ func (obj PixelShader) GetDevice() (ppDevice Device, err error) {
 }
 
 // GetFunction returns the shader data.
-func (obj PixelShader) GetFunction() (pData []byte, err error) {
+func (obj PixelShader) GetFunction() (pData []byte, err Error) {
 	// first get the needed buffer size, pass nil as the data pointer
 	var cpSizeOfDataInBytes C.UINT
 	err = toErr(C.IDirect3DPixelShader9GetFunction(

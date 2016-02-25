@@ -68,7 +68,7 @@ func (obj CubeTexture) AddDirtyRect(
 	FaceType CUBEMAP_FACES,
 	pDirtyRect *RECT,
 ) (
-	err error,
+	err Error,
 ) {
 	if pDirtyRect == nil {
 		err = toErr(C.IDirect3DCubeTexture9AddDirtyRect(
@@ -93,7 +93,7 @@ func (obj CubeTexture) GetCubeMapSurface(
 	Level uint,
 ) (
 	ppCubeMapSurface Surface,
-	err error,
+	err Error,
 ) {
 	var cppCubeMapSurface *C.IDirect3DSurface9
 	err = toErr(C.IDirect3DCubeTexture9GetCubeMapSurface(
@@ -115,7 +115,7 @@ func (obj CubeTexture) GetLevelDesc(
 	Level uint,
 ) (
 	pDesc SURFACE_DESC,
-	err error,
+	err Error,
 ) {
 	var cpDesc C.D3DSURFACE_DESC
 	err = toErr(C.IDirect3DCubeTexture9GetLevelDesc(
@@ -135,7 +135,7 @@ func (obj CubeTexture) LockRect(
 	Flags uint32,
 ) (
 	pLockedRect LOCKED_RECT,
-	err error,
+	err Error,
 ) {
 	var cpLockedRect C.D3DLOCKED_RECT
 	if pRect == nil {
@@ -167,7 +167,7 @@ func (obj CubeTexture) UnlockRect(
 	FaceType CUBEMAP_FACES,
 	Level uint,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3DCubeTexture9UnlockRect(
 		obj.handle,

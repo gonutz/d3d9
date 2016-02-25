@@ -57,7 +57,7 @@ func (obj VolumeTexture) Release() {
 }
 
 // AddDirtyBox adds a dirty region to a volume texture resource.
-func (obj VolumeTexture) AddDirtyBox(pDirtyBox *BOX) (err error) {
+func (obj VolumeTexture) AddDirtyBox(pDirtyBox *BOX) (err Error) {
 	if pDirtyBox == nil {
 		err = toErr(C.IDirect3DVolumeTexture9AddDirtyBox(obj.handle, nil))
 	} else {
@@ -75,7 +75,7 @@ func (obj VolumeTexture) GetLevelDesc(
 	Level uint,
 ) (
 	pDesc VOLUME_DESC,
-	err error,
+	err Error,
 ) {
 	var cpDesc C.D3DVOLUME_DESC
 	err = toErr(C.IDirect3DVolumeTexture9GetLevelDesc(
@@ -93,7 +93,7 @@ func (obj VolumeTexture) GetVolumeLevel(
 	Level uint,
 ) (
 	ppVolumeLevel Volume,
-	err error,
+	err Error,
 ) {
 	var cppVolumeLevel *C.IDirect3DVolume9
 	err = toErr(C.IDirect3DVolumeTexture9GetVolumeLevel(
@@ -112,7 +112,7 @@ func (obj VolumeTexture) LockBox(
 	Flags uint32,
 ) (
 	pLockedVolume LOCKED_BOX,
-	err error,
+	err Error,
 ) {
 	var cpLockedVolume C.D3DLOCKED_BOX
 	if pBox == nil {
@@ -138,7 +138,7 @@ func (obj VolumeTexture) LockBox(
 }
 
 // UnlockBox unlocks a box on a volume texture resource.
-func (obj VolumeTexture) UnlockBox(Level uint) (err error) {
+func (obj VolumeTexture) UnlockBox(Level uint) (err Error) {
 	err = toErr(C.IDirect3DVolumeTexture9UnlockBox(obj.handle, (C.UINT)(Level)))
 	return
 }

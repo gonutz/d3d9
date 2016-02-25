@@ -77,7 +77,7 @@ func (obj SwapChain) GetBackBuffer(
 	Type BACKBUFFER_TYPE,
 ) (
 	ppBackBuffer Surface,
-	err error,
+	err Error,
 ) {
 	var cppBackBuffer *C.IDirect3DSurface9
 	err = toErr(C.IDirect3DSwapChain9GetBackBuffer(
@@ -95,7 +95,7 @@ func (obj SwapChain) GetBackBuffer(
 
 // GetDevice retrieves the device associated with the swap chain.
 // Call Release on the returned device when finished using it.
-func (obj SwapChain) GetDevice() (ppDevice Device, err error) {
+func (obj SwapChain) GetDevice() (ppDevice Device, err Error) {
 	var cppDevice *C.IDirect3DDevice9
 	err = toErr(C.IDirect3DSwapChain9GetDevice(obj.handle, &cppDevice))
 	ppDevice = Device{cppDevice}
@@ -104,7 +104,7 @@ func (obj SwapChain) GetDevice() (ppDevice Device, err error) {
 
 // GetDisplayMode retrieves the display mode's spatial resolution, color
 // resolution, and refresh frequency.
-func (obj SwapChain) GetDisplayMode() (pMode DISPLAYMODE, err error) {
+func (obj SwapChain) GetDisplayMode() (pMode DISPLAYMODE, err Error) {
 	var cpMode C.D3DDISPLAYMODE
 	err = toErr(C.IDirect3DSwapChain9GetDisplayMode(obj.handle, &cpMode))
 	pMode.fromC(&cpMode)
@@ -114,7 +114,7 @@ func (obj SwapChain) GetDisplayMode() (pMode DISPLAYMODE, err error) {
 // GetFrontBufferData generates a copy of the swapchain's front buffer and
 // places that copy in a system memory buffer provided by the application.
 // Call Release on the returned surface when finished using it.
-func (obj SwapChain) GetFrontBufferData(pDestSurface Surface) (err error) {
+func (obj SwapChain) GetFrontBufferData(pDestSurface Surface) (err Error) {
 	err = toErr(C.IDirect3DSwapChain9GetFrontBufferData(
 		obj.handle,
 		pDestSurface.handle,
@@ -126,7 +126,7 @@ func (obj SwapChain) GetFrontBufferData(pDestSurface Surface) (err error) {
 // swap chain.
 func (obj SwapChain) GetPresentParameters() (
 	pPresentationParameters PRESENT_PARAMETERS,
-	err error,
+	err Error,
 ) {
 	var cpPresentationParameters C.D3DPRESENT_PARAMETERS
 	err = toErr(C.IDirect3DSwapChain9GetPresentParameters(
@@ -141,7 +141,7 @@ func (obj SwapChain) GetPresentParameters() (
 // which the swap chain is presented.
 func (obj SwapChain) GetRasterStatus() (
 	pRasterStatus RASTER_STATUS,
-	err error,
+	err Error,
 ) {
 	var cpRasterStatus C.D3DRASTER_STATUS
 	err = toErr(C.IDirect3DSwapChain9GetRasterStatus(
@@ -161,7 +161,7 @@ func (obj SwapChain) Present(
 	pDirtyRegion *RGNDATA,
 	dwFlags uint32,
 ) (
-	err error,
+	err Error,
 ) {
 	if pSourceRect == nil && pDestRect == nil && pDirtyRegion == nil {
 		err = toErr(C.IDirect3DSwapChain9Present(

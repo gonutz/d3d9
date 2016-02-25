@@ -208,7 +208,7 @@ func (obj Direct3D) CheckDepthStencilMatch(
 	RenderTargetFormat FORMAT,
 	DepthStencilFormat FORMAT,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3D9CheckDepthStencilMatch(
 		obj.handle,
@@ -233,7 +233,7 @@ func (obj Direct3D) CheckDeviceFormat(
 	RType RESOURCETYPE,
 	CheckFormat FORMAT,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3D9CheckDeviceFormat(
 		obj.handle,
@@ -255,7 +255,7 @@ func (obj Direct3D) CheckDeviceFormatConversion(
 	SourceFormat FORMAT,
 	TargetFormat FORMAT,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3D9CheckDeviceFormatConversion(
 		obj.handle,
@@ -277,7 +277,7 @@ func (obj Direct3D) CheckDeviceMultiSampleType(
 	MultiSampleType MULTISAMPLE_TYPE,
 ) (
 	pQualityLevels uint32,
-	err error,
+	err Error,
 ) {
 	var cpQualityLevels C.DWORD
 	err = toErr(C.IDirect3D9CheckDeviceMultiSampleType(obj.handle,
@@ -301,7 +301,7 @@ func (obj Direct3D) CheckDeviceType(
 	BackBufferFormat FORMAT,
 	Windowed bool,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3D9CheckDeviceType(
 		obj.handle,
@@ -324,7 +324,7 @@ func (obj Direct3D) CreateDevice(
 ) (
 	ppReturnedDeviceInterface Device,
 	outpPresentationParameters PRESENT_PARAMETERS,
-	err error,
+	err Error,
 ) {
 	cpPresentationParameters := inpPresentationParameters.toC()
 	var cppReturnedDeviceInterface *C.IDirect3DDevice9
@@ -351,7 +351,7 @@ func (obj Direct3D) EnumAdapterModes(
 	Mode uint,
 ) (
 	pMode DISPLAYMODE,
-	err error,
+	err Error,
 ) {
 	var cpMode C.D3DDISPLAYMODE
 	err = toErr(C.IDirect3D9EnumAdapterModes(
@@ -375,7 +375,7 @@ func (obj Direct3D) GetAdapterDisplayMode(
 	Adapter uint,
 ) (
 	pMode DISPLAYMODE,
-	err error,
+	err Error,
 ) {
 	var cpMode C.D3DDISPLAYMODE
 	err = toErr(C.IDirect3D9GetAdapterDisplayMode(
@@ -395,7 +395,7 @@ func (obj Direct3D) GetAdapterIdentifier(
 	Flags uint32,
 ) (
 	pIdentifier ADAPTER_IDENTIFIER,
-	err error,
+	err Error,
 ) {
 	var cpIdentifier C.D3DADAPTER_IDENTIFIER9
 	err = toErr(C.IDirect3D9GetAdapterIdentifier(
@@ -433,7 +433,7 @@ func (obj Direct3D) GetDeviceCaps(
 	DeviceType DEVTYPE,
 ) (
 	pCaps CAPS,
-	err error,
+	err Error,
 ) {
 	var cpCaps C.D3DCAPS9
 	err = toErr(C.IDirect3D9GetDeviceCaps(
@@ -452,7 +452,7 @@ func (obj Direct3D) GetDeviceCaps(
 func (obj Direct3D) RegisterSoftwareDevice(
 	pInitializeFunction unsafe.Pointer,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3D9RegisterSoftwareDevice(
 		obj.handle,

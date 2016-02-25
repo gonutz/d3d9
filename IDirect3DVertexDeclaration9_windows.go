@@ -37,7 +37,7 @@ func (obj VertexDeclaration) Release() {
 // GetDeclaration returns the vertex shader declaration.
 func (obj VertexDeclaration) GetDeclaration() (
 	pDecl []VERTEXELEMENT,
-	err error,
+	err Error,
 ) {
 	// first pass nil for the elements to get the count
 	var cpNumElements C.UINT
@@ -66,7 +66,7 @@ func (obj VertexDeclaration) GetDeclaration() (
 }
 
 // GetDevice returns the current device.
-func (obj VertexDeclaration) GetDevice() (ppDevice Device, err error) {
+func (obj VertexDeclaration) GetDevice() (ppDevice Device, err Error) {
 	var cppDevice *C.IDirect3DDevice9
 	err = toErr(C.IDirect3DVertexDeclaration9GetDevice(obj.handle, &cppDevice))
 	ppDevice = Device{cppDevice}

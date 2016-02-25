@@ -78,7 +78,7 @@ func (obj BaseTexture) GetLOD() uint32 {
 func (obj BaseTexture) SetAutoGenFilterType(
 	FilterType TEXTUREFILTERTYPE,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3DBaseTexture9SetAutoGenFilterType(
 		obj.handle,

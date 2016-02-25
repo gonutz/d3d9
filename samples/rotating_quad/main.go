@@ -33,13 +33,17 @@ func main() {
 	check(err)
 	defer d3d.Release()
 
-	device, _, err := d3d.CreateDevice(d3d9.ADAPTER_DEFAULT, d3d9.DEVTYPE_HAL,
-		windowHandle, d3d9.CREATE_HARDWARE_VERTEXPROCESSING,
+	device, _, err := d3d.CreateDevice(
+		d3d9.ADAPTER_DEFAULT,
+		d3d9.DEVTYPE_HAL,
+		windowHandle,
+		d3d9.CREATE_HARDWARE_VERTEXPROCESSING,
 		d3d9.PRESENT_PARAMETERS{
 			Windowed:      true,
 			SwapEffect:    d3d9.SWAPEFFECT_DISCARD,
 			HDeviceWindow: windowHandle,
-		})
+		},
+	)
 	check(err)
 	defer device.Release()
 
@@ -49,8 +53,13 @@ func main() {
 		0.5, -0.5,
 		0.5, 0.5,
 	}
-	vb, err := device.CreateVertexBuffer(uint(len(vertices)*4),
-		d3d9.USAGE_WRITEONLY, 0, d3d9.POOL_DEFAULT, nil)
+	vb, err := device.CreateVertexBuffer(
+		uint(len(vertices)*4),
+		d3d9.USAGE_WRITEONLY,
+		0,
+		d3d9.POOL_DEFAULT,
+		nil,
+	)
 	check(err)
 	defer vb.Release()
 	vbMem, err := vb.Lock(0, 0, d3d9.LOCK_DISCARD)

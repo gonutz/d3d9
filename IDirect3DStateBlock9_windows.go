@@ -35,20 +35,20 @@ func (obj StateBlock) Release() {
 }
 
 // Apply applies the state block to the current device state.
-func (obj StateBlock) Apply() (err error) {
+func (obj StateBlock) Apply() (err Error) {
 	err = toErr(C.IDirect3DStateBlock9Apply(obj.handle))
 	return
 }
 
 // Capture captures the current value of states that are included in a
 // stateblock.
-func (obj StateBlock) Capture() (err error) {
+func (obj StateBlock) Capture() (err Error) {
 	err = toErr(C.IDirect3DStateBlock9Capture(obj.handle))
 	return
 }
 
 // GetDevice returns the device.
-func (obj StateBlock) GetDevice() (ppDevice Device, err error) {
+func (obj StateBlock) GetDevice() (ppDevice Device, err Error) {
 	var cppDevice *C.IDirect3DDevice9
 	err = toErr(C.IDirect3DStateBlock9GetDevice(obj.handle, &cppDevice))
 	ppDevice = Device{cppDevice}

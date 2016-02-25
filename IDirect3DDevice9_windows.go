@@ -895,13 +895,13 @@ func (obj Device) Release() {
 // BeginScene begins a scene.
 // Applications must call BeginScene before performing any rendering and must
 // call EndScene when rendering is complete and before calling BeginScene again.
-func (obj Device) BeginScene() (err error) {
+func (obj Device) BeginScene() (err Error) {
 	err = toErr(C.IDirect3DDevice9BeginScene(obj.handle))
 	return
 }
 
 // BeginStateBlock signals Direct3D to begin recording a device-state block.
-func (obj Device) BeginStateBlock() (err error) {
+func (obj Device) BeginStateBlock() (err Error) {
 	err = toErr(C.IDirect3DDevice9BeginStateBlock(obj.handle))
 	return
 }
@@ -915,7 +915,7 @@ func (obj Device) Clear(
 	Z float32,
 	Stencil uint32,
 ) (
-	err error,
+	err Error,
 ) {
 	if len(pRects) == 0 {
 		err = toErr(C.IDirect3DDevice9Clear(
@@ -952,7 +952,7 @@ func (obj Device) ColorFill(
 	pRect *RECT,
 	color COLOR,
 ) (
-	err error,
+	err Error,
 ) {
 	if pRect == nil {
 		err = toErr(C.IDirect3DDevice9ColorFill(
@@ -980,7 +980,7 @@ func (obj Device) CreateAdditionalSwapChain(
 ) (
 	ppSwapChain SwapChain,
 	outpPresentationParameters PRESENT_PARAMETERS,
-	err error,
+	err Error,
 ) {
 	cpPresentationParameters := inpPresentationParameters.toC()
 	var cppSwapChain *C.IDirect3DSwapChain9
@@ -1004,7 +1004,7 @@ func (obj Device) CreateCubeTexture(
 	pSharedHandle unsafe.Pointer,
 ) (
 	ppCubeTexture CubeTexture,
-	err error,
+	err Error,
 ) {
 	var cppCubeTexture *C.IDirect3DCubeTexture9
 	err = toErr(C.IDirect3DDevice9CreateCubeTexture(
@@ -1038,7 +1038,7 @@ func (obj Device) CreateDepthStencilSurface(
 	pSharedHandle unsafe.Pointer,
 ) (
 	ppSurface Surface,
-	err error,
+	err Error,
 ) {
 	var cppSurface *C.IDirect3DSurface9
 	err = toErr(C.IDirect3DDevice9CreateDepthStencilSurface(
@@ -1066,7 +1066,7 @@ func (obj Device) CreateIndexBuffer(
 	pSharedHandle unsafe.Pointer,
 ) (
 	ppIndexBuffer IndexBuffer,
-	err error,
+	err Error,
 ) {
 	var cppIndexBuffer *C.IDirect3DIndexBuffer9
 	err = toErr(C.IDirect3DDevice9CreateIndexBuffer(
@@ -1094,7 +1094,7 @@ func (obj Device) CreateOffscreenPlainSurface(
 	pSharedHandle unsafe.Pointer,
 ) (
 	ppSurface Surface,
-	err error,
+	err Error,
 ) {
 	var cppSurface *C.IDirect3DSurface9
 	err = toErr(C.IDirect3DDevice9CreateOffscreenPlainSurface(
@@ -1116,7 +1116,7 @@ func (obj Device) CreatePixelShader(
 	pFunction unsafe.Pointer,
 ) (
 	ppShader PixelShader,
-	err error,
+	err Error,
 ) {
 	var cppShader *C.IDirect3DPixelShader9
 	err = toErr(C.IDirect3DDevice9CreatePixelShader(
@@ -1133,13 +1133,13 @@ func (obj Device) CreatePixelShaderFromBytes(
 	pFunction []byte,
 ) (
 	ppShader PixelShader,
-	err error,
+	err Error,
 ) {
 	return obj.CreatePixelShader(unsafe.Pointer(&pFunction[0]))
 }
 
 // CreateQuery creates a status query.
-func (obj Device) CreateQuery(Type QUERYTYPE) (ppQuery Query, err error) {
+func (obj Device) CreateQuery(Type QUERYTYPE) (ppQuery Query, err Error) {
 	var cppQuery *C.IDirect3DQuery9
 	err = toErr(C.IDirect3DDevice9CreateQuery(
 		obj.handle,
@@ -1161,7 +1161,7 @@ func (obj Device) CreateRenderTarget(
 	pSharedHandle unsafe.Pointer,
 ) (
 	ppSurface Surface,
-	err error,
+	err Error,
 ) {
 	var cppSurface *C.IDirect3DSurface9
 	err = toErr(C.IDirect3DDevice9CreateRenderTarget(
@@ -1186,7 +1186,7 @@ func (obj Device) CreateStateBlock(
 	Type STATEBLOCKTYPE,
 ) (
 	ppSB StateBlock,
-	err error,
+	err Error,
 ) {
 	var cppSB *C.IDirect3DStateBlock9
 	err = toErr(C.IDirect3DDevice9CreateStateBlock(
@@ -1209,7 +1209,7 @@ func (obj Device) CreateTexture(
 	pSharedHandle unsafe.Pointer,
 ) (
 	ppTexture Texture,
-	err error,
+	err Error,
 ) {
 	var cppTexture *C.IDirect3DTexture9
 	err = toErr(C.IDirect3DDevice9CreateTexture(
@@ -1241,7 +1241,7 @@ func (obj Device) CreateVertexBuffer(
 	pSharedHandle unsafe.Pointer,
 ) (
 	ppVertexBuffer VertexBuffer,
-	err error,
+	err Error,
 ) {
 	var cppVertexBuffer *C.IDirect3DVertexBuffer9
 	err = toErr(C.IDirect3DDevice9CreateVertexBuffer(
@@ -1267,7 +1267,7 @@ func (obj Device) CreateVertexDeclaration(
 	pVertexElements []VERTEXELEMENT,
 ) (
 	ppDecl VertexDeclaration,
-	err error,
+	err Error,
 ) {
 	cpVertexElements := make([]C.D3DVERTEXELEMENT9, len(pVertexElements))
 	for i := range cpVertexElements {
@@ -1293,7 +1293,7 @@ func (obj Device) CreateVertexShader(
 	pFunction unsafe.Pointer,
 ) (
 	ppShader VertexShader,
-	err error,
+	err Error,
 ) {
 	var cppShader *C.IDirect3DVertexShader9
 	err = toErr(C.IDirect3DDevice9CreateVertexShader(
@@ -1310,7 +1310,7 @@ func (obj Device) CreateVertexShaderFromBytes(
 	pFunction []byte,
 ) (
 	ppShader VertexShader,
-	err error,
+	err Error,
 ) {
 	return obj.CreateVertexShader(unsafe.Pointer(&pFunction[0]))
 }
@@ -1327,7 +1327,7 @@ func (obj Device) CreateVolumeTexture(
 	pSharedHandle unsafe.Pointer,
 ) (
 	ppVolumeTexture VolumeTexture,
-	err error,
+	err Error,
 ) {
 	var cppVolumeTexture *C.IDirect3DVolumeTexture9
 	err = toErr(C.IDirect3DDevice9CreateVolumeTexture(
@@ -1354,7 +1354,7 @@ func (obj Device) CreateVolumeTexture(
 }
 
 // DeletePatch frees a cached high-order patch.
-func (obj Device) DeletePatch(Handle uint) (err error) {
+func (obj Device) DeletePatch(Handle uint) (err Error) {
 	err = toErr(C.IDirect3DDevice9DeletePatch(obj.handle, (C.UINT)(Handle)))
 	return
 }
@@ -1368,7 +1368,7 @@ func (obj Device) DrawIndexedPrimitive(
 	NumVertices uint,
 	StartIndex uint,
 	PrimitiveCount uint,
-) (err error) {
+) (err Error) {
 	err = toErr(C.IDirect3DDevice9DrawIndexedPrimitive(
 		obj.handle,
 		(C.D3DPRIMITIVETYPE)(Type),
@@ -1393,7 +1393,7 @@ func (obj Device) DrawIndexedPrimitiveUP(
 	pVertexStreamZeroData unsafe.Pointer,
 	VertexStreamZeroStride uint,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3DDevice9DrawIndexedPrimitiveUP(
 		obj.handle,
@@ -1420,7 +1420,7 @@ func (obj Device) DrawIndexedPrimitiveUPuint32(
 	pVertexStreamZeroData unsafe.Pointer,
 	VertexStreamZeroStride uint,
 ) (
-	err error,
+	err Error,
 ) {
 	return obj.DrawIndexedPrimitiveUP(
 		PrimitiveType,
@@ -1445,7 +1445,7 @@ func (obj Device) DrawIndexedPrimitiveUPuint16(
 	pVertexStreamZeroData unsafe.Pointer,
 	VertexStreamZeroStride uint,
 ) (
-	err error,
+	err Error,
 ) {
 	return obj.DrawIndexedPrimitiveUP(
 		PrimitiveType,
@@ -1466,7 +1466,7 @@ func (obj Device) DrawPrimitive(
 	StartVertex uint,
 	PrimitiveCount uint,
 ) (
-	err error) {
+	err Error) {
 
 	err = toErr(C.IDirect3DDevice9DrawPrimitive(
 		obj.handle,
@@ -1485,7 +1485,7 @@ func (obj Device) DrawPrimitiveUP(
 	pVertexStreamZeroData unsafe.Pointer,
 	VertexStreamZeroStride uint,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3DDevice9DrawPrimitiveUP(
 		obj.handle,
@@ -1503,7 +1503,7 @@ func (obj Device) DrawRectPatch(
 	pNumSegs [4]float32,
 	pRectPatchInfo *RECTPATCH_INFO,
 ) (
-	err error,
+	err Error,
 ) {
 	if pRectPatchInfo == nil {
 		err = toErr(C.IDirect3DDevice9DrawRectPatch(
@@ -1530,7 +1530,7 @@ func (obj Device) DrawTriPatch(
 	pNumSegs [3]float32,
 	pTriPatchInfo *TRIPATCH_INFO,
 ) (
-	err error,
+	err Error,
 ) {
 	if pTriPatchInfo == nil {
 		err = toErr(C.IDirect3DDevice9DrawTriPatch(
@@ -1552,14 +1552,14 @@ func (obj Device) DrawTriPatch(
 }
 
 // EndScene ends a scene that was begun by calling BeginScene.
-func (obj Device) EndScene() (err error) {
+func (obj Device) EndScene() (err Error) {
 	err = toErr(C.IDirect3DDevice9EndScene(obj.handle))
 	return
 }
 
 // EndStateBlock signals Direct3D to stop recording a device-state block and
 // retrieve a pointer to the state block interface.
-func (obj Device) EndStateBlock() (ppSB StateBlock, err error) {
+func (obj Device) EndStateBlock() (ppSB StateBlock, err Error) {
 	var cppSB *C.IDirect3DStateBlock9
 	err = toErr(C.IDirect3DDevice9EndStateBlock(obj.handle, &cppSB))
 	ppSB = StateBlock{cppSB}
@@ -1568,7 +1568,7 @@ func (obj Device) EndStateBlock() (ppSB StateBlock, err error) {
 
 // EvictManagedResources evicts all managed resources, including both Direct3D
 // and driver-managed resources.
-func (obj Device) EvictManagedResources() (err error) {
+func (obj Device) EvictManagedResources() (err Error) {
 	err = toErr(C.IDirect3DDevice9EvictManagedResources(obj.handle))
 	return
 }
@@ -1587,7 +1587,7 @@ func (obj Device) GetBackBuffer(
 	Type BACKBUFFER_TYPE,
 ) (
 	ppBackBuffer Surface,
-	err error,
+	err Error,
 ) {
 	var cppBackBuffer *C.IDirect3DSurface9
 	err = toErr(C.IDirect3DDevice9GetBackBuffer(
@@ -1606,7 +1606,7 @@ func (obj Device) GetBackBuffer(
 
 // GetClipPlane retrieves the coefficients of a user-defined clipping plane for
 // the device.
-func (obj Device) GetClipPlane(Index uint32) (pPlane [4]float32, err error) {
+func (obj Device) GetClipPlane(Index uint32) (pPlane [4]float32, err Error) {
 	err = toErr(C.IDirect3DDevice9GetClipPlane(
 		obj.handle,
 		(C.DWORD)(Index),
@@ -1616,7 +1616,7 @@ func (obj Device) GetClipPlane(Index uint32) (pPlane [4]float32, err error) {
 }
 
 // GetClipStatus retrieves the clip status.
-func (obj Device) GetClipStatus() (pClipStatus CLIPSTATUS, err error) {
+func (obj Device) GetClipStatus() (pClipStatus CLIPSTATUS, err Error) {
 	var cpClipStatus C.D3DCLIPSTATUS9
 	err = toErr(C.IDirect3DDevice9GetClipStatus(obj.handle, &cpClipStatus))
 	pClipStatus.fromC(&cpClipStatus)
@@ -1626,7 +1626,7 @@ func (obj Device) GetClipStatus() (pClipStatus CLIPSTATUS, err error) {
 // GetCreationParameters retrieves the creation parameters of the device.
 func (obj Device) GetCreationParameters() (
 	pParameters DEVICE_CREATION_PARAMETERS,
-	err error,
+	err Error,
 ) {
 	var cpParameters C.D3DDEVICE_CREATION_PARAMETERS
 	err = toErr(C.IDirect3DDevice9GetCreationParameters(
@@ -1638,7 +1638,7 @@ func (obj Device) GetCreationParameters() (
 }
 
 // GetCurrentTexturePalette retrieves the current texture palette.
-func (obj Device) GetCurrentTexturePalette() (pPaletteNumber uint, err error) {
+func (obj Device) GetCurrentTexturePalette() (pPaletteNumber uint, err Error) {
 	var cpPaletteNumber C.UINT
 	err = toErr(C.IDirect3DDevice9GetCurrentTexturePalette(
 		obj.handle,
@@ -1653,7 +1653,7 @@ func (obj Device) GetCurrentTexturePalette() (pPaletteNumber uint, err error) {
 // Call Release on the returned surface when finished using it.
 func (obj Device) GetDepthStencilSurface() (
 	ppZStencilSurface Surface,
-	err error,
+	err Error,
 ) {
 	var cppZStencilSurface *C.IDirect3DSurface9
 	err = toErr(C.IDirect3DDevice9GetDepthStencilSurface(
@@ -1668,7 +1668,7 @@ func (obj Device) GetDepthStencilSurface() (
 }
 
 // GetDeviceCaps retrieves the capabilities of the rendering device.
-func (obj Device) GetDeviceCaps() (pCaps CAPS, err error) {
+func (obj Device) GetDeviceCaps() (pCaps CAPS, err Error) {
 	var cpCaps C.D3DCAPS9
 	err = toErr(C.IDirect3DDevice9GetDeviceCaps(obj.handle, &cpCaps))
 	pCaps.fromC(&cpCaps)
@@ -1678,7 +1678,7 @@ func (obj Device) GetDeviceCaps() (pCaps CAPS, err error) {
 // GetDirect3D returns an interface to the instance of the Direct3D object that
 // created the device.
 // Call Release on the returned object when finished using it.
-func (obj Device) GetDirect3D() (ppD3D9 Direct3D, err error) {
+func (obj Device) GetDirect3D() (ppD3D9 Direct3D, err Error) {
 	var cppD3D9 *C.IDirect3D9
 	err = toErr(C.IDirect3DDevice9GetDirect3D(obj.handle, &cppD3D9))
 	ppD3D9 = Direct3D{cppD3D9}
@@ -1691,7 +1691,7 @@ func (obj Device) GetDisplayMode(
 	iSwapChain uint,
 ) (
 	pMode DISPLAYMODE,
-	err error,
+	err Error,
 ) {
 	var cpMode C.D3DDISPLAYMODE
 	err = toErr(C.IDirect3DDevice9GetDisplayMode(
@@ -1709,7 +1709,7 @@ func (obj Device) GetFrontBufferData(
 	iSwapChain uint,
 	pDestSurface Surface,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3DDevice9GetFrontBufferData(
 		obj.handle,
@@ -1720,7 +1720,7 @@ func (obj Device) GetFrontBufferData(
 }
 
 // GetFVF gets the fixed vertex function declaration.
-func (obj Device) GetFVF() (pFVF uint32, err error) {
+func (obj Device) GetFVF() (pFVF uint32, err Error) {
 	var cpFVF C.DWORD
 	err = toErr(C.IDirect3DDevice9GetFVF(obj.handle, &cpFVF))
 	pFVF = (uint32)(cpFVF)
@@ -1736,7 +1736,7 @@ func (obj Device) GetGammaRamp(iSwapChain uint) (pRamp GAMMARAMP) {
 }
 
 // GetIndices retrieves index data.
-func (obj Device) GetIndices() (ppIndexData IndexBuffer, err error) {
+func (obj Device) GetIndices() (ppIndexData IndexBuffer, err Error) {
 	var cppIndexData *C.IDirect3DIndexBuffer9
 	err = toErr(C.IDirect3DDevice9GetIndices(obj.handle, &cppIndexData))
 	resource := Resource{(*C.IDirect3DResource9)(unsafe.Pointer(cppIndexData))}
@@ -1745,7 +1745,7 @@ func (obj Device) GetIndices() (ppIndexData IndexBuffer, err error) {
 }
 
 // GetLight retrieves a set of lighting properties that this device uses.
-func (obj Device) GetLight(Index uint32) (pLight LIGHT, err error) {
+func (obj Device) GetLight(Index uint32) (pLight LIGHT, err Error) {
 	var cpLight C.D3DLIGHT9
 	err = toErr(C.IDirect3DDevice9GetLight(
 		obj.handle,
@@ -1758,7 +1758,7 @@ func (obj Device) GetLight(Index uint32) (pLight LIGHT, err error) {
 
 // GetLightEnable retrieves the activity status - enabled or disabled - for a
 // set of lighting parameters within a device.
-func (obj Device) GetLightEnable(Index uint32) (pEnable bool, err error) {
+func (obj Device) GetLightEnable(Index uint32) (pEnable bool, err Error) {
 	var cpEnable C.BOOL
 	err = toErr(C.IDirect3DDevice9GetLightEnable(
 		obj.handle,
@@ -1770,7 +1770,7 @@ func (obj Device) GetLightEnable(Index uint32) (pEnable bool, err error) {
 }
 
 // GetMaterial retrieves the current material properties for the device.
-func (obj Device) GetMaterial() (pMaterial MATERIAL, err error) {
+func (obj Device) GetMaterial() (pMaterial MATERIAL, err Error) {
 	var cpMaterial C.D3DMATERIAL9
 	err = toErr(C.IDirect3DDevice9GetMaterial(obj.handle, &cpMaterial))
 	pMaterial.fromC(&cpMaterial)
@@ -1792,7 +1792,7 @@ func (obj Device) GetPaletteEntries(
 	PaletteNumber uint,
 ) (
 	pEntries [256]PALETTEENTRY,
-	err error,
+	err Error,
 ) {
 	var cpEntries [256]C.PALETTEENTRY
 	err = toErr(C.IDirect3DDevice9GetPaletteEntries(
@@ -1807,7 +1807,7 @@ func (obj Device) GetPaletteEntries(
 }
 
 // GetPixelShader retrieves the currently set pixel shader.
-func (obj Device) GetPixelShader() (ppShader PixelShader, err error) {
+func (obj Device) GetPixelShader() (ppShader PixelShader, err Error) {
 	var cppShader *C.IDirect3DPixelShader9
 	err = toErr(C.IDirect3DDevice9GetPixelShader(obj.handle, &cppShader))
 	ppShader = PixelShader{cppShader}
@@ -1820,7 +1820,7 @@ func (obj Device) GetPixelShaderConstantB(
 	StartRegister uint,
 	pConstantData []bool,
 ) (
-	err error,
+	err Error,
 ) {
 	cpConstantData := make([]C.BOOL, len(pConstantData))
 	err = toErr(C.IDirect3DDevice9GetPixelShaderConstantB(
@@ -1842,7 +1842,7 @@ func (obj Device) GetPixelShaderConstantF(
 	StartRegister uint,
 	pConstantData []float32,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3DDevice9GetPixelShaderConstantF(
 		obj.handle,
@@ -1860,7 +1860,7 @@ func (obj Device) GetPixelShaderConstantI(
 	StartRegister uint,
 	pConstantData []int32,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3DDevice9GetPixelShaderConstantI(
 		obj.handle,
@@ -1877,7 +1877,7 @@ func (obj Device) GetRasterStatus(
 	iSwapChain uint,
 ) (
 	pRasterStatus RASTER_STATUS,
-	err error,
+	err Error,
 ) {
 	var cpRasterStatus C.D3DRASTER_STATUS
 	err = toErr(C.IDirect3DDevice9GetRasterStatus(
@@ -1894,7 +1894,7 @@ func (obj Device) GetRenderState(
 	State RENDERSTATETYPE,
 ) (
 	pValue uint32,
-	err error,
+	err Error,
 ) {
 	var cpValue C.DWORD
 	err = toErr(C.IDirect3DDevice9GetRenderState(
@@ -1911,7 +1911,7 @@ func (obj Device) GetRenderTarget(
 	RenderTargetIndex uint32,
 ) (
 	ppRenderTarget Surface,
-	err error,
+	err Error,
 ) {
 	var cppRenderTarget *C.IDirect3DSurface9
 	err = toErr(C.IDirect3DDevice9GetRenderTarget(
@@ -1932,7 +1932,7 @@ func (obj Device) GetRenderTargetData(
 	pRenderTarget Surface,
 	pDestSurface Surface,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3DDevice9GetRenderTargetData(
 		obj.handle,
@@ -1948,7 +1948,7 @@ func (obj Device) GetSamplerState(
 	Type SAMPLERSTATETYPE,
 ) (
 	pValue uint32,
-	err error,
+	err Error,
 ) {
 	var cpValue C.DWORD
 	err = toErr(C.IDirect3DDevice9GetSamplerState(
@@ -1962,7 +1962,7 @@ func (obj Device) GetSamplerState(
 }
 
 // GetScissorRect returns the scissor rectangle.
-func (obj Device) GetScissorRect() (pRect RECT, err error) {
+func (obj Device) GetScissorRect() (pRect RECT, err Error) {
 	var cpRect C.RECT
 	err = toErr(C.IDirect3DDevice9GetScissorRect(obj.handle, &cpRect))
 	pRect.fromC(&cpRect)
@@ -1982,7 +1982,7 @@ func (obj Device) GetStreamSource(
 	ppStreamData VertexBuffer,
 	pOffsetInBytes uint,
 	pStride uint,
-	err error,
+	err Error,
 ) {
 	var cppStreamData *C.IDirect3DVertexBuffer9
 	var cpOffsetInBytes C.UINT
@@ -2008,7 +2008,7 @@ func (obj Device) GetStreamSourceFreq(
 	StreamNumber uint,
 ) (
 	pDivider uint,
-	err error,
+	err Error,
 ) {
 	var cpDivider C.UINT
 	err = toErr(C.IDirect3DDevice9GetStreamSourceFreq(
@@ -2025,7 +2025,7 @@ func (obj Device) GetSwapChain(
 	iSwapChain uint,
 ) (
 	ppSwapChain SwapChain,
-	err error,
+	err Error,
 ) {
 	var cppSwapChain *C.IDirect3DSwapChain9
 	err = toErr(C.IDirect3DDevice9GetSwapChain(
@@ -2038,7 +2038,7 @@ func (obj Device) GetSwapChain(
 }
 
 // GetTexture retrieves a texture assigned to a stage for a device.
-func (obj Device) GetTexture(Stage uint32) (ppTexture BaseTexture, err error) {
+func (obj Device) GetTexture(Stage uint32) (ppTexture BaseTexture, err Error) {
 	var cppTexture *C.IDirect3DBaseTexture9
 	err = toErr(C.IDirect3DDevice9GetTexture(
 		obj.handle,
@@ -2056,7 +2056,7 @@ func (obj Device) GetTextureStageState(
 	Type TEXTURESTAGESTATETYPE,
 ) (
 	pValue uint32,
-	err error,
+	err Error,
 ) {
 	var cpValue C.DWORD
 	err = toErr(C.IDirect3DDevice9GetTextureStageState(
@@ -2074,7 +2074,7 @@ func (obj Device) GetTransform(
 	State TRANSFORMSTATETYPE,
 ) (
 	pMatrix MATRIX,
-	err error,
+	err Error,
 ) {
 	var cpMatrix C.D3DMATRIX
 	err = toErr(C.IDirect3DDevice9GetTransform(
@@ -2087,7 +2087,7 @@ func (obj Device) GetTransform(
 }
 
 // GetVertexDeclaration returns a vertex shader declaration.
-func (obj Device) GetVertexDeclaration() (ppDecl VertexDeclaration, err error) {
+func (obj Device) GetVertexDeclaration() (ppDecl VertexDeclaration, err Error) {
 	var cppDecl *C.IDirect3DVertexDeclaration9
 	err = toErr(C.IDirect3DDevice9GetVertexDeclaration(obj.handle, &cppDecl))
 	ppDecl = VertexDeclaration{cppDecl}
@@ -2095,7 +2095,7 @@ func (obj Device) GetVertexDeclaration() (ppDecl VertexDeclaration, err error) {
 }
 
 // GetVertexShader retrieves the currently set vertex shader.
-func (obj Device) GetVertexShader() (ppShader VertexShader, err error) {
+func (obj Device) GetVertexShader() (ppShader VertexShader, err Error) {
 	var cppShader *C.IDirect3DVertexShader9
 	err = toErr(C.IDirect3DDevice9GetVertexShader(obj.handle, &cppShader))
 	ppShader = VertexShader{cppShader}
@@ -2106,7 +2106,10 @@ func (obj Device) GetVertexShader() (ppShader VertexShader, err error) {
 // slice is filled with the constant data.
 func (obj Device) GetVertexShaderConstantB(
 	StartRegister uint,
-	pConstantData []bool) (err error) {
+	pConstantData []bool,
+) (
+	err Error,
+) {
 	cpConstantData := make([]C.BOOL, len(pConstantData))
 	err = toErr(C.IDirect3DDevice9GetVertexShaderConstantB(
 		obj.handle,
@@ -2125,7 +2128,10 @@ func (obj Device) GetVertexShaderConstantB(
 // a multiple of four.
 func (obj Device) GetVertexShaderConstantF(
 	StartRegister uint,
-	pConstantData []float32) (err error) {
+	pConstantData []float32,
+) (
+	err Error,
+) {
 	err = toErr(C.IDirect3DDevice9GetVertexShaderConstantF(
 		obj.handle,
 		(C.UINT)(StartRegister),
@@ -2140,7 +2146,10 @@ func (obj Device) GetVertexShaderConstantF(
 // multiple of four.
 func (obj Device) GetVertexShaderConstantI(
 	StartRegister uint,
-	pConstantData []int32) (err error) {
+	pConstantData []int32,
+) (
+	err Error,
+) {
 	err = toErr(C.IDirect3DDevice9GetVertexShaderConstantI(
 		obj.handle,
 		(C.UINT)(StartRegister),
@@ -2151,7 +2160,7 @@ func (obj Device) GetVertexShaderConstantI(
 }
 
 // GetViewport retrieves the viewport parameters currently set for the device.
-func (obj Device) GetViewport() (pViewport VIEWPORT, err error) {
+func (obj Device) GetViewport() (pViewport VIEWPORT, err Error) {
 	var cpViewport C.D3DVIEWPORT9
 	err = toErr(C.IDirect3DDevice9GetViewport(obj.handle, &cpViewport))
 	pViewport.fromC(&cpViewport)
@@ -2159,7 +2168,7 @@ func (obj Device) GetViewport() (pViewport VIEWPORT, err error) {
 }
 
 // LightEnable enables or disables a set of lighting parameters within a device.
-func (obj Device) LightEnable(LightIndex uint32, bEnable bool) (err error) {
+func (obj Device) LightEnable(LightIndex uint32, bEnable bool) (err Error) {
 	err = toErr(C.IDirect3DDevice9LightEnable(
 		obj.handle,
 		(C.DWORD)(LightIndex),
@@ -2174,7 +2183,7 @@ func (obj Device) MultiplyTransform(
 	State TRANSFORMSTATETYPE,
 	pMatrix MATRIX,
 ) (
-	err error,
+	err Error,
 ) {
 	cpMatrix := pMatrix.toC()
 	err = toErr(C.IDirect3DDevice9MultiplyTransform(
@@ -2193,7 +2202,7 @@ func (obj Device) Present(
 	hDestWindowOverride unsafe.Pointer,
 	pDirtyRegion *RGNDATA,
 ) (
-	err error,
+	err Error,
 ) {
 	if pSourceRect == nil && pDestRect == nil && pDirtyRegion == nil {
 		err = toErr(C.IDirect3DDevice9Present(
@@ -2248,7 +2257,7 @@ func (obj Device) ProcessVertices(
 	pVertexDecl VertexDeclaration,
 	Flags uint32,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3DDevice9ProcessVertices(
 		obj.handle,
@@ -2267,7 +2276,7 @@ func (obj Device) Reset(
 	inpPresentationParameters PRESENT_PARAMETERS,
 ) (
 	outpPresentationParameters PRESENT_PARAMETERS,
-	err error,
+	err Error,
 ) {
 	cpPresentationParameters := inpPresentationParameters.toC()
 	err = toErr(C.IDirect3DDevice9Reset(obj.handle, &cpPresentationParameters))
@@ -2277,7 +2286,7 @@ func (obj Device) Reset(
 
 // SetClipPlane sets the coefficients of a user-defined clipping plane for the
 // device.
-func (obj Device) SetClipPlane(Index uint32, pPlane [4]float32) (err error) {
+func (obj Device) SetClipPlane(Index uint32, pPlane [4]float32) (err Error) {
 	err = toErr(C.IDirect3DDevice9SetClipPlane(
 		obj.handle,
 		C.DWORD(Index),
@@ -2287,14 +2296,14 @@ func (obj Device) SetClipPlane(Index uint32, pPlane [4]float32) (err error) {
 }
 
 // SetClipStatus sets the clip status.
-func (obj Device) SetClipStatus(pClipStatus CLIPSTATUS) (err error) {
+func (obj Device) SetClipStatus(pClipStatus CLIPSTATUS) (err Error) {
 	cpClipStatus := pClipStatus.toC()
 	err = toErr(C.IDirect3DDevice9SetClipStatus(obj.handle, &cpClipStatus))
 	return
 }
 
 // SetCurrentTexturePalette sets the current texture palette.
-func (obj Device) SetCurrentTexturePalette(PaletteNumber uint) (err error) {
+func (obj Device) SetCurrentTexturePalette(PaletteNumber uint) (err Error) {
 	err = toErr(C.IDirect3DDevice9SetCurrentTexturePalette(
 		obj.handle,
 		(C.UINT)(PaletteNumber),
@@ -2318,7 +2327,7 @@ func (obj Device) SetCursorProperties(
 	YHotSpot uint,
 	pCursorBitmap Surface,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3DDevice9SetCursorProperties(
 		obj.handle,
@@ -2330,7 +2339,7 @@ func (obj Device) SetCursorProperties(
 }
 
 // SetDepthStencilSurface sets the depth stencil surface.
-func (obj Device) SetDepthStencilSurface(pNewZStencil Surface) (err error) {
+func (obj Device) SetDepthStencilSurface(pNewZStencil Surface) (err Error) {
 	err = toErr(C.IDirect3DDevice9SetDepthStencilSurface(
 		obj.handle,
 		pNewZStencil.handle,
@@ -2340,7 +2349,7 @@ func (obj Device) SetDepthStencilSurface(pNewZStencil Surface) (err error) {
 
 // SetDialogBoxMode allows the use of GDI dialog boxes in full-screen mode
 // applications.
-func (obj Device) SetDialogBoxMode(bEnableDialogs bool) (err error) {
+func (obj Device) SetDialogBoxMode(bEnableDialogs bool) (err Error) {
 	err = toErr(C.IDirect3DDevice9SetDialogBoxMode(
 		obj.handle,
 		toBOOL(bEnableDialogs),
@@ -2349,7 +2358,7 @@ func (obj Device) SetDialogBoxMode(bEnableDialogs bool) (err error) {
 }
 
 // SetFVF sets the current vertex stream declaration.
-func (obj Device) SetFVF(FVF uint32) (err error) {
+func (obj Device) SetFVF(FVF uint32) (err Error) {
 	err = toErr(C.IDirect3DDevice9SetFVF(obj.handle, (C.DWORD)(FVF)))
 	return
 }
@@ -2367,13 +2376,13 @@ func (obj Device) SetGammaRamp(iSwapChain uint, Flags uint32, pRamp GAMMARAMP) {
 }
 
 // SetIndices sets index data.
-func (obj Device) SetIndices(pIndexData IndexBuffer) (err error) {
+func (obj Device) SetIndices(pIndexData IndexBuffer) (err Error) {
 	err = toErr(C.IDirect3DDevice9SetIndices(obj.handle, pIndexData.handle))
 	return
 }
 
 // SetLight assigns a set of lighting properties for this device.
-func (obj Device) SetLight(Index uint32, pLight LIGHT) (err error) {
+func (obj Device) SetLight(Index uint32, pLight LIGHT) (err Error) {
 	cpLight := pLight.toC()
 	err = toErr(C.IDirect3DDevice9SetLight(
 		obj.handle,
@@ -2384,7 +2393,7 @@ func (obj Device) SetLight(Index uint32, pLight LIGHT) (err error) {
 }
 
 // SetMaterial sets the material properties for the device.
-func (obj Device) SetMaterial(pMaterial MATERIAL) (err error) {
+func (obj Device) SetMaterial(pMaterial MATERIAL) (err Error) {
 	cpMaterial := pMaterial.toC()
 	err = toErr(C.IDirect3DDevice9SetMaterial(obj.handle, &cpMaterial))
 	return
@@ -2393,7 +2402,7 @@ func (obj Device) SetMaterial(pMaterial MATERIAL) (err error) {
 // SetNPatchMode enables or disables N-patches.
 // nSegments specifies the number of subdivision segments. If the number of
 // segments is less than 1.0, N-patches are disabled. The default value is 0.0.
-func (obj Device) SetNPatchMode(nSegments float32) (err error) {
+func (obj Device) SetNPatchMode(nSegments float32) (err Error) {
 	err = toErr(C.IDirect3DDevice9SetNPatchMode(
 		obj.handle,
 		(C.float)(nSegments),
@@ -2406,7 +2415,7 @@ func (obj Device) SetPaletteEntries(
 	PaletteNumber uint,
 	pEntries [256]PALETTEENTRY,
 ) (
-	err error,
+	err Error,
 ) {
 	var cpEntries [256]C.PALETTEENTRY
 	for i := range pEntries {
@@ -2422,7 +2431,7 @@ func (obj Device) SetPaletteEntries(
 
 // SetPixelShader sets the current pixel shader to a previously created pixel
 // shader.
-func (obj Device) SetPixelShader(pShader PixelShader) (err error) {
+func (obj Device) SetPixelShader(pShader PixelShader) (err Error) {
 	err = toErr(C.IDirect3DDevice9SetPixelShader(obj.handle, pShader.handle))
 	return
 }
@@ -2432,7 +2441,7 @@ func (obj Device) SetPixelShaderConstantB(
 	StartRegister uint,
 	pConstantData []bool,
 ) (
-	err error,
+	err Error,
 ) {
 	data := make([]C.BOOL, len(pConstantData))
 	for i := range data {
@@ -2453,7 +2462,7 @@ func (obj Device) SetPixelShaderConstantF(
 	StartRegister uint,
 	pConstantData []float32,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3DDevice9SetPixelShaderConstantF(
 		obj.handle,
@@ -2470,7 +2479,7 @@ func (obj Device) SetPixelShaderConstantI(
 	StartRegister uint,
 	pConstantData []int32,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3DDevice9SetPixelShaderConstantI(
 		obj.handle,
@@ -2482,7 +2491,12 @@ func (obj Device) SetPixelShaderConstantI(
 }
 
 // SetRenderState sets a single device render-state parameter.
-func (obj Device) SetRenderState(State RENDERSTATETYPE, Value uint32) (err error) {
+func (obj Device) SetRenderState(
+	State RENDERSTATETYPE,
+	Value uint32,
+) (
+	err Error,
+) {
 	err = toErr(C.IDirect3DDevice9SetRenderState(
 		obj.handle,
 		(C.D3DRENDERSTATETYPE)(State),
@@ -2496,7 +2510,7 @@ func (obj Device) SetRenderTarget(
 	RenderTargetIndex uint32,
 	pRenderTarget Surface,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3DDevice9SetRenderTarget(
 		obj.handle,
@@ -2512,7 +2526,7 @@ func (obj Device) SetSamplerState(
 	Type SAMPLERSTATETYPE,
 	Value uint32,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3DDevice9SetSamplerState(
 		obj.handle,
@@ -2524,7 +2538,7 @@ func (obj Device) SetSamplerState(
 }
 
 // SetScissorRect sets the scissor rectangle.
-func (obj Device) SetScissorRect(pRect RECT) (err error) {
+func (obj Device) SetScissorRect(pRect RECT) (err Error) {
 	cpRect := pRect.toC()
 	err = toErr(C.IDirect3DDevice9SetScissorRect(obj.handle, &cpRect))
 	return
@@ -2532,7 +2546,7 @@ func (obj Device) SetScissorRect(pRect RECT) (err error) {
 
 // SetSoftwareVertexProcessing can be used to switch between software and
 // hardware vertex processing.
-func (obj Device) SetSoftwareVertexProcessing(bSoftware bool) (err error) {
+func (obj Device) SetSoftwareVertexProcessing(bSoftware bool) (err Error) {
 	err = toErr(C.IDirect3DDevice9SetSoftwareVertexProcessing(
 		obj.handle,
 		toBOOL(bSoftware),
@@ -2547,7 +2561,7 @@ func (obj Device) SetStreamSource(
 	OffsetInBytes uint,
 	Stride uint,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3DDevice9SetStreamSource(
 		obj.handle,
@@ -2565,7 +2579,7 @@ func (obj Device) SetStreamSourceFreq(
 	StreamNumber uint,
 	FrequencyParameter uint,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3DDevice9SetStreamSourceFreq(
 		obj.handle,
@@ -2576,7 +2590,7 @@ func (obj Device) SetStreamSourceFreq(
 }
 
 // SetTexture assigns a texture to a stage for a device.
-func (obj Device) SetTexture(Sampler uint32, pTexture BaseTexture) (err error) {
+func (obj Device) SetTexture(Sampler uint32, pTexture BaseTexture) (err Error) {
 	err = toErr(C.IDirect3DDevice9SetTexture(
 		obj.handle,
 		(C.DWORD)(Sampler),
@@ -2591,7 +2605,7 @@ func (obj Device) SetTextureStageState(
 	Type TEXTURESTAGESTATETYPE,
 	Value uint32,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3DDevice9SetTextureStageState(
 		obj.handle,
@@ -2607,7 +2621,7 @@ func (obj Device) SetTransform(
 	State TRANSFORMSTATETYPE,
 	pMatrix MATRIX,
 ) (
-	err error,
+	err Error,
 ) {
 	cpMatrix := pMatrix.toC()
 	err = toErr(C.IDirect3DDevice9SetTransform(
@@ -2619,7 +2633,7 @@ func (obj Device) SetTransform(
 }
 
 // SetVertexDeclaration sets a vertex declaration.
-func (obj Device) SetVertexDeclaration(pDecl VertexDeclaration) (err error) {
+func (obj Device) SetVertexDeclaration(pDecl VertexDeclaration) (err Error) {
 	err = toErr(C.IDirect3DDevice9SetVertexDeclaration(
 		obj.handle,
 		pDecl.handle,
@@ -2628,7 +2642,7 @@ func (obj Device) SetVertexDeclaration(pDecl VertexDeclaration) (err error) {
 }
 
 // SetVertexShader sets the vertex shader.
-func (obj Device) SetVertexShader(pShader VertexShader) (err error) {
+func (obj Device) SetVertexShader(pShader VertexShader) (err Error) {
 	err = toErr(C.IDirect3DDevice9SetVertexShader(obj.handle, pShader.handle))
 	return
 }
@@ -2638,7 +2652,7 @@ func (obj Device) SetVertexShaderConstantB(
 	StartRegister uint,
 	pConstantData []bool,
 ) (
-	err error,
+	err Error,
 ) {
 	data := make([]C.BOOL, len(pConstantData))
 	for i := range data {
@@ -2659,7 +2673,7 @@ func (obj Device) SetVertexShaderConstantF(
 	StartRegister uint,
 	pConstantData []float32,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3DDevice9SetVertexShaderConstantF(
 		obj.handle,
@@ -2676,7 +2690,7 @@ func (obj Device) SetVertexShaderConstantI(
 	StartRegister uint,
 	pConstantData []int32,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3DDevice9SetVertexShaderConstantI(
 		obj.handle,
@@ -2688,7 +2702,7 @@ func (obj Device) SetVertexShaderConstantI(
 }
 
 // SetViewport sets the viewport parameters for the device.
-func (obj Device) SetViewport(pViewport VIEWPORT) (err error) {
+func (obj Device) SetViewport(pViewport VIEWPORT) (err Error) {
 	cpViewport := pViewport.toC()
 	err = toErr(C.IDirect3DDevice9SetViewport(obj.handle, &cpViewport))
 	return
@@ -2709,7 +2723,7 @@ func (obj Device) StretchRect(
 	pDestRect *RECT,
 	Filter TEXTUREFILTERTYPE,
 ) (
-	err error,
+	err Error,
 ) {
 	if pSourceRect == nil && pDestRect == nil {
 		err = toErr(C.IDirect3DDevice9StretchRect(
@@ -2750,7 +2764,7 @@ func (obj Device) StretchRect(
 
 // TestCooperativeLevel reports the current cooperative-level status of the
 // Direct3D device for a windowed or full-screen application.
-func (obj Device) TestCooperativeLevel() (err error) {
+func (obj Device) TestCooperativeLevel() (err Error) {
 	err = toErr(C.IDirect3DDevice9TestCooperativeLevel(obj.handle))
 	return
 }
@@ -2762,7 +2776,7 @@ func (obj Device) UpdateSurface(
 	pDestinationSurface Surface,
 	pDestinationPoint *POINT,
 ) (
-	err error,
+	err Error,
 ) {
 	if pSourceRect == nil && pDestinationPoint == nil {
 		err = toErr(C.IDirect3DDevice9UpdateSurface(
@@ -2804,7 +2818,7 @@ func (obj Device) UpdateTexture(
 	pSourceTexture BaseTexture,
 	pDestinationTexture BaseTexture,
 ) (
-	err error,
+	err Error,
 ) {
 	err = toErr(C.IDirect3DDevice9UpdateTexture(
 		obj.handle,
@@ -2816,7 +2830,7 @@ func (obj Device) UpdateTexture(
 
 // ValidateDevice reports the device's ability to render the current
 // texture-blending operations and arguments in a single pass.
-func (obj Device) ValidateDevice() (pNumPasses uint32, err error) {
+func (obj Device) ValidateDevice() (pNumPasses uint32, err Error) {
 	var cpNumPasses C.DWORD
 	err = toErr(C.IDirect3DDevice9ValidateDevice(obj.handle, &cpNumPasses))
 	pNumPasses = (uint32)(cpNumPasses)

@@ -42,7 +42,7 @@ func (obj IndexBuffer) Release() {
 }
 
 // GetDesc retrieves a description of the index buffer resource.
-func (obj IndexBuffer) GetDesc() (pDesc INDEXBUFFER_DESC, err error) {
+func (obj IndexBuffer) GetDesc() (pDesc INDEXBUFFER_DESC, err Error) {
 	var cpDesc C.D3DINDEXBUFFER_DESC
 	err = toErr(C.IDirect3DIndexBuffer9GetDesc(obj.handle, &cpDesc))
 	pDesc.fromC(&cpDesc)
@@ -57,7 +57,7 @@ func (obj IndexBuffer) Lock(
 	Flags uint32,
 ) (
 	data IndexBufferMemory,
-	err error,
+	err Error,
 ) {
 	var ppbData unsafe.Pointer
 	err = toErr(C.IDirect3DIndexBuffer9Lock(
@@ -118,7 +118,7 @@ func (m IndexBufferMemory) GetUint16s(offsetInInts int, data []uint16) {
 }
 
 // Unlock unlocks index data.
-func (obj IndexBuffer) Unlock() (err error) {
+func (obj IndexBuffer) Unlock() (err Error) {
 	err = toErr(C.IDirect3DIndexBuffer9Unlock(obj.handle))
 	return
 }

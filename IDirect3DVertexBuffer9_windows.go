@@ -42,7 +42,7 @@ func (obj VertexBuffer) Release() {
 }
 
 // GetDesc retrieves a description of the vertex buffer resource.
-func (obj VertexBuffer) GetDesc() (pDesc VERTEXBUFFER_DESC, err error) {
+func (obj VertexBuffer) GetDesc() (pDesc VERTEXBUFFER_DESC, err Error) {
 	var cpDesc C.D3DVERTEXBUFFER_DESC
 	err = toErr(C.IDirect3DVertexBuffer9GetDesc(obj.handle, &cpDesc))
 	pDesc.fromC(&cpDesc)
@@ -57,7 +57,7 @@ func (obj VertexBuffer) Lock(
 	Flags uint32,
 ) (
 	data VertexBufferMemory,
-	err error,
+	err Error,
 ) {
 	var ppbData unsafe.Pointer
 	err = toErr(C.IDirect3DVertexBuffer9Lock(
@@ -240,7 +240,7 @@ func (m VertexBufferMemory) GetUint8s(offsetInInts int, data []uint8) {
 }
 
 // Unlock unlocks vertex data.
-func (obj VertexBuffer) Unlock() (err error) {
+func (obj VertexBuffer) Unlock() (err Error) {
 	err = toErr(C.IDirect3DVertexBuffer9Unlock(obj.handle))
 	return
 }

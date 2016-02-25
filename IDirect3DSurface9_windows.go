@@ -74,7 +74,7 @@ func (obj Surface) GetContainerCubeTexture(
 	riid GUID,
 ) (
 	cubeTex CubeTexture,
-	err error,
+	err Error,
 ) {
 	criid := riid.toC()
 	var chandle *C.IDirect3DCubeTexture9
@@ -97,7 +97,7 @@ func (obj Surface) GetContainerTexture(
 	riid GUID,
 ) (
 	tex Texture,
-	err error,
+	err Error,
 ) {
 	criid := riid.toC()
 	var chandle *C.IDirect3DTexture9
@@ -121,7 +121,7 @@ func (obj Surface) GetContainerSwapChain(
 	riid GUID,
 ) (
 	chain SwapChain,
-	err error,
+	err Error,
 ) {
 	criid := riid.toC()
 	var chandle *C.IDirect3DSwapChain9
@@ -135,7 +135,7 @@ func (obj Surface) GetContainerSwapChain(
 }
 
 // GetDC retrieves a device context.
-func (obj Surface) GetDC() (phdc unsafe.Pointer, err error) {
+func (obj Surface) GetDC() (phdc unsafe.Pointer, err Error) {
 	var cphdc C.HDC
 	err = toErr(C.IDirect3DSurface9GetDC(obj.handle, &cphdc))
 	phdc = (unsafe.Pointer)(cphdc)
@@ -143,7 +143,7 @@ func (obj Surface) GetDC() (phdc unsafe.Pointer, err error) {
 }
 
 // GetDesc retrieves a description of the surface.
-func (obj Surface) GetDesc() (pDesc SURFACE_DESC, err error) {
+func (obj Surface) GetDesc() (pDesc SURFACE_DESC, err Error) {
 	var cpDesc C.D3DSURFACE_DESC
 	err = toErr(C.IDirect3DSurface9GetDesc(obj.handle, &cpDesc))
 	pDesc.fromC(&cpDesc)
@@ -156,7 +156,7 @@ func (obj Surface) LockRect(
 	Flags uint32,
 ) (
 	pLockedRect LOCKED_RECT,
-	err error,
+	err Error,
 ) {
 	var cpLockedRect C.D3DLOCKED_RECT
 	if pRect == nil {
@@ -180,13 +180,13 @@ func (obj Surface) LockRect(
 }
 
 // ReleaseDC releases a device context handle.
-func (obj Surface) ReleaseDC(hdc unsafe.Pointer) (err error) {
+func (obj Surface) ReleaseDC(hdc unsafe.Pointer) (err Error) {
 	err = toErr(C.IDirect3DSurface9ReleaseDC(obj.handle, (C.HDC)(hdc)))
 	return
 }
 
 // UnlockRect unlocks a rectangle on a surface.
-func (obj Surface) UnlockRect() (err error) {
+func (obj Surface) UnlockRect() (err Error) {
 	err = toErr(C.IDirect3DSurface9UnlockRect(obj.handle))
 	return
 }

@@ -48,7 +48,7 @@ func (obj Query) Release() {
 }
 
 // GetData polls a queried resource to get the query state or a query result.
-func (obj Query) GetData(pData []byte, dwGetDataFlags uint32) (err error) {
+func (obj Query) GetData(pData []byte, dwGetDataFlags uint32) (err Error) {
 	if len(pData) == 0 {
 		err = toErr(C.IDirect3DQuery9GetData(
 			obj.handle,
@@ -73,7 +73,7 @@ func (obj Query) GetDataSize() uint32 {
 }
 
 // GetDevice returns the device that is being queried.
-func (obj Query) GetDevice() (pDevice Device, err error) {
+func (obj Query) GetDevice() (pDevice Device, err Error) {
 	var cpDevice *C.IDirect3DDevice9
 	err = toErr(C.IDirect3DQuery9GetDevice(obj.handle, &cpDevice))
 	pDevice = Device{cpDevice}
@@ -86,7 +86,7 @@ func (obj Query) GetType() QUERYTYPE {
 }
 
 // Issue issues a query.
-func (obj Query) Issue(dwIssueFlags uint32) (err error) {
+func (obj Query) Issue(dwIssueFlags uint32) (err Error) {
 	err = toErr(C.IDirect3DQuery9Issue(obj.handle, (C.DWORD)(dwIssueFlags)))
 	return
 }

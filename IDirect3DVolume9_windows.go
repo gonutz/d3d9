@@ -72,7 +72,7 @@ func (obj Volume) Release() {
 }
 
 // FreePrivateData frees the specified private data associated with this volume.
-func (obj Volume) FreePrivateData(refguid GUID) (err error) {
+func (obj Volume) FreePrivateData(refguid GUID) (err Error) {
 	crefguid := refguid.toC()
 	err = toErr(C.IDirect3DVolume9FreePrivateData(obj.handle, &crefguid))
 	return
@@ -85,7 +85,7 @@ func (obj Volume) GetContainer(
 	riid GUID,
 ) (
 	ppContainer VolumeTexture,
-	err error,
+	err Error,
 ) {
 	var handle *C.IDirect3DVolumeTexture9
 	criid := riid.toC()
@@ -107,7 +107,7 @@ func (obj Volume) GetContainer(
 }
 
 // GetDesc retrieves a description of the volume.
-func (obj Volume) GetDesc() (pDesc VOLUME_DESC, err error) {
+func (obj Volume) GetDesc() (pDesc VOLUME_DESC, err Error) {
 	var cpDesc C.D3DVOLUME_DESC
 	err = toErr(C.IDirect3DVolume9GetDesc(obj.handle, &cpDesc))
 	pDesc.fromC(&cpDesc)
@@ -115,7 +115,7 @@ func (obj Volume) GetDesc() (pDesc VOLUME_DESC, err error) {
 }
 
 // GetDevice retrieves the device associated with a volume.
-func (obj Volume) GetDevice() (ppDevice Device, err error) {
+func (obj Volume) GetDevice() (ppDevice Device, err Error) {
 	var cppDevice *C.IDirect3DDevice9
 	err = toErr(C.IDirect3DVolume9GetDevice(obj.handle, &cppDevice))
 	ppDevice = Device{cppDevice}
@@ -124,7 +124,7 @@ func (obj Volume) GetDevice() (ppDevice Device, err error) {
 
 // GetPrivateData copies the private data associated with the volume to a
 // provided buffer.
-func (obj Volume) GetPrivateData(refguid GUID) (pData []byte, err error) {
+func (obj Volume) GetPrivateData(refguid GUID) (pData []byte, err Error) {
 	// first get the buffer size by passing nil as the data pointer
 	crefguid := refguid.toC()
 	var cpSizeOfDataInBytes C.DWORD
@@ -153,7 +153,7 @@ func (obj Volume) LockBox(
 	Flags uint32,
 ) (
 	pLockedVolume LOCKED_BOX,
-	err error,
+	err Error,
 ) {
 	var cpLockedVolume C.D3DLOCKED_BOX
 	if pBox == nil {
@@ -184,7 +184,7 @@ func (obj Volume) SetPrivateData(
 	SizeOfData uint32,
 	Flags uint32,
 ) (
-	err error,
+	err Error,
 ) {
 	crefguid := refguid.toC()
 	err = toErr(C.IDirect3DVolume9SetPrivateData(
@@ -204,7 +204,7 @@ func (obj Volume) SetPrivateDataInBytes(
 	data []byte,
 	Flags uint32,
 ) (
-	err error,
+	err Error,
 ) {
 	return obj.SetPrivateData(
 		refguid,
@@ -215,7 +215,7 @@ func (obj Volume) SetPrivateDataInBytes(
 }
 
 // UnlockBox unlocks a box on a volume resource.
-func (obj Volume) UnlockBox() (err error) {
+func (obj Volume) UnlockBox() (err Error) {
 	err = toErr(C.IDirect3DVolume9UnlockBox(obj.handle))
 	return
 }

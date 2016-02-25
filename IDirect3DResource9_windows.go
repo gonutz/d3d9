@@ -70,7 +70,7 @@ func (obj Resource) Release() {
 
 // FreePrivateData frees the specified private data associated with this
 // resource.
-func (obj Resource) FreePrivateData(refguid GUID) (err error) {
+func (obj Resource) FreePrivateData(refguid GUID) (err Error) {
 	crefguid := refguid.toC()
 	err = toErr(C.IDirect3DResource9FreePrivateData(obj.handle, &crefguid))
 	return
@@ -78,7 +78,7 @@ func (obj Resource) FreePrivateData(refguid GUID) (err error) {
 
 // GetDevice retrieves the device associated with a resource.
 // Call Release on the returned device when finished using it.
-func (obj Resource) GetDevice() (ppDevice Device, err error) {
+func (obj Resource) GetDevice() (ppDevice Device, err Error) {
 	var cppDevice *C.IDirect3DDevice9
 	err = toErr(C.IDirect3DResource9GetDevice(obj.handle, &cppDevice))
 	ppDevice = Device{cppDevice}
@@ -92,7 +92,7 @@ func (obj Resource) GetPriority() uint32 {
 
 // GetPrivateData copies the private data associated with the resource to a
 // provided buffer.
-func (obj Resource) GetPrivateData(refguid GUID) (data []byte, err error) {
+func (obj Resource) GetPrivateData(refguid GUID) (data []byte, err Error) {
 	// first get the data size by passing nil as the data pointer
 	crefguid := refguid.toC()
 	var cpSizeOfData C.DWORD
@@ -142,7 +142,7 @@ func (obj Resource) SetPrivateData(
 	SizeOfData uint32,
 	Flags uint32,
 ) (
-	err error,
+	err Error,
 ) {
 	crefguid := refguid.toC()
 	err = toErr(C.IDirect3DResource9SetPrivateData(
@@ -163,7 +163,7 @@ func (obj Resource) SetPrivateDataBytes(
 	data []byte,
 	Flags uint32,
 ) (
-	err error,
+	err Error,
 ) {
 	return obj.SetPrivateData(
 		refguid,
