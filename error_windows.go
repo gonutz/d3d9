@@ -4,8 +4,19 @@ package d3d9
 import "C"
 import "strconv"
 
+// Error is returned by all Direct3D9 functions. It encapsulates the error code
+// returned by Direct3D. If a function succeeds it will return nil as the Error
+// and if it fails you can retrieve the error code using the Code() function.
+// You can check the result against the predefined error codes (like
+// ERR_DEVICELOST, E_OUTOFMEMORY etc).
 type Error interface {
 	error
+	// Code returns the Direct3D error code for a function. Call this function
+	// only if the Error is not nil, if the error code is D3D_OK or any other
+	// code that signifies success, a function will return nil as the Error
+	// instead of a non-nil error with that code in it. This way, functions
+	// behave in a standard Go way, returning nil as the error in case of
+	// success and only returning non-nil errors if something went wrong.
 	Code() int
 }
 
