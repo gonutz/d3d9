@@ -80,41 +80,49 @@ type IndexBufferMemory struct {
 // SetUint32s copies the given slice to the memory, starting at the given
 // offset in items (not in bytes).
 func (m IndexBufferMemory) SetUint32s(offsetInInts int, data []uint32) {
-	C.memcpy(
-		unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*4)),
-		unsafe.Pointer(&data[0]),
-		C.size_t(len(data)*4),
-	)
+	if len(data) > 0 {
+		C.memcpy(
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*4)),
+			unsafe.Pointer(&data[0]),
+			C.size_t(len(data)*4),
+		)
+	}
 }
 
 // GetUint32s copies data from memory to the given slice, starting at the given
 // offset in items (not in bytes).
 func (m IndexBufferMemory) GetUint32s(offsetInInts int, data []uint32) {
-	C.memcpy(
-		unsafe.Pointer(&data[0]),
-		unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*4)),
-		C.size_t(len(data)*4),
-	)
+	if len(data) > 0 {
+		C.memcpy(
+			unsafe.Pointer(&data[0]),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*4)),
+			C.size_t(len(data)*4),
+		)
+	}
 }
 
 // SetUint16s copies the given slice to the memory, starting at the given
 // offset in items (not in bytes).
 func (m IndexBufferMemory) SetUint16s(offsetInInts int, data []uint16) {
-	C.memcpy(
-		unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*2)),
-		unsafe.Pointer(&data[0]),
-		C.size_t(len(data)*2),
-	)
+	if len(data) > 0 {
+		C.memcpy(
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*2)),
+			unsafe.Pointer(&data[0]),
+			C.size_t(len(data)*2),
+		)
+	}
 }
 
 // GetUint16s copies data from memory to the given slice, starting at the given
 // offset in items (not in bytes).
 func (m IndexBufferMemory) GetUint16s(offsetInInts int, data []uint16) {
-	C.memcpy(
-		unsafe.Pointer(&data[0]),
-		unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*2)),
-		C.size_t(len(data)*2),
-	)
+	if len(data) > 0 {
+		C.memcpy(
+			unsafe.Pointer(&data[0]),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*2)),
+			C.size_t(len(data)*2),
+		)
+	}
 }
 
 // Unlock unlocks index data.
