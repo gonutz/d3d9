@@ -36,6 +36,11 @@ Similarly, when locking a two-dimensional resource, like a texture, you will get
 # Documentation
 See the [GoDoc](https://godoc.org/github.com/gonutz/d3d9) for the Go API. The functions are only documented very generally, to get more detailed information about the Direct3D9 API see the [MSDN documentation](https://msdn.microsoft.com/en-us/library/windows/desktop/bb172964%28v=vs.85%29.aspx).
 
+# Examples
+The samples folder contains some example programs that show the basics of setting up and using the library.
+
+One real world usage of this library is [my entry](https://github.com/gonutz/gophette) to the [GopherGala 2016](http://gophergala.com/). It was first built using SDL2 and after the competition I ported it to DirectX, see [`main_windows.go`](https://github.com/gonutz/gophette/blob/master/main_windows.go) for the implementation.
+
 # Status
 The code started out as a rough version generated from the MSDN online documentation and was then manually refined to work well with Go and its conventions. It wraps the whole Direct3D9 API right now and adds some additional convenience functions for easy Go usage. However, LOCKED_RECT only has one function for setting the whole data rectangle at once, there is no simple way to set only sub-rectangles right now. Similarly the CubeTexture's LOCKED_BOX has no wrapper functions for getting and setting its data, yet. For now the raw unsafe.Pointer memory pointers can be used along with the pitch values and in the future such functions can be added when needed.
 
