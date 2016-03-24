@@ -1,6 +1,8 @@
 package main
 
 /*
+vso is the vertex shader object code (compiled with fxc) for the code:
+
 struct input {
 	float4 position : POSITION;
 };

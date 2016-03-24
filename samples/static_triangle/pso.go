@@ -1,6 +1,8 @@
 package main
 
 /*
+pso is the pixel shader object code (compiled with fxc) for the code:
+
 struct input {};
 
 struct output {

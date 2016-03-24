@@ -1,7 +1,7 @@
 package main
 
 /*
-vso is the vertex shader object code (compiled with fxc) for the code:
+pso is the pixel shader object code (compiled with fxc) for the code:
 
 struct input {};
 
