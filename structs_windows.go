@@ -58,14 +58,16 @@ void setWholeLockedRect(
 	int stride = sourceStride;
 	if (destStride < sourceStride)
 		stride = destStride;
+	int destSkip = destStride - stride;
+	int sourceSkip = sourceStride - stride;
 	int x, y;
 	char* d = (char*) dest;
 	char* s = (char*) source;
 	for (y = 0; y < height; ++y) {
 		for (x = 0; x < stride; ++x)
 			*d++ = *s++;
-		d += destStride - stride;
-		s += sourceStride - stride;
+		d += destSkip;
+		s += sourceSkip;
 	}
 }
 */

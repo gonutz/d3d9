@@ -78,11 +78,11 @@ type VertexBufferMemory struct {
 }
 
 // SetFloat32s copies the given slice to the memory, starting at the given
-// offset in items (not in bytes).
-func (m VertexBufferMemory) SetFloat32s(offsetInFloats int, data []float32) {
+// offset in bytes.
+func (m VertexBufferMemory) SetFloat32s(offsetInBytes int, data []float32) {
 	if len(data) > 0 {
 		C.memcpy(
-			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInFloats*4)),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
 			unsafe.Pointer(&data[0]),
 			C.size_t(len(data)*4),
 		)
@@ -90,23 +90,23 @@ func (m VertexBufferMemory) SetFloat32s(offsetInFloats int, data []float32) {
 }
 
 // GetFloat32s copies data from memory to the given slice, starting at the given
-// offset in items (not in bytes).
-func (m VertexBufferMemory) GetFloat32s(offsetInFloats int, data []float32) {
+// offset in bytes.
+func (m VertexBufferMemory) GetFloat32s(offsetInBytes int, data []float32) {
 	if len(data) > 0 {
 		C.memcpy(
 			unsafe.Pointer(&data[0]),
-			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInFloats*4)),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
 			C.size_t(len(data)*4),
 		)
 	}
 }
 
 // SetFloat64s copies the given slice to the memory, starting at the given
-// offset in items (not in bytes).
-func (m VertexBufferMemory) SetFloat64s(offsetInFloats int, data []float64) {
+// offset in bytes.
+func (m VertexBufferMemory) SetFloat64s(offsetInBytes int, data []float64) {
 	if len(data) > 0 {
 		C.memcpy(
-			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInFloats*8)),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
 			unsafe.Pointer(&data[0]),
 			C.size_t(len(data)*8),
 		)
@@ -114,23 +114,23 @@ func (m VertexBufferMemory) SetFloat64s(offsetInFloats int, data []float64) {
 }
 
 // GetFloat64s copies data from memory to the given slice, starting at the given
-// offset in items (not in bytes).
-func (m VertexBufferMemory) GetFloat64s(offsetInFloats int, data []float64) {
+// offset in bytes.
+func (m VertexBufferMemory) GetFloat64s(offsetInBytes int, data []float64) {
 	if len(data) > 0 {
 		C.memcpy(
 			unsafe.Pointer(&data[0]),
-			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInFloats*8)),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
 			C.size_t(len(data)*8),
 		)
 	}
 }
 
 // SetInt32s copies the given slice to the memory, starting at the given
-// offset in items (not in bytes).
-func (m VertexBufferMemory) SetInt32s(offsetInInts int, data []int32) {
+// offset in bytes.
+func (m VertexBufferMemory) SetInt32s(offsetInBytes int, data []int32) {
 	if len(data) > 0 {
 		C.memcpy(
-			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*4)),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
 			unsafe.Pointer(&data[0]),
 			C.size_t(len(data)*4),
 		)
@@ -138,23 +138,23 @@ func (m VertexBufferMemory) SetInt32s(offsetInInts int, data []int32) {
 }
 
 // GetInt32s copies data from memory to the given slice, starting at the given
-// offset in items (not in bytes).
-func (m VertexBufferMemory) GetInt32s(offsetInInts int, data []int32) {
+// offset in bytes.
+func (m VertexBufferMemory) GetInt32s(offsetInBytes int, data []int32) {
 	if len(data) > 0 {
 		C.memcpy(
 			unsafe.Pointer(&data[0]),
-			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*4)),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
 			C.size_t(len(data)*4),
 		)
 	}
 }
 
 // SetUint32s copies the given slice to the memory, starting at the given
-// offset in items (not in bytes).
-func (m VertexBufferMemory) SetUint32s(offsetInInts int, data []uint32) {
+// offset in bytes.
+func (m VertexBufferMemory) SetUint32s(offsetInBytes int, data []uint32) {
 	if len(data) > 0 {
 		C.memcpy(
-			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*4)),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
 			unsafe.Pointer(&data[0]),
 			C.size_t(len(data)*4),
 		)
@@ -162,23 +162,23 @@ func (m VertexBufferMemory) SetUint32s(offsetInInts int, data []uint32) {
 }
 
 // GetUint32s copies data from memory to the given slice, starting at the given
-// offset in items (not in bytes).
-func (m VertexBufferMemory) GetUint32s(offsetInInts int, data []uint32) {
+// offset in bytes.
+func (m VertexBufferMemory) GetUint32s(offsetInBytes int, data []uint32) {
 	if len(data) > 0 {
 		C.memcpy(
 			unsafe.Pointer(&data[0]),
-			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*4)),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
 			C.size_t(len(data)*4),
 		)
 	}
 }
 
 // SetInt16s copies the given slice to the memory, starting at the given
-// offset in items (not in bytes).
-func (m VertexBufferMemory) SetInt16s(offsetInInts int, data []int16) {
+// offset in bytes.
+func (m VertexBufferMemory) SetInt16s(offsetInBytes int, data []int16) {
 	if len(data) > 0 {
 		C.memcpy(
-			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*2)),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
 			unsafe.Pointer(&data[0]),
 			C.size_t(len(data)*2),
 		)
@@ -186,23 +186,23 @@ func (m VertexBufferMemory) SetInt16s(offsetInInts int, data []int16) {
 }
 
 // GetInt16s copies data from memory to the given slice, starting at the given
-// offset in items (not in bytes).
-func (m VertexBufferMemory) GetInt16s(offsetInInts int, data []int16) {
+// offset in bytes.
+func (m VertexBufferMemory) GetInt16s(offsetInBytes int, data []int16) {
 	if len(data) > 0 {
 		C.memcpy(
 			unsafe.Pointer(&data[0]),
-			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*2)),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
 			C.size_t(len(data)*2),
 		)
 	}
 }
 
 // SetUint16s copies the given slice to the memory, starting at the given
-// offset in items (not in bytes).
-func (m VertexBufferMemory) SetUint16s(offsetInInts int, data []uint16) {
+// offset in bytes.
+func (m VertexBufferMemory) SetUint16s(offsetInBytes int, data []uint16) {
 	if len(data) > 0 {
 		C.memcpy(
-			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*2)),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
 			unsafe.Pointer(&data[0]),
 			C.size_t(len(data)*2),
 		)
@@ -210,23 +210,23 @@ func (m VertexBufferMemory) SetUint16s(offsetInInts int, data []uint16) {
 }
 
 // GetUint16s copies data from memory to the given slice, starting at the given
-// offset in items (not in bytes).
-func (m VertexBufferMemory) GetUint16s(offsetInInts int, data []uint16) {
+// offset in bytes.
+func (m VertexBufferMemory) GetUint16s(offsetInBytes int, data []uint16) {
 	if len(data) > 0 {
 		C.memcpy(
 			unsafe.Pointer(&data[0]),
-			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*2)),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
 			C.size_t(len(data)*2),
 		)
 	}
 }
 
 // SetInt8s copies the given slice to the memory, starting at the given
-// offset in items (not in bytes).
-func (m VertexBufferMemory) SetInt8s(offsetInInts int, data []int8) {
+// offset in bytes.
+func (m VertexBufferMemory) SetInt8s(offsetInBytes int, data []int8) {
 	if len(data) > 0 {
 		C.memcpy(
-			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts)),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
 			unsafe.Pointer(&data[0]),
 			C.size_t(len(data)),
 		)
@@ -234,24 +234,23 @@ func (m VertexBufferMemory) SetInt8s(offsetInInts int, data []int8) {
 }
 
 // GetInt8s copies data from memory to the given slice, starting at the given
-// offset in items (not in bytes).
-func (m VertexBufferMemory) GetInt8s(offsetInInts int, data []int8) {
+// offset in bytes.
+func (m VertexBufferMemory) GetInt8s(offsetInBytes int, data []int8) {
 	if len(data) > 0 {
 		C.memcpy(
 			unsafe.Pointer(&data[0]),
-			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts)),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
 			C.size_t(len(data)),
 		)
 	}
 }
 
-// SetUint8s copies the given slice to the memory, starting at the given
-// offset in items (not in bytes). You can also use it to set a byte slice, just
-// cast the []uint8 slice to []byte.
-func (m VertexBufferMemory) SetUint8s(offsetInInts int, data []uint8) {
+// SetUint8s copies the given slice to the memory, starting at the given offset
+// in bytes.
+func (m VertexBufferMemory) SetUint8s(offsetInBytes int, data []uint8) {
 	if len(data) > 0 {
 		C.memcpy(
-			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts)),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
 			unsafe.Pointer(&data[0]),
 			C.size_t(len(data)),
 		)
@@ -259,13 +258,36 @@ func (m VertexBufferMemory) SetUint8s(offsetInInts int, data []uint8) {
 }
 
 // GetUint8s copies data from memory to the given slice, starting at the given
-// offset in items (not in bytes). You can also use it to get a byte slice, just
-// cast the result form []uint8 to []byte.
-func (m VertexBufferMemory) GetUint8s(offsetInInts int, data []uint8) {
+// offset in bytes.
+func (m VertexBufferMemory) GetUint8s(offsetInBytes int, data []uint8) {
 	if len(data) > 0 {
 		C.memcpy(
 			unsafe.Pointer(&data[0]),
-			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts)),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
+			C.size_t(len(data)),
+		)
+	}
+}
+
+// SetBytes copies the given slice to the memory, starting at the given offset
+// in bytes.
+func (m VertexBufferMemory) SetBytes(offsetInBytes int, data []byte) {
+	if len(data) > 0 {
+		C.memcpy(
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
+			unsafe.Pointer(&data[0]),
+			C.size_t(len(data)),
+		)
+	}
+}
+
+// GetBytes copies data from memory to the given slice, starting at the given
+// offset in bytes.
+func (m VertexBufferMemory) GetBytes(offsetInBytes int, data []byte) {
+	if len(data) > 0 {
+		C.memcpy(
+			unsafe.Pointer(&data[0]),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
 			C.size_t(len(data)),
 		)
 	}

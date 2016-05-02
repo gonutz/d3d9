@@ -78,11 +78,11 @@ type IndexBufferMemory struct {
 }
 
 // SetUint32s copies the given slice to the memory, starting at the given
-// offset in items (not in bytes).
-func (m IndexBufferMemory) SetUint32s(offsetInInts int, data []uint32) {
+// offset in bytes.
+func (m IndexBufferMemory) SetUint32s(offsetInBytes int, data []uint32) {
 	if len(data) > 0 {
 		C.memcpy(
-			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*4)),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
 			unsafe.Pointer(&data[0]),
 			C.size_t(len(data)*4),
 		)
@@ -90,23 +90,23 @@ func (m IndexBufferMemory) SetUint32s(offsetInInts int, data []uint32) {
 }
 
 // GetUint32s copies data from memory to the given slice, starting at the given
-// offset in items (not in bytes).
-func (m IndexBufferMemory) GetUint32s(offsetInInts int, data []uint32) {
+// offset in bytes.
+func (m IndexBufferMemory) GetUint32s(offsetInBytes int, data []uint32) {
 	if len(data) > 0 {
 		C.memcpy(
 			unsafe.Pointer(&data[0]),
-			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*4)),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
 			C.size_t(len(data)*4),
 		)
 	}
 }
 
 // SetUint16s copies the given slice to the memory, starting at the given
-// offset in items (not in bytes).
-func (m IndexBufferMemory) SetUint16s(offsetInInts int, data []uint16) {
+// offset in bytes.
+func (m IndexBufferMemory) SetUint16s(offsetInBytes int, data []uint16) {
 	if len(data) > 0 {
 		C.memcpy(
-			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*2)),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
 			unsafe.Pointer(&data[0]),
 			C.size_t(len(data)*2),
 		)
@@ -114,12 +114,12 @@ func (m IndexBufferMemory) SetUint16s(offsetInInts int, data []uint16) {
 }
 
 // GetUint16s copies data from memory to the given slice, starting at the given
-// offset in items (not in bytes).
-func (m IndexBufferMemory) GetUint16s(offsetInInts int, data []uint16) {
+// offset in bytes.
+func (m IndexBufferMemory) GetUint16s(offsetInBytes int, data []uint16) {
 	if len(data) > 0 {
 		C.memcpy(
 			unsafe.Pointer(&data[0]),
-			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInInts*2)),
+			unsafe.Pointer(uintptr(int(uintptr(m.Memory))+offsetInBytes)),
 			C.size_t(len(data)*2),
 		)
 	}
