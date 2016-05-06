@@ -81,6 +81,7 @@ func toBOOL(b bool) C.BOOL {
 	return 0
 }
 
+// ADAPTER_IDENTIFIER contains information identifying the adapter.
 type ADAPTER_IDENTIFIER struct {
 	Driver           [C.MAX_DEVICE_IDENTIFIER_STRING]byte
 	Description      [C.MAX_DEVICE_IDENTIFIER_STRING]byte
@@ -134,6 +135,7 @@ func (s *ADAPTER_IDENTIFIER) fromC(c *C.D3DADAPTER_IDENTIFIER9) {
 	s.WHQLLevel = (uint32)(c.WHQLLevel)
 }
 
+// BOX defines a volume.
 type BOX struct {
 	Left   uint
 	Top    uint
@@ -163,6 +165,8 @@ func (s *BOX) fromC(c *C.D3DBOX) {
 	s.Back = (uint)(c.Back)
 }
 
+// CAPS represents the capabilities of the hardware exposed through the Direct3D
+// object.
 type CAPS struct {
 	DeviceType                        DEVTYPE
 	AdapterOrdinal                    uint
@@ -375,6 +379,7 @@ func (s *CAPS) fromC(c *C.D3DCAPS9) {
 	s.MaxPixelShader30InstructionSlots = (uint32)(c.MaxPixelShader30InstructionSlots)
 }
 
+// CLIPSTATUS describes the current clip status.
 type CLIPSTATUS struct {
 	ClipUnion        uint32
 	ClipIntersection uint32
@@ -392,6 +397,7 @@ func (s *CLIPSTATUS) fromC(c *C.D3DCLIPSTATUS9) {
 	s.ClipIntersection = (uint32)(c.ClipIntersection)
 }
 
+// COLORVALUE describes color values.
 type COLORVALUE struct {
 	R float32
 	G float32
@@ -415,6 +421,7 @@ func (s *COLORVALUE) fromC(c *C.D3DCOLORVALUE) {
 	s.A = (float32)(c.a)
 }
 
+// DEVICE_CREATION_PARAMETERS describes the creation parameters for a device.
 type DEVICE_CREATION_PARAMETERS struct {
 	AdapterOrdinal uint
 	DeviceType     DEVTYPE
@@ -438,6 +445,8 @@ func (s *DEVICE_CREATION_PARAMETERS) fromC(c *C.D3DDEVICE_CREATION_PARAMETERS) {
 	s.BehaviorFlags = (uint32)(c.BehaviorFlags)
 }
 
+// DEVINFO_D3D9BANDWIDTHTIMINGS contains throughput metrics for help in
+// understanding the performance of an application.
 type DEVINFO_D3D9BANDWIDTHTIMINGS struct {
 	MaxBandwidthUtilized                float32
 	FrontEndUploadMemoryUtilizedPercent float32
@@ -464,6 +473,8 @@ func (s *DEVINFO_D3D9BANDWIDTHTIMINGS) fromC(c *C.D3DDEVINFO_D3D9BANDWIDTHTIMING
 	s.FillRateUtilizedPercent = (float32)(c.FillRateUtilizedPercent)
 }
 
+// DEVINFO_D3D9CACHEUTILIZATION measures the cache hit rate performance for
+// textures and indexed vertices.
 type DEVINFO_D3D9CACHEUTILIZATION struct {
 	TextureCacheHitRate             float32
 	PostTransformVertexCacheHitRate float32
@@ -481,6 +492,9 @@ func (s *DEVINFO_D3D9CACHEUTILIZATION) fromC(c *C.D3DDEVINFO_D3D9CACHEUTILIZATIO
 	s.PostTransformVertexCacheHitRate = (float32)(c.PostTransformVertexCacheHitRate)
 }
 
+// DEVINFO_D3D9INTERFACETIMINGS contains the percent of time processing data in
+// the driver. These statistics may help identify cases when the driver is
+// waiting for other resources.
 type DEVINFO_D3D9INTERFACETIMINGS struct {
 	WaitingForGPUToUseApplicationResourceTimePercent float32
 	WaitingForGPUToAcceptMoreCommandsTimePercent     float32
@@ -507,6 +521,8 @@ func (s *DEVINFO_D3D9INTERFACETIMINGS) fromC(c *C.D3DDEVINFO_D3D9INTERFACETIMING
 	s.WaitingForGPUOtherTimePercent = (float32)(c.WaitingForGPUOtherTimePercent)
 }
 
+// DEVINFO_D3D9PIPELINETIMINGS contains the percent of time processing data in
+// the pipeline.
 type DEVINFO_D3D9PIPELINETIMINGS struct {
 	VertexProcessingTimePercent   float32
 	PixelProcessingTimePercent    float32
@@ -530,6 +546,7 @@ func (s *DEVINFO_D3D9PIPELINETIMINGS) fromC(c *C.D3DDEVINFO_D3D9PIPELINETIMINGS)
 	s.GPUIdleTimePercent = (float32)(c.GPUIdleTimePercent)
 }
 
+// DEVINFO_D3D9STAGETIMINGS contains the percent of time processing shader data.
 type DEVINFO_D3D9STAGETIMINGS struct {
 	MemoryProcessingPercent      float32
 	ComputationProcessingPercent float32
@@ -547,6 +564,8 @@ func (s *DEVINFO_D3D9STAGETIMINGS) fromC(c *C.D3DDEVINFO_D3D9STAGETIMINGS) {
 	s.ComputationProcessingPercent = (float32)(c.ComputationProcessingPercent)
 }
 
+// DEVINFO_D3DVERTEXSTATS reports the number of triangles that have been
+// processed and clipped by the runtime's software vertex processing.
 type DEVINFO_D3DVERTEXSTATS struct {
 	NumRenderedTriangles      uint32
 	NumExtraClippingTriangles uint32
@@ -564,6 +583,7 @@ func (s *DEVINFO_D3DVERTEXSTATS) fromC(c *C.D3DDEVINFO_D3DVERTEXSTATS) {
 	s.NumExtraClippingTriangles = (uint32)(c.NumExtraClippingTriangles)
 }
 
+// DEVINFO_VCACHE contains vertex cache optimization hints.
 type DEVINFO_VCACHE struct {
 	Pattern     uint32
 	OptMethod   uint32
@@ -587,6 +607,7 @@ func (s *DEVINFO_VCACHE) fromC(c *C.D3DDEVINFO_VCACHE) {
 	s.MagicNumber = (uint32)(c.MagicNumber)
 }
 
+// DISPLAYMODE describes the display mode.
 type DISPLAYMODE struct {
 	Width       uint
 	Height      uint
@@ -610,6 +631,7 @@ func (s *DISPLAYMODE) fromC(c *C.D3DDISPLAYMODE) {
 	s.Format = (FORMAT)(c.Format)
 }
 
+// GAMMARAMP contains red, green, and blue ramp data.
 type GAMMARAMP struct {
 	Red   [256]uint16
 	Green [256]uint16
@@ -642,6 +664,7 @@ func (s *GAMMARAMP) fromC(c *C.D3DGAMMARAMP) {
 	}
 }
 
+// INDEXBUFFER_DESC describes an index buffer.
 type INDEXBUFFER_DESC struct {
 	Format FORMAT
 	Type   RESOURCETYPE
@@ -668,6 +691,7 @@ func (s *INDEXBUFFER_DESC) fromC(c *C.D3DINDEXBUFFER_DESC) {
 	s.Size = (uint)(c.Size)
 }
 
+// LIGHT defines a set of lighting properties.
 type LIGHT struct {
 	Type         LIGHTTYPE
 	Diffuse      COLORVALUE
@@ -718,6 +742,7 @@ func (s *LIGHT) fromC(c *C.D3DLIGHT9) {
 	s.Phi = (float32)(c.Phi)
 }
 
+// LOCKED_BOX describes a locked box (volume).
 type LOCKED_BOX struct {
 	RowPitch   int
 	SlicePitch int
@@ -738,6 +763,7 @@ func (s *LOCKED_BOX) fromC(c *C.D3DLOCKED_BOX) {
 	s.PBits = (unsafe.Pointer)(c.pBits)
 }
 
+// LOCKED_RECT describes a locked rectangular region.
 type LOCKED_RECT struct {
 	Pitch int
 	PBits unsafe.Pointer
@@ -769,6 +795,7 @@ func (r LOCKED_RECT) SetAllBytes(data []byte, stride int) {
 	)
 }
 
+// MATERIAL specifies material properties.
 type MATERIAL struct {
 	Diffuse  COLORVALUE
 	Ambient  COLORVALUE
@@ -795,6 +822,7 @@ func (s *MATERIAL) fromC(c *C.D3DMATERIAL9) {
 	s.Power = (float32)(c.Power)
 }
 
+// MATRIX escribes a matrix.
 type MATRIX [16]float32
 
 func (s *MATRIX) toC() C.D3DMATRIX {
@@ -807,6 +835,7 @@ func (s *MATRIX) fromC(c *C.D3DMATRIX) {
 	C.toGoMatrix(c, (*C.float)(unsafe.Pointer(&(*s)[0])))
 }
 
+// PRESENT_PARAMETERS describes the presentation parameters.
 type PRESENT_PARAMETERS struct {
 	BackBufferWidth            uint
 	BackBufferHeight           uint
@@ -866,6 +895,7 @@ func (s *PRESENT_PARAMETERS) fromC(c *C.D3DPRESENT_PARAMETERS) {
 	s.PresentationInterval = (uint)(c.PresentationInterval)
 }
 
+// PSHADERCAPS2_0 describes pixel shader driver caps.
 type PSHADERCAPS2_0 struct {
 	Caps                    uint32
 	DynamicFlowControlDepth int
@@ -892,6 +922,7 @@ func (s *PSHADERCAPS2_0) fromC(c *C.D3DPSHADERCAPS2_0) {
 	s.NumInstructionSlots = (int)(c.NumInstructionSlots)
 }
 
+// RANGE defines a range.
 type RANGE struct {
 	Offset uint
 	Size   uint
@@ -909,6 +940,7 @@ func (s *RANGE) fromC(c *C.D3DRANGE) {
 	s.Size = (uint)(c.Size)
 }
 
+// RASTER_STATUS describes the raster status.
 type RASTER_STATUS struct {
 	InVBlank bool
 	ScanLine uint
@@ -929,6 +961,7 @@ func (s *RASTER_STATUS) fromC(c *C.D3DRASTER_STATUS) {
 	s.ScanLine = (uint)(c.ScanLine)
 }
 
+// D3DRECT defines a rectangle.
 type D3DRECT struct {
 	X1 int32
 	Y1 int32
@@ -952,6 +985,7 @@ func (s *D3DRECT) fromC(c *C.D3DRECT) {
 	s.Y2 = (int32)(c.y2)
 }
 
+// RECTPATCH_INFO describes a rectangular high-order patch.
 type RECTPATCH_INFO struct {
 	StartVertexOffsetWidth  uint
 	StartVertexOffsetHeight uint
@@ -984,6 +1018,8 @@ func (s *RECTPATCH_INFO) fromC(c *C.D3DRECTPATCH_INFO) {
 	s.Degree = (DEGREETYPE)(c.Degree)
 }
 
+// RESOURCESTATS contains resource statistics gathered by the
+// DEVINFO_ResourceManager when using the asynchronous query mechanism.
 type RESOURCESTATS struct {
 	BThrashing            bool
 	ApproxBytesDownloaded uint32
@@ -1031,6 +1067,7 @@ func (s *RESOURCESTATS) fromC(c *C.D3DRESOURCESTATS) {
 	s.TotalBytes = (uint32)(c.TotalBytes)
 }
 
+// SURFACE_DESC describes a surface.
 type SURFACE_DESC struct {
 	Format             FORMAT
 	Type               RESOURCETYPE
@@ -1066,6 +1103,7 @@ func (s *SURFACE_DESC) fromC(c *C.D3DSURFACE_DESC) {
 	s.Height = (uint)(c.Height)
 }
 
+// TRIPATCH_INFO describes a triangular high-order patch.
 type TRIPATCH_INFO struct {
 	StartVertexOffset uint
 	NumVertices       uint
@@ -1089,6 +1127,7 @@ func (s *TRIPATCH_INFO) fromC(c *C.D3DTRIPATCH_INFO) {
 	s.Degree = (DEGREETYPE)(c.Degree)
 }
 
+// VECTOR defines a vector.
 type VECTOR struct {
 	X float32
 	Y float32
@@ -1109,6 +1148,7 @@ func (s *VECTOR) fromC(c *C.D3DVECTOR) {
 	s.Z = (float32)(c.z)
 }
 
+// VERTEXBUFFER_DESC describes a vertex buffer.
 type VERTEXBUFFER_DESC struct {
 	Format FORMAT
 	Type   RESOURCETYPE
@@ -1138,6 +1178,8 @@ func (s *VERTEXBUFFER_DESC) fromC(c *C.D3DVERTEXBUFFER_DESC) {
 	s.FVF = (uint32)(c.FVF)
 }
 
+// VERTEXELEMENT defines the vertex data layout. Each vertex can contain one or
+// more data types, and each data type is described by a vertex element.
 type VERTEXELEMENT struct {
 	Stream     uint16
 	Offset     uint16
@@ -1167,6 +1209,8 @@ func (s *VERTEXELEMENT) fromC(c *C.D3DVERTEXELEMENT9) {
 	s.UsageIndex = (byte)(c.UsageIndex)
 }
 
+// VIEWPORT defines the window dimensions of a render-target surface onto which
+// a 3D volume projects.
 type VIEWPORT struct {
 	X      uint32
 	Y      uint32
@@ -1196,6 +1240,7 @@ func (s *VIEWPORT) fromC(c *C.D3DVIEWPORT9) {
 	s.MaxZ = (float32)(c.MaxZ)
 }
 
+// VOLUME_DESC describes a volume.
 type VOLUME_DESC struct {
 	Format FORMAT
 	Type   RESOURCETYPE
@@ -1228,6 +1273,7 @@ func (s *VOLUME_DESC) fromC(c *C.D3DVOLUME_DESC) {
 	s.Depth = (uint)(c.Depth)
 }
 
+// VSHADERCAPS2_0 contains vertex shader capabilities.
 type VSHADERCAPS2_0 struct {
 	Caps                    uint32
 	DynamicFlowControlDepth int
@@ -1251,6 +1297,7 @@ func (s *VSHADERCAPS2_0) fromC(c *C.D3DVSHADERCAPS2_0) {
 	s.StaticFlowControlDepth = (int)(c.StaticFlowControlDepth)
 }
 
+// PALETTEENTRY specifies the color and usage of an entry in a logical palette.
 type PALETTEENTRY struct {
 	PeRed   byte
 	PeGreen byte
@@ -1274,6 +1321,7 @@ func (s *PALETTEENTRY) fromC(c *C.PALETTEENTRY) {
 	s.PeFlags = (byte)(c.peFlags)
 }
 
+// GUID is a globally unique identifier.
 type GUID struct {
 	Data1 uint32
 	Data2 uint16
@@ -1301,6 +1349,7 @@ func (s *GUID) fromC(c *C.GUID) {
 	}
 }
 
+// LUID is a locally unique identifier.
 type LUID struct {
 	LowPart  uint32
 	HighPart int32
@@ -1318,6 +1367,7 @@ func (s *LUID) fromC(c *C.LUID) {
 	s.HighPart = (int32)(c.HighPart)
 }
 
+// RECT describes a rectangle.
 type RECT struct {
 	Left   int32
 	Top    int32
@@ -1341,6 +1391,7 @@ func (s *RECT) fromC(c *C.RECT) {
 	s.Bottom = (int32)(c.bottom)
 }
 
+// RGNDATAHEADER describes region data.
 type RGNDATAHEADER struct {
 	DwSize   uint32
 	IType    uint32
@@ -1367,6 +1418,7 @@ func (s *RGNDATAHEADER) fromC(c *C.RGNDATAHEADER) {
 	s.RcBound.fromC(&c.rcBound)
 }
 
+// RGNDATA contains region data.
 type RGNDATA struct {
 	Rdh    RGNDATAHEADER
 	Buffer [1]byte
@@ -1388,6 +1440,7 @@ func (s *RGNDATA) fromC(c *C.RGNDATA) {
 	}
 }
 
+// POINT describes a 2D point.
 type POINT struct {
 	X int32
 	Y int32
