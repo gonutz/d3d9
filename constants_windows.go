@@ -1374,4 +1374,34 @@ const (
 	// MAXD3DDECLUSAGEINDEX is the maximum index (0-15) that can be used in a
 	// vertex declaration.
 	MAXD3DDECLUSAGEINDEX = C.MAXD3DDECLUSAGEINDEX
+	// CLIPPLANE0 can be used to enable user-defined clipping plane 0. It is
+	// defined as a convenience when setting values for the RS_CLIPPLANEENABLE
+	// render state.
+	CLIPPLANE0 = C.D3DCLIPPLANE0
+	// CLIPPLANE1 can be used to enable user-defined clipping plane 1. It is
+	// defined as a convenience when setting values for the RS_CLIPPLANEENABLE
+	// render state.
+	CLIPPLANE1 = C.D3DCLIPPLANE1
+	// CLIPPLANE2 can be used to enable user-defined clipping plane 2. It is
+	// defined as a convenience when setting values for the RS_CLIPPLANEENABLE
+	// render state.
+	CLIPPLANE2 = C.D3DCLIPPLANE2
+	// CLIPPLANE3 can be used to enable user-defined clipping plane 3. It is
+	// defined as a convenience when setting values for the RS_CLIPPLANEENABLE
+	// render state.
+	CLIPPLANE3 = C.D3DCLIPPLANE3
+	// CLIPPLANE4 can be used to enable user-defined clipping plane 4. It is
+	// defined as a convenience when setting values for the RS_CLIPPLANEENABLE
+	// render state.
+	CLIPPLANE4 = C.D3DCLIPPLANE4
+	// CLIPPLANE5 can be used to enable user-defined clipping plane 5. It is
+	// defined as a convenience when setting values for the RS_CLIPPLANEENABLE
+	// render state.
+	CLIPPLANE5 = C.D3DCLIPPLANE5
+	// ISSUE_BEGIN is a value used by Issue to issue a query begin.
+	ISSUE_BEGIN = C.D3DISSUE_BEGIN
+	// ISSUE_END is a value used by Issue to issue a query end.
+	ISSUE_END = C.D3DISSUE_END
+	// GETDATA_FLUSH is the value passed to GetData to flush query data.
+	GETDATA_FLUSH = C.D3DGETDATA_FLUSH
 )
