@@ -2505,6 +2505,42 @@ func (obj Device) SetRenderState(
 	return
 }
 
+func (obj Device) SetRenderStateFloat(
+	State RENDERSTATETYPE,
+	Value float32,
+) (
+	err Error,
+) {
+	err = toErr(C.IDirect3DDevice9SetRenderState(
+		obj.handle,
+		(C.D3DRENDERSTATETYPE)(State),
+		*((*C.DWORD)(unsafe.Pointer(&Value))),
+	))
+	return
+}
+
+func (obj Device) SetRenderStateBool(
+	State RENDERSTATETYPE,
+	Value bool,
+) (
+	err Error,
+) {
+	if Value {
+		err = toErr(C.IDirect3DDevice9SetRenderState(
+			obj.handle,
+			(C.D3DRENDERSTATETYPE)(State),
+			1,
+		))
+	} else {
+		err = toErr(C.IDirect3DDevice9SetRenderState(
+			obj.handle,
+			(C.D3DRENDERSTATETYPE)(State),
+			0,
+		))
+	}
+	return
+}
+
 // SetRenderTarget sets a new color buffer for the device.
 func (obj Device) SetRenderTarget(
 	RenderTargetIndex uint32,

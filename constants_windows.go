@@ -4,781 +4,1374 @@ package d3d9
 import "C"
 
 const (
-	// D3DADAPTER_DEFAULT is used to specify the primary display adapter.
+	// ADAPTER_DEFAULT is used to specify the primary display adapter.
 	ADAPTER_DEFAULT = C.D3DADAPTER_DEFAULT
-	// D3DCAPS_READ_SCANLINE means the display hardware is capable of returning
+	// CAPS_READ_SCANLINE means the display hardware is capable of returning
+	// the current scan line.
 	CAPS_READ_SCANLINE = C.D3DCAPS_READ_SCANLINE
-	// D3DCAPS2_CANAUTOGENMIPMAP indicates that the driver is capable of
+	// CAPS2_CANAUTOGENMIPMAP indicates that the driver is capable of
+	// automatically generating mipmaps.
 	CAPS2_CANAUTOGENMIPMAP = C.D3DCAPS2_CANAUTOGENMIPMAP
-	// D3DCAPS2_CANCALIBRATEGAMMA indicates that the system has a calibrator
+	// CAPS2_CANCALIBRATEGAMMA indicates that the system has a calibrator
+	// installed that can automatically adjust the gamma ramp so that the
+	// result is identical on all systems that have a calibrator. To invoke the
+	// calibrator when setting new gamma levels, use the SGR_CALIBRATE flag
+	// when calling SetGammaRamp. Calibrating gamma ramps incurs some
+	// processing overhead and should not be used frequently.
 	CAPS2_CANCALIBRATEGAMMA = C.D3DCAPS2_CANCALIBRATEGAMMA
-	// D3DCAPS2_CANMANAGERESOURCE indicates that the driver is capable of
+	// CAPS2_CANMANAGERESOURCE indicates that the driver is capable of managing
+	// resources. On such drivers, POOL_MANAGED resources will be managed by
+	// the driver. To have Direct3D override the driver so that Direct3D
+	// manages resources, use the CREATE_DISABLE_DRIVER_MANAGEMENT flag when
+	// calling CreateDevice.
 	CAPS2_CANMANAGERESOURCE = C.D3DCAPS2_CANMANAGERESOURCE
-	// D3DCAPS2_DYNAMICTEXTURES indicates that the driver supports dynamic
+	// CAPS2_DYNAMICTEXTURES indicates that the driver supports dynamic
+	// textures.
 	CAPS2_DYNAMICTEXTURES = C.D3DCAPS2_DYNAMICTEXTURES
-	// D3DCAPS2_FULLSCREENGAMMA indicates that the driver supports dynamic
+	// CAPS2_FULLSCREENGAMMA indicates that the driver supports dynamic gamma
+	// ramp adjustment in full-screen mode.
 	CAPS2_FULLSCREENGAMMA = C.D3DCAPS2_FULLSCREENGAMMA
-	// D3DCAPS3_ALPHA_FULLSCREEN_FLIP_OR_DISCARD indicates that the device can
+	// CAPS3_ALPHA_FULLSCREEN_FLIP_OR_DISCARD indicates that the device can
+	// respect the RS_ALPHABLENDENABLE render state in full-screen mode while
+	// using the FLIP or DISCARD swap effect. This only applies when the
+	// RS_SRCBLEND or RS_DESTBLEND states are set to one of the following:
+	// BLEND_DESTALPHA, BLEND_INVDESTALPHA, BLEND_DESTCOLOR, BLEND_INVDESTCOLOR
 	CAPS3_ALPHA_FULLSCREEN_FLIP_OR_DISCARD = C.D3DCAPS3_ALPHA_FULLSCREEN_FLIP_OR_DISCARD
-	// D3DCAPS3_COPY_TO_VIDMEM indicates that the device can accelerate a
+	// CAPS3_COPY_TO_VIDMEM indicates that the device can accelerate a memory
+	// copy from system memory to local video memory. This cap guarantees that
+	// UpdateSurface and UpdateTexture calls will be hardware accelerated. If
+	// this cap is absent, these calls will succeed but will be slower.
 	CAPS3_COPY_TO_VIDMEM = C.D3DCAPS3_COPY_TO_VIDMEM
-	// D3DCAPS3_COPY_TO_SYSTEMMEM indicates that the device can accelerate a
+	// CAPS3_COPY_TO_SYSTEMMEM indicates that the device can accelerate a
+	// memory copy from local video memory to system memory. This cap
+	// guarantees that GetRenderTargetData calls will be hardware accelerated.
+	// If this cap is absent, this call will succeed but will be slower.
 	CAPS3_COPY_TO_SYSTEMMEM = C.D3DCAPS3_COPY_TO_SYSTEMMEM
-	// D3DCAPS3_LINEAR_TO_SRGB_PRESENTATION indicates that the device can
+	// CAPS3_LINEAR_TO_SRGB_PRESENTATION indicates that the device can perform
+	// gamma correction from a windowed back buffer (containing linear content)
+	// to an sRGB desktop.
 	CAPS3_LINEAR_TO_SRGB_PRESENTATION = C.D3DCAPS3_LINEAR_TO_SRGB_PRESENTATION
-	// D3DCLEAR_STENCIL clears the stencil buffer.
+	// CLEAR_STENCIL clears the stencil buffer.
 	CLEAR_STENCIL = C.D3DCLEAR_STENCIL
-	// D3DCLEAR_TARGET clears a render target, or all targets in a multiple
+	// CLEAR_TARGET clears a render target, or all targets in a multiple render
+	// target.
 	CLEAR_TARGET = C.D3DCLEAR_TARGET
-	// D3DCLEAR_ZBUFFER clears the depth buffer.
+	// CLEAR_ZBUFFER clears the depth buffer.
 	CLEAR_ZBUFFER = C.D3DCLEAR_ZBUFFER
-	// D3DCREATE_ADAPTERGROUP_DEVICE asks the device to drive all the heads
+	// CREATE_ADAPTERGROUP_DEVICE asks the device to drive all the heads that
+	// this master adapter owns. The flag is illegal on nonmaster adapters. If
+	// this flag is set, the presentation parameters passed to CreateDevice
+	// should point to an array of PRESENT_PARAMETERS. The number of elements
+	// in PRESENT_PARAMETERS should equal the number of adapters defined by the
+	// NumberOfAdaptersInGroup member of the CAPS9 structure. The DirectX
+	// runtime will assign each element to each head in the numerical order
+	// specified by the AdapterOrdinalInGroup member of CAPS9.
 	CREATE_ADAPTERGROUP_DEVICE = C.D3DCREATE_ADAPTERGROUP_DEVICE
-	// D3DCREATE_DISABLE_DRIVER_MANAGEMENT instructs Direct3D to manage
+	// CREATE_DISABLE_DRIVER_MANAGEMENT instructs Direct3D to manage resources
+	// instead of the driver. Direct3D calls will not fail for resource errors
+	// such as insufficient video memory.
 	CREATE_DISABLE_DRIVER_MANAGEMENT = C.D3DCREATE_DISABLE_DRIVER_MANAGEMENT
-	// D3DCREATE_DISABLE_DRIVER_MANAGEMENT_EX instructs Direct3D to manage
+	// CREATE_DISABLE_DRIVER_MANAGEMENT_EX instructs Direct3D to manage
+	// resources instead of the driver. Unlike
+	// CREATE_DISABLE_DRIVER_MANAGEMENT, CREATE_DISABLE_DRIVER_MANAGEMENT_EX
+	// will return errors for conditions such as insufficient video memory.
 	CREATE_DISABLE_DRIVER_MANAGEMENT_EX = C.D3DCREATE_DISABLE_DRIVER_MANAGEMENT_EX
-	// D3DCREATE_DISABLE_PRINTSCREEN causes the runtime not register hotkeys
+	// CREATE_DISABLE_PRINTSCREEN causes the runtime not register hotkeys for
+	// Printscreen, Ctrl-Printscreen and Alt-Printscreen to capture the desktop
+	// or window content.
 	// This flag is available in Direct3D 9Ex only.
 	CREATE_DISABLE_PRINTSCREEN = C.D3DCREATE_DISABLE_PRINTSCREEN
-	// D3DCREATE_DISABLE_PSGP_THREADING restricts computation to the main
+	// CREATE_DISABLE_PSGP_THREADING restricts computation to the main
+	// application thread. If the flag is not set, the runtime may perform
+	// software vertex processing and other computations in worker thread to
+	// improve performance on multi-processor systems. Differences between
+	// Windows XP and Windows Vista: This flag is available on Windows Vista,
+	// Windows Server 2008, and Windows 7.
 	CREATE_DISABLE_PSGP_THREADING = C.D3DCREATE_DISABLE_PSGP_THREADING
-	// D3DCREATE_ENABLE_PRESENTSTATS enables the gathering of present
+	// CREATE_ENABLE_PRESENTSTATS enables the gathering of present statistics
+	// on the device. Calls to GetPresentStatistics will return valid data.
 	// This flag is available in Direct3D 9Ex only.
 	CREATE_ENABLE_PRESENTSTATS = C.D3DCREATE_ENABLE_PRESENTSTATS
-	// D3DCREATE_FPU_PRESERVE sets the precision for Direct3D floating-point
+	// CREATE_FPU_PRESERVE sets the precision for Direct3D floating-point
+	// calculations to the precision used by the calling thread. If you do not
+	// specify this flag, Direct3D defaults to single-precision
+	// round-to-nearest mode for two reasons:
 	// 1) Double-precision mode will reduce Direct3D performance.
 	// 2) Portions of Direct3D assume floating-point unit exceptions are
+	// masked; unmasking these exceptions may result in undefined behavior.
 	CREATE_FPU_PRESERVE = C.D3DCREATE_FPU_PRESERVE
-	// D3DCREATE_HARDWARE_VERTEXPROCESSING specifies hardware vertex processing.
+	// CREATE_HARDWARE_VERTEXPROCESSING specifies hardware vertex processing.
 	CREATE_HARDWARE_VERTEXPROCESSING = C.D3DCREATE_HARDWARE_VERTEXPROCESSING
-	// D3DCREATE_MIXED_VERTEXPROCESSING specifies mixed (both software and
+	// CREATE_MIXED_VERTEXPROCESSING specifies mixed (both software and
+	// hardware) vertex processing.
 	CREATE_MIXED_VERTEXPROCESSING = C.D3DCREATE_MIXED_VERTEXPROCESSING
-	// D3DCREATE_MULTITHREADED indicates that the application requests Direct3D
+	// CREATE_MULTITHREADED indicates that the application requests Direct3D to
+	// be multithread safe. This makes a Direct3D thread take ownership of its
+	// global critical section more frequently, which can degrade performance.
+	// If an application processes window messages in one thread while making
+	// Direct3D API calls in another, the application must use this flag when
+	// creating the device. This window must also be destroyed before unloading
+	// d3d9.dll.
 	CREATE_MULTITHREADED = C.D3DCREATE_MULTITHREADED
-	// D3DCREATE_NOWINDOWCHANGES indicates that Direct3D must not alter the
+	// CREATE_NOWINDOWCHANGES indicates that Direct3D must not alter the focus
+	// window in any way.
 	// Note: If this flag is set, the application must fully support all focus
+	// management events, such as ALT+TAB and mouse click events.
 	CREATE_NOWINDOWCHANGES = C.D3DCREATE_NOWINDOWCHANGES
-	// D3DCREATE_PUREDEVICE specifies that Direct3D does not support Get* calls
+	// CREATE_PUREDEVICE specifies that Direct3D does not support Get* calls
+	// for anything that can be stored in state blocks. It also tells Direct3D
+	// not to provide any emulation services for vertex processing. This means
+	// that if the device does not support vertex processing, then the
+	// application can use only post-transformed vertices.
 	CREATE_PUREDEVICE = C.D3DCREATE_PUREDEVICE
-	// D3DCREATE_SCREENSAVER allows screensavers during a fullscreen
+	// CREATE_SCREENSAVER allows screensavers during a fullscreen application.
+	// Without this flag, Direct3D will disable screensavers for as long as the
+	// calling application is fullscreen. If the calling application is already
+	// a screensaver, this flag has no effect.
 	// This flag is available in Direct3D 9Ex only.
 	CREATE_SCREENSAVER = C.D3DCREATE_SCREENSAVER
-	// D3DCREATE_SOFTWARE_VERTEXPROCESSING specifies software vertex processing.
+	// CREATE_SOFTWARE_VERTEXPROCESSING specifies software vertex processing.
 	CREATE_SOFTWARE_VERTEXPROCESSING = C.D3DCREATE_SOFTWARE_VERTEXPROCESSING
-	// D3DCS_ALL is a combination of all clip flags.
+	// CS_ALL is a combination of all clip flags.
 	CS_ALL = C.D3DCS_ALL
-	// D3DCS_LEFT means all vertices are clipped by the left plane of the
+	// CS_LEFT means all vertices are clipped by the left plane of the viewing
+	// frustum.
 	CS_LEFT = C.D3DCS_LEFT
-	// D3DCS_RIGHT means all vertices are clipped by the right plane of the
+	// CS_RIGHT means all vertices are clipped by the right plane of the
+	// viewing frustum.
 	CS_RIGHT = C.D3DCS_RIGHT
-	// D3DCS_TOP means all vertices are clipped by the top plane of the viewing
+	// CS_TOP means all vertices are clipped by the top plane of the viewing
+	// frustum.
 	CS_TOP = C.D3DCS_TOP
-	// D3DCS_BOTTOM means all vertices are clipped by the bottom plane of the
+	// CS_BOTTOM means all vertices are clipped by the bottom plane of the
+	// viewing frustum.
 	CS_BOTTOM = C.D3DCS_BOTTOM
-	// D3DCS_FRONT means all vertices are clipped by the front plane of the
+	// CS_FRONT means all vertices are clipped by the front plane of the
+	// viewing frustum.
 	CS_FRONT = C.D3DCS_FRONT
-	// D3DCS_BACK means all vertices are clipped by the back plane of the
+	// CS_BACK means all vertices are clipped by the back plane of the viewing
+	// frustum.
 	CS_BACK = C.D3DCS_BACK
-	// D3DCS_PLANE0 uses application-defined clipping planes.
+	// CS_PLANE0 uses application-defined clipping planes.
 	CS_PLANE0 = C.D3DCS_PLANE0
-	// D3DCS_PLANE1 uses application-defined clipping planes.
+	// CS_PLANE1 uses application-defined clipping planes.
 	CS_PLANE1 = C.D3DCS_PLANE1
-	// D3DCS_PLANE2 uses application-defined clipping planes.
+	// CS_PLANE2 uses application-defined clipping planes.
 	CS_PLANE2 = C.D3DCS_PLANE2
-	// D3DCS_PLANE3 uses application-defined clipping planes.
+	// CS_PLANE3 uses application-defined clipping planes.
 	CS_PLANE3 = C.D3DCS_PLANE3
-	// D3DCS_PLANE4 uses application-defined clipping planes.
+	// CS_PLANE4 uses application-defined clipping planes.
 	CS_PLANE4 = C.D3DCS_PLANE4
-	// D3DCS_PLANE5 uses application-defined clipping planes.
+	// CS_PLANE5 uses application-defined clipping planes.
 	CS_PLANE5 = C.D3DCS_PLANE5
-	// D3DCURSORCAPS_COLOR indicates that the driver supports hardware color
+	// CURSORCAPS_COLOR indicates that the driver supports hardware color
+	// cursor in at least high resolution modes (height >= 400).
 	CURSORCAPS_COLOR = C.D3DCURSORCAPS_COLOR
-	// D3DCURSORCAPS_LOWRES indicates that the driver supports hardware color
+	// CURSORCAPS_LOWRES indicates that the driver supports hardware color
+	// cursor in low resolution modes (height < 400).
 	CURSORCAPS_LOWRES = C.D3DCURSORCAPS_LOWRES
-	// D3DDEVCAPS_CANBLTSYSTONONLOCAL means the device supports blits from
+	// DEVCAPS_CANBLTSYSTONONLOCAL means the device supports blits from
+	// system-memory textures to nonlocal video-memory textures.
 	DEVCAPS_CANBLTSYSTONONLOCAL = C.D3DDEVCAPS_CANBLTSYSTONONLOCAL
-	// D3DDEVCAPS_CANRENDERAFTERFLIP means the device can queue rendering
+	// DEVCAPS_CANRENDERAFTERFLIP means the device can queue rendering commands
+	// after a page flip. Applications do not change their behavior if this
+	// flag is set; this capability means that the device is relatively fast.
 	DEVCAPS_CANRENDERAFTERFLIP = C.D3DDEVCAPS_CANRENDERAFTERFLIP
-	// D3DDEVCAPS_DRAWPRIMITIVES2 means the device can support at least a
+	// DEVCAPS_DRAWPRIMITIVES2 means the device can support at least a DirectX
+	// 5-compliant driver.
 	DEVCAPS_DRAWPRIMITIVES2 = C.D3DDEVCAPS_DRAWPRIMITIVES2
-	// D3DDEVCAPS_DRAWPRIMITIVES2EX means the device can support at least a
+	// DEVCAPS_DRAWPRIMITIVES2EX means the device can support at least a
+	// DirectX 7-compliant driver.
 	DEVCAPS_DRAWPRIMITIVES2EX = C.D3DDEVCAPS_DRAWPRIMITIVES2EX
-	// D3DDEVCAPS_DRAWPRIMTLVERTEX means the device exports an
+	// DEVCAPS_DRAWPRIMTLVERTEX means the device exports an
+	// IDirect3DDevice9::DrawPrimitive-aware hal.
 	DEVCAPS_DRAWPRIMTLVERTEX = C.D3DDEVCAPS_DRAWPRIMTLVERTEX
-	// D3DDEVCAPS_EXECUTESYSTEMMEMORY means the device can use execute buffers
+	// DEVCAPS_EXECUTESYSTEMMEMORY means the device can use execute buffers
+	// from system memory.
 	DEVCAPS_EXECUTESYSTEMMEMORY = C.D3DDEVCAPS_EXECUTESYSTEMMEMORY
-	// D3DDEVCAPS_EXECUTEVIDEOMEMORY means the device can use execute buffers
+	// DEVCAPS_EXECUTEVIDEOMEMORY means the device can use execute buffers from
+	// video memory.
 	DEVCAPS_EXECUTEVIDEOMEMORY = C.D3DDEVCAPS_EXECUTEVIDEOMEMORY
-	// D3DDEVCAPS_HWRASTERIZATION means the device has hardware acceleration
+	// DEVCAPS_HWRASTERIZATION means the device has hardware acceleration for
+	// scene rasterization.
 	DEVCAPS_HWRASTERIZATION = C.D3DDEVCAPS_HWRASTERIZATION
-	// D3DDEVCAPS_HWTRANSFORMANDLIGHT means the device can support
+	// DEVCAPS_HWTRANSFORMANDLIGHT means the device can support transformation
+	// and lighting in hardware.
 	DEVCAPS_HWTRANSFORMANDLIGHT = C.D3DDEVCAPS_HWTRANSFORMANDLIGHT
-	// D3DDEVCAPS_NPATCHES means the device supports N patches.
+	// DEVCAPS_NPATCHES means the device supports N patches.
 	DEVCAPS_NPATCHES = C.D3DDEVCAPS_NPATCHES
-	// D3DDEVCAPS_PUREDEVICE means the device can support rasterization,
+	// DEVCAPS_PUREDEVICE means the device can support rasterization,
+	// transform, lighting, and shading in hardware.
 	DEVCAPS_PUREDEVICE = C.D3DDEVCAPS_PUREDEVICE
-	// D3DDEVCAPS_QUINTICRTPATCHES means the device supports quintic Bézier
+	// DEVCAPS_QUINTICRTPATCHES means the device supports quintic Bézier
+	// curves and B-splines.
 	DEVCAPS_QUINTICRTPATCHES = C.D3DDEVCAPS_QUINTICRTPATCHES
-	// D3DDEVCAPS_RTPATCHES means the device supports rectangular and
+	// DEVCAPS_RTPATCHES means the device supports rectangular and triangular
+	// patches.
 	DEVCAPS_RTPATCHES = C.D3DDEVCAPS_RTPATCHES
-	// D3DDEVCAPS_RTPATCHHANDLEZERO means the hardware architecture does not
+	// DEVCAPS_RTPATCHHANDLEZERO means the hardware architecture does not
+	// require caching of any information, and uncached patches (handle zero)
+	// will be drawn as efficiently as cached ones. Note that setting
+	// DEVCAPS_RTPATCHHANDLEZERO does not mean that a patch with handle zero
+	// can be drawn. A handle-zero patch can always be drawn whether this cap
+	// is set or not.
 	DEVCAPS_RTPATCHHANDLEZERO = C.D3DDEVCAPS_RTPATCHHANDLEZERO
-	// D3DDEVCAPS_SEPARATETEXTUREMEMORIES means the device is texturing from
+	// DEVCAPS_SEPARATETEXTUREMEMORIES means the device is texturing from
+	// separate memory pools.
 	DEVCAPS_SEPARATETEXTUREMEMORIES = C.D3DDEVCAPS_SEPARATETEXTUREMEMORIES
-	// D3DDEVCAPS_TEXTURENONLOCALVIDMEM means the device can retrieve textures
+	// DEVCAPS_TEXTURENONLOCALVIDMEM means the device can retrieve textures
+	// from non-local video memory.
 	DEVCAPS_TEXTURENONLOCALVIDMEM = C.D3DDEVCAPS_TEXTURENONLOCALVIDMEM
-	// D3DDEVCAPS_TEXTURESYSTEMMEMORY means the device can retrieve textures
+	// DEVCAPS_TEXTURESYSTEMMEMORY means the device can retrieve textures from
+	// system memory.
 	DEVCAPS_TEXTURESYSTEMMEMORY = C.D3DDEVCAPS_TEXTURESYSTEMMEMORY
-	// D3DDEVCAPS_TEXTUREVIDEOMEMORY means the device can retrieve textures
+	// DEVCAPS_TEXTUREVIDEOMEMORY means the device can retrieve textures from
+	// device memory.
 	DEVCAPS_TEXTUREVIDEOMEMORY = C.D3DDEVCAPS_TEXTUREVIDEOMEMORY
-	// D3DDEVCAPS_TLVERTEXSYSTEMMEMORY means the device can use buffers from
+	// DEVCAPS_TLVERTEXSYSTEMMEMORY means the device can use buffers from
+	// system memory for transformed and lit vertices.
 	DEVCAPS_TLVERTEXSYSTEMMEMORY = C.D3DDEVCAPS_TLVERTEXSYSTEMMEMORY
-	// D3DDEVCAPS_TLVERTEXVIDEOMEMORY means the device can use buffers from
+	// DEVCAPS_TLVERTEXVIDEOMEMORY means the device can use buffers from video
+	// memory for transformed and lit vertices.
 	DEVCAPS_TLVERTEXVIDEOMEMORY = C.D3DDEVCAPS_TLVERTEXVIDEOMEMORY
-	// D3DDEVCAPS2_ADAPTIVETESSRTPATCH indicates that the device supports
+	// DEVCAPS2_ADAPTIVETESSRTPATCH indicates that the device supports adaptive
+	// tessellation of RT-patches
 	DEVCAPS2_ADAPTIVETESSRTPATCH = C.D3DDEVCAPS2_ADAPTIVETESSRTPATCH
-	// D3DDEVCAPS2_ADAPTIVETESSNPATCH indicates that the device supports
+	// DEVCAPS2_ADAPTIVETESSNPATCH indicates that the device supports adaptive
+	// tessellation of N-patches.
 	DEVCAPS2_ADAPTIVETESSNPATCH = C.D3DDEVCAPS2_ADAPTIVETESSNPATCH
-	// D3DDEVCAPS2_CAN_STRETCHRECT_FROM_TEXTURES indicates that the device
+	// DEVCAPS2_CAN_STRETCHRECT_FROM_TEXTURES indicates that the device
+	// supports StretchRect using a texture as the source.
 	DEVCAPS2_CAN_STRETCHRECT_FROM_TEXTURES = C.D3DDEVCAPS2_CAN_STRETCHRECT_FROM_TEXTURES
-	// D3DDEVCAPS2_DMAPNPATCH indicates that the device supports displacement
+	// DEVCAPS2_DMAPNPATCH indicates that the device supports displacement maps
+	// for N-patches.
 	DEVCAPS2_DMAPNPATCH = C.D3DDEVCAPS2_DMAPNPATCH
-	// D3DDEVCAPS2_PRESAMPLEDDMAPNPATCH indicates that the device supports
+	// DEVCAPS2_PRESAMPLEDDMAPNPATCH indicates that the device supports
+	// presampled displacement maps for N-patches.
 	DEVCAPS2_PRESAMPLEDDMAPNPATCH = C.D3DDEVCAPS2_PRESAMPLEDDMAPNPATCH
-	// D3DDEVCAPS2_STREAMOFFSET indicates that the device supports stream
+	// DEVCAPS2_STREAMOFFSET indicates that the device supports stream offsets.
 	DEVCAPS2_STREAMOFFSET = C.D3DDEVCAPS2_STREAMOFFSET
-	// D3DDEVCAPS2_VERTEXELEMENTSCANSHARESTREAMOFFSET means that multiple
+	// DEVCAPS2_VERTEXELEMENTSCANSHARESTREAMOFFSET means that multiple vertex
+	// elements can share the same offset in a stream if
+	// DEVCAPS2_VERTEXELEMENTSCANSHARESTREAMOFFSET is set by the device and the
+	// vertex declaration does not have an element with DECLUSAGE_POSITIONT0.
 	DEVCAPS2_VERTEXELEMENTSCANSHARESTREAMOFFSET = C.D3DDEVCAPS2_VERTEXELEMENTSCANSHARESTREAMOFFSET
-	// D3DDTCAPS_UBYTE4 is a 4D unsigned byte.
+	// DTCAPS_UBYTE4 is a 4D unsigned byte.
 	DTCAPS_UBYTE4 = C.D3DDTCAPS_UBYTE4
-	// D3DDTCAPS_UBYTE4N is a normalized, 4D unsigned byte. Each of the four
+	// DTCAPS_UBYTE4N is a normalized, 4D unsigned byte. Each of the four bytes
+	// is normalized by dividing to 255.0.
 	DTCAPS_UBYTE4N = C.D3DDTCAPS_UBYTE4N
-	// D3DDTCAPS_SHORT2N is a normalized, 2D signed short, expanded to (first
+	// DTCAPS_SHORT2N is a normalized, 2D signed short, expanded to (first
+	// byte/32767.0, second byte/32767.0, 0, 1).
 	DTCAPS_SHORT2N = C.D3DDTCAPS_SHORT2N
-	// D3DDTCAPS_SHORT4N is a normalized, 4D signed short, expanded to (first
+	// DTCAPS_SHORT4N is a normalized, 4D signed short, expanded to (first
+	// byte/32767.0, second byte/32767.0, third byte/32767.0, fourth
+	// byte/32767.0).
 	DTCAPS_SHORT4N = C.D3DDTCAPS_SHORT4N
-	// D3DDTCAPS_USHORT2N is a normalized, 2D unsigned short, expanded to
+	// DTCAPS_USHORT2N is a normalized, 2D unsigned short, expanded to (first
+	// byte/65535.0, second byte/65535.0, 0, 1).
 	DTCAPS_USHORT2N = C.D3DDTCAPS_USHORT2N
-	// D3DDTCAPS_USHORT4N is a normalized 4D unsigned short, expanded to (first
+	// DTCAPS_USHORT4N is a normalized 4D unsigned short, expanded to (first
+	// byte/65535.0, second byte/65535.0, third byte/65535.0, fourth
+	// byte/65535.0).
 	DTCAPS_USHORT4N = C.D3DDTCAPS_USHORT4N
-	// D3DDTCAPS_UDEC3 is a 3D unsigned 10 10 10 format expanded to (value,
+	// DTCAPS_UDEC3 is a 3D unsigned 10 10 10 format expanded to (value, value,
+	// value, 1).
 	DTCAPS_UDEC3 = C.D3DDTCAPS_UDEC3
-	// D3DDTCAPS_DEC3N is a 3D signed 10 10 10 format normalized and expanded
+	// DTCAPS_DEC3N is a 3D signed 10 10 10 format normalized and expanded to
+	// (v[0]/511.0, v[1]/511.0, v[2]/511.0, 1).
 	DTCAPS_DEC3N = C.D3DDTCAPS_DEC3N
-	// D3DDTCAPS_FLOAT16_2 is a 2D 16-bit floating point numbers.
+	// DTCAPS_FLOAT16_2 is a 2D 16-bit floating point numbers.
 	DTCAPS_FLOAT16_2 = C.D3DDTCAPS_FLOAT16_2
-	// D3DDTCAPS_FLOAT16_4 is a 4D 16-bit floating point numbers.
+	// DTCAPS_FLOAT16_4 is a 4D 16-bit floating point numbers.
 	DTCAPS_FLOAT16_4 = C.D3DDTCAPS_FLOAT16_4
-	// D3DOK_NOAUTOGEN is a success code. However, the autogeneration of
+	// OK_NOAUTOGEN is a success code. However, the autogeneration of mipmaps
+	// is not supported for this format. This means that resource creation will
+	// succeed but the mipmap levels will not be automatically generated.
 	OK_NOAUTOGEN = C.D3DOK_NOAUTOGEN
-	// D3DERR_CONFLICTINGRENDERSTATE indicates that the currently set render
+	// ERR_CONFLICTINGRENDERSTATE indicates that the currently set render
+	// states cannot be used together.
 	ERR_CONFLICTINGRENDERSTATE = C.D3DERR_CONFLICTINGRENDERSTATE
-	// D3DERR_CONFLICTINGTEXTUREFILTER indicates that the current texture
+	// ERR_CONFLICTINGTEXTUREFILTER indicates that the current texture filters
+	// cannot be used together.
 	ERR_CONFLICTINGTEXTUREFILTER = C.D3DERR_CONFLICTINGTEXTUREFILTER
-	// D3DERR_CONFLICTINGTEXTUREPALETTE indicates that the current textures
+	// ERR_CONFLICTINGTEXTUREPALETTE indicates that the current textures cannot
+	// be used simultaneously.
 	ERR_CONFLICTINGTEXTUREPALETTE = C.D3DERR_CONFLICTINGTEXTUREPALETTE
-	// D3DERR_DEVICEHUNG indicates that the device that returned this code
+	// ERR_DEVICEHUNG indicates that the device that returned this code caused
+	// the hardware adapter to be reset by the OS. Most applications should
+	// destroy the device and quit. Applications that must continue should
+	// destroy all video memory objects (surfaces, textures, state blocks etc)
+	// and call Reset() to put the device in a default state. If the
+	// application then continues rendering in the same way, the device will
+	// return to this state.
 	// Applies to Direct3D 9Ex only.
 	ERR_DEVICEHUNG = C.D3DERR_DEVICEHUNG
-	// D3DERR_DEVICELOST indicates that the device has been lost but cannot be
+	// ERR_DEVICELOST indicates that the device has been lost but cannot be
+	// reset at this time. Therefore, rendering is not possible. A Direct3D
+	// device object other than the one that returned this code caused the
+	// hardware adapter to be reset by the OS. Delete all video memory objects
+	// (surfaces, textures, state blocks) and call Reset() to return the device
+	// to a default state. If the application continues rendering without a
+	// reset, the rendering calls will succeed.
 	ERR_DEVICELOST = C.D3DERR_DEVICELOST
-	// D3DERR_DEVICENOTRESET indicates that the device has been lost but can be
+	// ERR_DEVICENOTRESET indicates that the device has been lost but can be
+	// reset at this time.
 	ERR_DEVICENOTRESET = C.D3DERR_DEVICENOTRESET
-	// D3DERR_DEVICEREMOVED indicates that he hardware adapter has been
+	// ERR_DEVICEREMOVED indicates that he hardware adapter has been removed.
+	// Application must destroy the device, do enumeration of adapters and
+	// create another Direct3D device. If application continues rendering
+	// without calling Reset, the rendering calls will succeed.
 	// Applies to Direct3D 9Ex only.
 	ERR_DEVICEREMOVED = C.D3DERR_DEVICEREMOVED
-	// D3DERR_DRIVERINTERNALERROR Internal driver error. Applications should
+	// ERR_DRIVERINTERNALERROR Internal driver error. Applications should
+	// destroy and recreate the device when receiving this error.
 	ERR_DRIVERINTERNALERROR = C.D3DERR_DRIVERINTERNALERROR
-	// D3DERR_DRIVERINVALIDCALL is not used.
+	// ERR_DRIVERINVALIDCALL is not used.
 	ERR_DRIVERINVALIDCALL = C.D3DERR_DRIVERINVALIDCALL
-	// D3DERR_INVALIDCALL indicates that the method call is invalid. For
+	// ERR_INVALIDCALL indicates that the method call is invalid. For example,
+	// a method's parameter may not be an invalid pointer.
 	ERR_INVALIDCALL = C.D3DERR_INVALIDCALL
-	// D3DERR_INVALIDDEVICE indicates that the requested device type is not
+	// ERR_INVALIDDEVICE indicates that the requested device type is not valid.
 	ERR_INVALIDDEVICE = C.D3DERR_INVALIDDEVICE
-	// D3DERR_MOREDATA indicates that there is more data available than the
+	// ERR_MOREDATA indicates that there is more data available than the
+	// specified buffer size can hold.
 	ERR_MOREDATA = C.D3DERR_MOREDATA
-	// D3DERR_NOTAVAILABLE indicates that this device does not support the
+	// ERR_NOTAVAILABLE indicates that this device does not support the queried
+	// technique.
 	ERR_NOTAVAILABLE = C.D3DERR_NOTAVAILABLE
-	// D3DERR_NOTFOUND indicates that the requested item was not found.
+	// ERR_NOTFOUND indicates that the requested item was not found.
 	ERR_NOTFOUND = C.D3DERR_NOTFOUND
-	// D3D_OK indicates that no error occurred.
+	// _OK indicates that no error occurred.
 	OK = C.D3D_OK
-	// D3DERR_OUTOFVIDEOMEMORY indicates that Direct3D does not have enough
+	// ERR_OUTOFVIDEOMEMORY indicates that Direct3D does not have enough
+	// display memory to perform the operation. The device is using more
+	// resources in a single scene than can fit simultaneously into video
+	// memory. Present, PresentEx, or CheckDeviceState can return this error.
+	// Recovery is similar to ERR_DEVICEHUNG, though the application may want
+	// to reduce its per-frame memory usage as well to avoid having the error
+	// recur.
 	ERR_OUTOFVIDEOMEMORY = C.D3DERR_OUTOFVIDEOMEMORY
-	// D3DERR_TOOMANYOPERATIONS indicates that the application is requesting
+	// ERR_TOOMANYOPERATIONS indicates that the application is requesting more
+	// texture-filtering operations than the device supports.
 	ERR_TOOMANYOPERATIONS = C.D3DERR_TOOMANYOPERATIONS
-	// D3DERR_UNSUPPORTEDALPHAARG indicates that the device does not support a
+	// ERR_UNSUPPORTEDALPHAARG indicates that the device does not support a
+	// specified texture-blending argument for the alpha channel.
 	ERR_UNSUPPORTEDALPHAARG = C.D3DERR_UNSUPPORTEDALPHAARG
-	// D3DERR_UNSUPPORTEDALPHAOPERATION indicates that the device does not
+	// ERR_UNSUPPORTEDALPHAOPERATION indicates that the device does not support
+	// a specified texture-blending operation for the alpha channel.
 	ERR_UNSUPPORTEDALPHAOPERATION = C.D3DERR_UNSUPPORTEDALPHAOPERATION
-	// D3DERR_UNSUPPORTEDCOLORARG indicates that the device does not support a
+	// ERR_UNSUPPORTEDCOLORARG indicates that the device does not support a
+	// specified texture-blending argument for color values.
 	ERR_UNSUPPORTEDCOLORARG = C.D3DERR_UNSUPPORTEDCOLORARG
-	// D3DERR_UNSUPPORTEDCOLOROPERATION indicates that the device does not
+	// ERR_UNSUPPORTEDCOLOROPERATION indicates that the device does not support
+	// a specified texture-blending operation for color values.
 	ERR_UNSUPPORTEDCOLOROPERATION = C.D3DERR_UNSUPPORTEDCOLOROPERATION
-	// D3DERR_UNSUPPORTEDFACTORVALUE indicates that the device does not support
+	// ERR_UNSUPPORTEDFACTORVALUE indicates that the device does not support
+	// the specified texture factor value. Not used; provided only to support
+	// older drivers.
 	ERR_UNSUPPORTEDFACTORVALUE = C.D3DERR_UNSUPPORTEDFACTORVALUE
-	// D3DERR_UNSUPPORTEDTEXTUREFILTER indicates that the device does not
+	// ERR_UNSUPPORTEDTEXTUREFILTER indicates that the device does not support
+	// the specified texture filter.
 	ERR_UNSUPPORTEDTEXTUREFILTER = C.D3DERR_UNSUPPORTEDTEXTUREFILTER
-	// D3DERR_WASSTILLDRAWING indicates that the previous blit operation that
+	// ERR_WASSTILLDRAWING indicates that the previous blit operation that is
+	// transferring information to or from this surface is incomplete.
 	ERR_WASSTILLDRAWING = C.D3DERR_WASSTILLDRAWING
-	// D3DERR_WRONGTEXTUREFORMAT indicates that the pixel format of the texture
+	// ERR_WRONGTEXTUREFORMAT indicates that the pixel format of the texture
+	// surface is not valid.
 	ERR_WRONGTEXTUREFORMAT = C.D3DERR_WRONGTEXTUREFORMAT
 	// E_FAIL indicates that an undetermined error occurred inside the Direct3D
+	// subsystem.
 	E_FAIL = C.E_FAIL
 	// E_INVALIDARG indicates that an invalid parameter was passed to the
+	// returning function.
 	E_INVALIDARG = C.E_INVALIDARG
 	// E_NOINTERFACE indicates that no object interface is available.
 	E_NOINTERFACE = C.E_NOINTERFACE
 	// E_NOTIMPL indicates that a method is not implemented.
 	E_NOTIMPL = C.E_NOTIMPL
 	// E_OUTOFMEMORY indicates that Direct3D could not allocate sufficient
+	// memory to complete the call.
 	E_OUTOFMEMORY = C.E_OUTOFMEMORY
 	// S_NOT_RESIDENT indicates that at least one allocation that comprises the
+	// resources is on disk. Direct3D 9Ex only.
 	S_NOT_RESIDENT = C.S_NOT_RESIDENT
 	// S_RESIDENT_IN_SHARED_MEMORY indicates that no allocations that comprise
+	// the resources are on disk. However, at least one allocation is not in
+	// GPU-accessible memory. Direct3D 9Ex only.
 	S_RESIDENT_IN_SHARED_MEMORY = C.S_RESIDENT_IN_SHARED_MEMORY
-	// D3DERR_UNSUPPORTEDOVERLAY indicates that the device does not support
+	// ERR_UNSUPPORTEDOVERLAY indicates that the device does not support
+	// overlay for the specified size or display mode.
 	// Direct3D 9Ex under Windows 7 only.
 	ERR_UNSUPPORTEDOVERLAY = C.D3DERR_UNSUPPORTEDOVERLAY
-	// D3DERR_UNSUPPORTEDOVERLAYFORMAT indicates that the device does not
+	// ERR_UNSUPPORTEDOVERLAYFORMAT indicates that the device does not support
+	// overlay for the specified surface format.
 	// Direct3D 9Ex under Windows 7 only.
 	ERR_UNSUPPORTEDOVERLAYFORMAT = C.D3DERR_UNSUPPORTEDOVERLAYFORMAT
-	// D3DERR_CANNOTPROTECTCONTENT indicates that the specified content cannot
+	// ERR_CANNOTPROTECTCONTENT indicates that the specified content cannot be
+	// protected.
 	// Direct3D 9Ex under Windows 7 only.
 	ERR_CANNOTPROTECTCONTENT = C.D3DERR_CANNOTPROTECTCONTENT
-	// D3DERR_UNSUPPORTEDCRYPTO indicates that the specified cryptographic
+	// ERR_UNSUPPORTEDCRYPTO indicates that the specified cryptographic
+	// algorithm is not supported.
 	// Direct3D 9Ex under Windows 7 only.
 	ERR_UNSUPPORTEDCRYPTO = C.D3DERR_UNSUPPORTEDCRYPTO
-	// D3DERR_PRESENT_STATISTICS_DISJOINT indicates that the present statistics
+	// ERR_PRESENT_STATISTICS_DISJOINT indicates that the present statistics
+	// have no orderly sequence.
 	// Direct3D 9Ex under Windows 7 only.
 	ERR_PRESENT_STATISTICS_DISJOINT = C.D3DERR_PRESENT_STATISTICS_DISJOINT
-	// D3DFVFCAPS_DONOTSTRIPELEMENTS means it is preferable that vertex
+	// FVFCAPS_DONOTSTRIPELEMENTS means it is preferable that vertex elements
+	// not be stripped. That is, if the vertex format contains elements that
+	// are not used with the current render states, there is no need to
+	// regenerate the vertices. If this capability flag is not present,
+	// stripping extraneous elements from the vertex format provides better
+	// performance.
 	FVFCAPS_DONOTSTRIPELEMENTS = C.D3DFVFCAPS_DONOTSTRIPELEMENTS
-	// D3DFVFCAPS_PSIZE means the point size is determined by either the render
+	// FVFCAPS_PSIZE means the point size is determined by either the render
+	// state or the vertex data. If an FVF is used, point size can come from
+	// point size data in the vertex declaration. Otherwise, point size is
+	// determined by the render state RS_POINTSIZE. If the application provides
+	// point size in both (the render state and the vertex declaration), the
+	// vertex data overrides the render-state data.
 	FVFCAPS_PSIZE = C.D3DFVFCAPS_PSIZE
-	// D3DFVFCAPS_TEXCOORDCOUNTMASK masks the low WORD of FVFCaps. These bits,
+	// FVFCAPS_TEXCOORDCOUNTMASK masks the low WORD of FVFCaps. These bits,
+	// cast to the WORD data type, describe the total number of texture
+	// coordinate sets that the device can simultaneously use for multiple
+	// texture blending. (You can use up to eight texture coordinate sets for
+	// any vertex, but the device can blend using only the specified number of
+	// texture coordinate sets.)
 	FVFCAPS_TEXCOORDCOUNTMASK = C.D3DFVFCAPS_TEXCOORDCOUNTMASK
-	// D3DFVF_DIFFUSE means the vertex format includes a diffuse color
+	// FVF_DIFFUSE means the vertex format includes a diffuse color component.
+	// It is a COLOR in ARGB order.
 	FVF_DIFFUSE = C.D3DFVF_DIFFUSE
-	// D3DFVF_NORMAL means the vertex format includes a vertex normal vector.
+	// FVF_NORMAL means the vertex format includes a vertex normal vector. This
+	// flag cannot be used with the FVF_XYZRHW flag. The normal consists of
+	// three float32s.
 	FVF_NORMAL = C.D3DFVF_NORMAL
-	// D3DFVF_PSIZE means vertex format specified in point size. This size is
+	// FVF_PSIZE means vertex format specified in point size. This size is
+	// expressed in camera space units for vertices that are not transformed
+	// and lit, and in device-space units for transformed and lit vertices.
 	FVF_PSIZE = C.D3DFVF_PSIZE
-	// D3DFVF_SPECULAR means the vertex format includes a specular color
+	// FVF_SPECULAR means the vertex format includes a specular color component.
 	FVF_SPECULAR = C.D3DFVF_SPECULAR
-	// D3DFVF_XYZ means the vertex format includes the position of an
+	// FVF_XYZ means the vertex format includes the position of an
+	// untransformed vertex. This flag cannot be used with the FVF_XYZRHW flag.
 	FVF_XYZ = C.D3DFVF_XYZ
-	// D3DFVF_XYZRHW means the vertex format includes the position of a
+	// FVF_XYZRHW means the vertex format includes the position of a
+	// transformed vertex. This flag cannot be used with the FVF_XYZ or
+	// FVF_NORMAL flags.
 	FVF_XYZRHW = C.D3DFVF_XYZRHW
-	// D3DFVF_XYZB1 means the vertex format contains position data, and 1
+	// FVF_XYZB1 means the vertex format contains position data, and 1
+	// weighting (beta) value to use for multimatrix vertex blending
+	// operations. Currently, Direct3D can blend with up to three weighting
+	// values and four blending matrices.
 	FVF_XYZB1 = C.D3DFVF_XYZB1
-	// D3DFVF_XYZB2 means the vertex format contains position data, and 2
+	// FVF_XYZB2 means the vertex format contains position data, and 2
+	// weighting (beta) values to use for multimatrix vertex blending
+	// operations. Currently, Direct3D can blend with up to three weighting
+	// values and four blending matrices.
 	FVF_XYZB2 = C.D3DFVF_XYZB2
-	// D3DFVF_XYZB3 means the vertex format contains position data, and 3
+	// FVF_XYZB3 means the vertex format contains position data, and 3
+	// weighting (beta) values to use for multimatrix vertex blending
+	// operations. Currently, Direct3D can blend with up to three weighting
+	// values and four blending matrices.
 	FVF_XYZB3 = C.D3DFVF_XYZB3
-	// D3DFVF_XYZB4 means the vertex format contains position data, and 4
+	// FVF_XYZB4 means the vertex format contains position data, and 4
+	// weighting (beta) values to use for multimatrix vertex blending
+	// operations. Currently, Direct3D can blend with up to three weighting
+	// values and four blending matrices.
 	FVF_XYZB4 = C.D3DFVF_XYZB4
-	// D3DFVF_XYZB5 means the vertex format contains position data, and 5
+	// FVF_XYZB5 means the vertex format contains position data, and 5
+	// weighting (beta) values to use for multimatrix vertex blending
+	// operations. Currently, Direct3D can blend with up to three weighting
+	// values and four blending matrices.
 	FVF_XYZB5 = C.D3DFVF_XYZB5
-	// D3DFVF_XYZW means the vertex format contains transformed and clipped (x,
+	// FVF_XYZW means the vertex format contains transformed and clipped (x, y,
+	// z, w) data. ProcessVertices does not invoke the clipper, instead
+	// outputting data in clip coordinates. This constant is designed for, and
+	// can only be used with, the programmable vertex pipeline.
 	FVF_XYZW = C.D3DFVF_XYZW
-	// D3DFVF_TEX0 is the number of texture coordinate sets for this vertex.
+	// FVF_TEX0 is the number of texture coordinate sets for this vertex. The
+	// actual values for these flags are not sequential.
 	FVF_TEX0 = C.D3DFVF_TEX0
-	// D3DFVF_TEX1 is the number of texture coordinate sets for this vertex.
+	// FVF_TEX1 is the number of texture coordinate sets for this vertex. The
+	// actual values for these flags are not sequential.
 	FVF_TEX1 = C.D3DFVF_TEX1
-	// D3DFVF_TEX2 is the number of texture coordinate sets for this vertex.
+	// FVF_TEX2 is the number of texture coordinate sets for this vertex. The
+	// actual values for these flags are not sequential.
 	FVF_TEX2 = C.D3DFVF_TEX2
-	// D3DFVF_TEX3 is the number of texture coordinate sets for this vertex.
+	// FVF_TEX3 is the number of texture coordinate sets for this vertex. The
+	// actual values for these flags are not sequential.
 	FVF_TEX3 = C.D3DFVF_TEX3
-	// D3DFVF_TEX4 is the number of texture coordinate sets for this vertex.
+	// FVF_TEX4 is the number of texture coordinate sets for this vertex. The
+	// actual values for these flags are not sequential.
 	FVF_TEX4 = C.D3DFVF_TEX4
-	// D3DFVF_TEX5 is the number of texture coordinate sets for this vertex.
+	// FVF_TEX5 is the number of texture coordinate sets for this vertex. The
+	// actual values for these flags are not sequential.
 	FVF_TEX5 = C.D3DFVF_TEX5
-	// D3DFVF_TEX6 is the number of texture coordinate sets for this vertex.
+	// FVF_TEX6 is the number of texture coordinate sets for this vertex. The
+	// actual values for these flags are not sequential.
 	FVF_TEX6 = C.D3DFVF_TEX6
-	// D3DFVF_TEX7 is the number of texture coordinate sets for this vertex.
+	// FVF_TEX7 is the number of texture coordinate sets for this vertex. The
+	// actual values for these flags are not sequential.
 	FVF_TEX7 = C.D3DFVF_TEX7
-	// D3DFVF_TEX8 is the number of texture coordinate sets for this vertex.
+	// FVF_TEX8 is the number of texture coordinate sets for this vertex. The
+	// actual values for these flags are not sequential.
 	FVF_TEX8 = C.D3DFVF_TEX8
-	// D3DFVF_TEXTUREFORMAT1 means 1 floating point value.
+	// FVF_TEXTUREFORMAT1 means 1 floating point value.
 	FVF_TEXTUREFORMAT1 = C.D3DFVF_TEXTUREFORMAT1
-	// D3DFVF_TEXTUREFORMAT2 means 2 floating point value.
+	// FVF_TEXTUREFORMAT2 means 2 floating point value.
 	FVF_TEXTUREFORMAT2 = C.D3DFVF_TEXTUREFORMAT2
-	// D3DFVF_TEXTUREFORMAT3 means 3 floating point value.
+	// FVF_TEXTUREFORMAT3 means 3 floating point value.
 	FVF_TEXTUREFORMAT3 = C.D3DFVF_TEXTUREFORMAT3
-	// D3DFVF_TEXTUREFORMAT4 means 4 floating point value.
+	// FVF_TEXTUREFORMAT4 means 4 floating point value.
 	FVF_TEXTUREFORMAT4 = C.D3DFVF_TEXTUREFORMAT4
-	// D3DFVF_POSITION_MASK means the format has a mask for position bits.
+	// FVF_POSITION_MASK means the format has a mask for position bits.
 	FVF_POSITION_MASK = C.D3DFVF_POSITION_MASK
-	// D3DFVF_TEXCOUNT_MASK means the format has a mask value for texture flag
+	// FVF_TEXCOUNT_MASK means the format has a mask value for texture flag
+	// bits.
 	FVF_TEXCOUNT_MASK = C.D3DFVF_TEXCOUNT_MASK
-	// D3DFVF_LASTBETA_D3DCOLOR means the last beta field in the vertex
+	// FVF_LASTBETA_D3DCOLOR means the last beta field in the vertex position
+	// data will be of type COLOR. The data in the beta fields are used with
+	// matrix palette skinning to specify matrix indices.
 	FVF_LASTBETA_D3DCOLOR = C.D3DFVF_LASTBETA_D3DCOLOR
-	// D3DFVF_LASTBETA_UBYTE4 means the last beta field in the vertex position
+	// FVF_LASTBETA_UBYTE4 means the last beta field in the vertex position
+	// data will be of type UBYTE4. The data in the beta fields are used with
+	// matrix palette skinning to specify matrix indices.
 	FVF_LASTBETA_UBYTE4 = C.D3DFVF_LASTBETA_UBYTE4
-	// D3DFVF_TEXCOUNT_SHIFT is the number of bits by which to shift an integer
+	// FVF_TEXCOUNT_SHIFT is the number of bits by which to shift an integer
+	// value that identifies the number of texture coordinates for a vertex.
 	FVF_TEXCOUNT_SHIFT = C.D3DFVF_TEXCOUNT_SHIFT
-	// D3DLINECAPS_ALPHACMP means it supports alpha-test comparisons.
+	// LINECAPS_ALPHACMP means it supports alpha-test comparisons.
 	LINECAPS_ALPHACMP = C.D3DLINECAPS_ALPHACMP
-	// D3DLINECAPS_ANTIALIAS means antialiased lines are supported.
+	// LINECAPS_ANTIALIAS means antialiased lines are supported.
 	LINECAPS_ANTIALIAS = C.D3DLINECAPS_ANTIALIAS
-	// D3DLINECAPS_BLEND means it supports source-blending.
+	// LINECAPS_BLEND means it supports source-blending.
 	LINECAPS_BLEND = C.D3DLINECAPS_BLEND
-	// D3DLINECAPS_FOG means it supports fog.
+	// LINECAPS_FOG means it supports fog.
 	LINECAPS_FOG = C.D3DLINECAPS_FOG
-	// D3DLINECAPS_TEXTURE means it supports texture-mapping.
+	// LINECAPS_TEXTURE means it supports texture-mapping.
 	LINECAPS_TEXTURE = C.D3DLINECAPS_TEXTURE
-	// D3DLINECAPS_ZTEST means it supports z-buffer comparisons.
+	// LINECAPS_ZTEST means it supports z-buffer comparisons.
 	LINECAPS_ZTEST = C.D3DLINECAPS_ZTEST
-	// D3DLOCK_DISCARD instructs the application to discard all memory within
+	// LOCK_DISCARD instructs the application to discard all memory within the
+	// locked region. For vertex and index buffers, the entire buffer will be
+	// discarded. This option is only valid when the resource is created with
+	// dynamic usage.
 	LOCK_DISCARD = C.D3DLOCK_DISCARD
-	// D3DLOCK_DONOTWAIT allows an application to gain back CPU cycles if the
+	// LOCK_DONOTWAIT allows an application to gain back CPU cycles if the
+	// driver cannot lock the surface immediately. If this flag is set and the
+	// driver cannot lock the surface immediately, the lock call will return
+	// ERR_WASSTILLDRAWING. This flag can only be used when locking a surface
+	// created using CreateOffscreenPlainSurface, CreateRenderTarget, or
+	// CreateDepthStencilSurface. This flag can also be used with a back buffer.
 	LOCK_DONOTWAIT = C.D3DLOCK_DONOTWAIT
-	// D3DLOCK_NO_DIRTY_UPDATE by default, a lock on a resource adds a dirty
+	// LOCK_NO_DIRTY_UPDATE by default, a lock on a resource adds a dirty
+	// region to that resource. This option prevents any changes to the dirty
+	// state of the resource. Applications should use this option when they
+	// have additional information about the set of regions changed during the
+	// lock operation.
 	LOCK_NO_DIRTY_UPDATE = C.D3DLOCK_NO_DIRTY_UPDATE
-	// D3DLOCK_NOOVERWRITE indicates that memory that was referred to in a
+	// LOCK_NOOVERWRITE indicates that memory that was referred to in a drawing
+	// call since the last lock without this flag will not be modified during
+	// the lock. This can enable optimizations when the application is
+	// appending data to a resource. Specifying this flag enables the driver to
+	// return immediately if the resource is in use, otherwise, the driver must
+	// finish using the resource before returning from locking.
 	LOCK_NOOVERWRITE = C.D3DLOCK_NOOVERWRITE
-	// D3DLOCK_NOSYSLOCK the default behavior of a video memory lock is to
+	// LOCK_NOSYSLOCK the default behavior of a video memory lock is to reserve
+	// a system-wide critical section, guaranteeing that no display mode
+	// changes will occur for the duration of the lock. This option causes the
+	// system-wide critical section not to be held for the duration of the lock.
 	// The lock operation is time consuming, but can enable the system to
+	// perform other duties, such as moving the mouse cursor. This option is
+	// useful for long-duration locks, such as the lock of the back buffer for
+	// software rendering that would otherwise adversely affect system
+	// responsiveness.
 	LOCK_NOSYSLOCK = C.D3DLOCK_NOSYSLOCK
-	// D3DLOCK_READONLY means the application will not write to the buffer.
+	// LOCK_READONLY means the application will not write to the buffer. This
+	// enables resources stored in non-native formats to save the recompression
+	// step when unlocking.
 	LOCK_READONLY = C.D3DLOCK_READONLY
-	// D3DPBLENDCAPS_BLENDFACTOR means the driver supports both
+	// PBLENDCAPS_BLENDFACTOR means the driver supports both BLEND_BLENDFACTOR
+	// and BLEND_INVBLENDFACTOR.
 	PBLENDCAPS_BLENDFACTOR = C.D3DPBLENDCAPS_BLENDFACTOR
-	// D3DPBLENDCAPS_BOTHINVSRCALPHA means the source blend factor is (1 - As,
+	// PBLENDCAPS_BOTHINVSRCALPHA means the source blend factor is (1 - As, 1 -
+	// As, 1 - As, 1 - As) and destination blend factor is (As, As, As, As);
+	// the destination blend selection is overridden.
 	PBLENDCAPS_BOTHINVSRCALPHA = C.D3DPBLENDCAPS_BOTHINVSRCALPHA
-	// D3DPBLENDCAPS_BOTHSRCALPHA means the driver supports the
+	// PBLENDCAPS_BOTHSRCALPHA means the driver supports the BLEND_BOTHSRCALPHA
+	// blend mode. (This blend mode is obsolete.)
 	PBLENDCAPS_BOTHSRCALPHA = C.D3DPBLENDCAPS_BOTHSRCALPHA
-	// D3DPBLENDCAPS_DESTALPHA means the blend factor is (Ad, Ad, Ad, Ad).
+	// PBLENDCAPS_DESTALPHA means the blend factor is (Ad, Ad, Ad, Ad).
 	PBLENDCAPS_DESTALPHA = C.D3DPBLENDCAPS_DESTALPHA
-	// D3DPBLENDCAPS_DESTCOLOR means the blend factor is (Rd, Gd, Bd, Ad).
+	// PBLENDCAPS_DESTCOLOR means the blend factor is (Rd, Gd, Bd, Ad).
 	PBLENDCAPS_DESTCOLOR = C.D3DPBLENDCAPS_DESTCOLOR
-	// D3DPBLENDCAPS_INVDESTALPHA means the blend factor is (1 - Ad, 1 - Ad, 1
+	// PBLENDCAPS_INVDESTALPHA means the blend factor is (1 - Ad, 1 - Ad, 1 -
+	// Ad, 1 - Ad).
 	PBLENDCAPS_INVDESTALPHA = C.D3DPBLENDCAPS_INVDESTALPHA
-	// D3DPBLENDCAPS_INVDESTCOLOR means the blend factor is (1 - Rd, 1 - Gd, 1
+	// PBLENDCAPS_INVDESTCOLOR means the blend factor is (1 - Rd, 1 - Gd, 1 -
+	// Bd, 1 - Ad).
 	PBLENDCAPS_INVDESTCOLOR = C.D3DPBLENDCAPS_INVDESTCOLOR
-	// D3DPBLENDCAPS_INVSRCALPHA means the blend factor is (1 - As, 1 - As, 1 -
+	// PBLENDCAPS_INVSRCALPHA means the blend factor is (1 - As, 1 - As, 1 -
+	// As, 1 - As).
 	PBLENDCAPS_INVSRCALPHA = C.D3DPBLENDCAPS_INVSRCALPHA
-	// D3DPBLENDCAPS_INVSRCCOLOR means the blend factor is (1 - Rs, 1 - Gs, 1 -
+	// PBLENDCAPS_INVSRCCOLOR means the blend factor is (1 - Rs, 1 - Gs, 1 -
+	// Bs, 1 - As).
 	PBLENDCAPS_INVSRCCOLOR = C.D3DPBLENDCAPS_INVSRCCOLOR
-	// D3DPBLENDCAPS_ONE means the blend factor is (1, 1, 1, 1).
+	// PBLENDCAPS_ONE means the blend factor is (1, 1, 1, 1).
 	PBLENDCAPS_ONE = C.D3DPBLENDCAPS_ONE
-	// D3DPBLENDCAPS_SRCALPHA means the blend factor is (As, As, As, As).
+	// PBLENDCAPS_SRCALPHA means the blend factor is (As, As, As, As).
 	PBLENDCAPS_SRCALPHA = C.D3DPBLENDCAPS_SRCALPHA
-	// D3DPBLENDCAPS_SRCALPHASAT means the blend factor is (f, f, f, 1); f =
+	// PBLENDCAPS_SRCALPHASAT means the blend factor is (f, f, f, 1); f =
+	// min(As, 1 - Ad).
 	PBLENDCAPS_SRCALPHASAT = C.D3DPBLENDCAPS_SRCALPHASAT
-	// D3DPBLENDCAPS_SRCCOLOR means the blend factor is (Rs, Gs, Bs, As).
+	// PBLENDCAPS_SRCCOLOR means the blend factor is (Rs, Gs, Bs, As).
 	PBLENDCAPS_SRCCOLOR = C.D3DPBLENDCAPS_SRCCOLOR
-	// D3DPBLENDCAPS_ZERO means the blend factor is (0, 0, 0, 0).
+	// PBLENDCAPS_ZERO means the blend factor is (0, 0, 0, 0).
 	PBLENDCAPS_ZERO = C.D3DPBLENDCAPS_ZERO
-	// D3DPCMPCAPS_ALWAYS always passes the z-test.
+	// PCMPCAPS_ALWAYS always passes the z-test.
 	PCMPCAPS_ALWAYS = C.D3DPCMPCAPS_ALWAYS
-	// D3DPCMPCAPS_EQUAL passes the z-test if the new z equals the current z.
+	// PCMPCAPS_EQUAL passes the z-test if the new z equals the current z.
 	PCMPCAPS_EQUAL = C.D3DPCMPCAPS_EQUAL
-	// D3DPCMPCAPS_GREATER passes the z-test if the new z is greater than the
+	// PCMPCAPS_GREATER passes the z-test if the new z is greater than the
+	// current z.
 	PCMPCAPS_GREATER = C.D3DPCMPCAPS_GREATER
-	// D3DPCMPCAPS_GREATEREQUAL passes the z-test if the new z is greater than
+	// PCMPCAPS_GREATEREQUAL passes the z-test if the new z is greater than or
+	// equal to the current z.
 	PCMPCAPS_GREATEREQUAL = C.D3DPCMPCAPS_GREATEREQUAL
-	// D3DPCMPCAPS_LESS passes the z-test if the new z is less than the current
+	// PCMPCAPS_LESS passes the z-test if the new z is less than the current z.
 	PCMPCAPS_LESS = C.D3DPCMPCAPS_LESS
-	// D3DPCMPCAPS_LESSEQUAL passes the z-test if the new z is less than or
+	// PCMPCAPS_LESSEQUAL passes the z-test if the new z is less than or equal
+	// to the current z.
 	PCMPCAPS_LESSEQUAL = C.D3DPCMPCAPS_LESSEQUAL
-	// D3DPCMPCAPS_NEVER always fails the z-test.
+	// PCMPCAPS_NEVER always fails the z-test.
 	PCMPCAPS_NEVER = C.D3DPCMPCAPS_NEVER
-	// D3DPCMPCAPS_NOTEQUAL passes the z-test if the new z does not equal the
+	// PCMPCAPS_NOTEQUAL passes the z-test if the new z does not equal the
+	// current z.
 	PCMPCAPS_NOTEQUAL = C.D3DPCMPCAPS_NOTEQUAL
-	// D3DPMISCCAPS_MASKZ means the device can enable and disable modification
+	// PMISCCAPS_MASKZ means the device can enable and disable modification of
+	// the depth buffer on pixel operations.
 	PMISCCAPS_MASKZ = C.D3DPMISCCAPS_MASKZ
-	// D3DPMISCCAPS_CULLNONE means the driver does not perform triangle
+	// PMISCCAPS_CULLNONE means the driver does not perform triangle culling.
+	// This corresponds to the CULL_NONE member of the CULL enumerated type.
 	PMISCCAPS_CULLNONE = C.D3DPMISCCAPS_CULLNONE
-	// D3DPMISCCAPS_CULLCW means the driver supports clockwise triangle culling
+	// PMISCCAPS_CULLCW means the driver supports clockwise triangle culling
+	// through the RS_CULLMODE state. (This applies only to triangle
+	// primitives.) This flag corresponds to the CULL_CW member of the CULL
+	// enumerated type.
 	PMISCCAPS_CULLCW = C.D3DPMISCCAPS_CULLCW
-	// D3DPMISCCAPS_CULLCCW means the driver supports counterclockwise culling
+	// PMISCCAPS_CULLCCW means the driver supports counterclockwise culling
+	// through the RS_CULLMODE state. (This applies only to triangle
+	// primitives.) This flag corresponds to the CULL_CCW member of the CULL
+	// enumerated type.
 	PMISCCAPS_CULLCCW = C.D3DPMISCCAPS_CULLCCW
-	// D3DPMISCCAPS_COLORWRITEENABLE means the device supports per-channel
+	// PMISCCAPS_COLORWRITEENABLE means the device supports per-channel writes
+	// for the render-target color buffer through the RS_COLORWRITEENABLE state.
 	PMISCCAPS_COLORWRITEENABLE = C.D3DPMISCCAPS_COLORWRITEENABLE
-	// D3DPMISCCAPS_CLIPPLANESCALEDPOINTS means the device correctly clips
+	// PMISCCAPS_CLIPPLANESCALEDPOINTS means the device correctly clips scaled
+	// points of size greater than 1.0 to user-defined clipping planes.
 	PMISCCAPS_CLIPPLANESCALEDPOINTS = C.D3DPMISCCAPS_CLIPPLANESCALEDPOINTS
-	// D3DPMISCCAPS_CLIPTLVERTS means the device clips post-transformed vertex
-	// Specify D3DUSAGE_DONOTCLIP when the pipeline should not do any clipping.
+	// PMISCCAPS_CLIPTLVERTS means the device clips post-transformed vertex
+	// primitives.
+	// Specify USAGE_DONOTCLIP when the pipeline should not do any clipping.
+	// For this case, additional software clipping may need to be performed at
+	// draw time, requiring the vertex buffer to be in system memory.
 	PMISCCAPS_CLIPTLVERTS = C.D3DPMISCCAPS_CLIPTLVERTS
-	// D3DPMISCCAPS_TSSARGTEMP means the device supports D3DTA for temporary
+	// PMISCCAPS_TSSARGTEMP means the device supports TA for temporary register.
 	PMISCCAPS_TSSARGTEMP = C.D3DPMISCCAPS_TSSARGTEMP
-	// D3DPMISCCAPS_BLENDOP means the device supports alpha-blending operations
+	// PMISCCAPS_BLENDOP means the device supports alpha-blending operations
+	// other than BLENDOP_ADD.
 	PMISCCAPS_BLENDOP = C.D3DPMISCCAPS_BLENDOP
-	// D3DPMISCCAPS_NULLREFERENCE is a reference device that does not render.
+	// PMISCCAPS_NULLREFERENCE is a reference device that does not render.
 	PMISCCAPS_NULLREFERENCE = C.D3DPMISCCAPS_NULLREFERENCE
-	// D3DPMISCCAPS_INDEPENDENTWRITEMASKS means the device supports independent
+	// PMISCCAPS_INDEPENDENTWRITEMASKS means the device supports independent
+	// write masks for multiple element textures or multiple render targets.
 	PMISCCAPS_INDEPENDENTWRITEMASKS = C.D3DPMISCCAPS_INDEPENDENTWRITEMASKS
-	// D3DPMISCCAPS_PERSTAGECONSTANT means the device supports per-stage
+	// PMISCCAPS_PERSTAGECONSTANT means the device supports per-stage
+	// constants. See TSS_CONSTANT in TEXTURESTAGESTATETYPE.
 	PMISCCAPS_PERSTAGECONSTANT = C.D3DPMISCCAPS_PERSTAGECONSTANT
-	// D3DPMISCCAPS_FOGANDSPECULARALPHA means the device supports separate fog
+	// PMISCCAPS_FOGANDSPECULARALPHA means the device supports separate fog and
+	// specular alpha. Many devices use the specular alpha channel to store the
+	// fog factor.
 	PMISCCAPS_FOGANDSPECULARALPHA = C.D3DPMISCCAPS_FOGANDSPECULARALPHA
-	// D3DPMISCCAPS_SEPARATEALPHABLEND means the device supports separate blend
+	// PMISCCAPS_SEPARATEALPHABLEND means the device supports separate blend
+	// settings for the alpha channel.
 	PMISCCAPS_SEPARATEALPHABLEND = C.D3DPMISCCAPS_SEPARATEALPHABLEND
-	// D3DPMISCCAPS_MRTINDEPENDENTBITDEPTHS means the device supports different
+	// PMISCCAPS_MRTINDEPENDENTBITDEPTHS means the device supports different
+	// bit depths for multiple render targets.
 	PMISCCAPS_MRTINDEPENDENTBITDEPTHS = C.D3DPMISCCAPS_MRTINDEPENDENTBITDEPTHS
-	// D3DPMISCCAPS_MRTPOSTPIXELSHADERBLENDING means the device supports
+	// PMISCCAPS_MRTPOSTPIXELSHADERBLENDING means the device supports
+	// post-pixel shader operations for multiple render targets.
 	PMISCCAPS_MRTPOSTPIXELSHADERBLENDING = C.D3DPMISCCAPS_MRTPOSTPIXELSHADERBLENDING
-	// D3DPMISCCAPS_FOGVERTEXCLAMPED means the device clamps fog blend factor
+	// PMISCCAPS_FOGVERTEXCLAMPED means the device clamps fog blend factor per
+	// vertex.
 	PMISCCAPS_FOGVERTEXCLAMPED = C.D3DPMISCCAPS_FOGVERTEXCLAMPED
-	// D3DPRASTERCAPS_ANISOTROPY means the device supports anisotropic
+	// PRASTERCAPS_ANISOTROPY means the device supports anisotropic filtering.
 	PRASTERCAPS_ANISOTROPY = C.D3DPRASTERCAPS_ANISOTROPY
-	// D3DPRASTERCAPS_COLORPERSPECTIVE means the device iterates colors
+	// PRASTERCAPS_COLORPERSPECTIVE means the device iterates colors
+	// perspective correctly.
 	PRASTERCAPS_COLORPERSPECTIVE = C.D3DPRASTERCAPS_COLORPERSPECTIVE
-	// D3DPRASTERCAPS_DITHER means the device can dither to improve color
+	// PRASTERCAPS_DITHER means the device can dither to improve color
+	// resolution.
 	PRASTERCAPS_DITHER = C.D3DPRASTERCAPS_DITHER
-	// D3DPRASTERCAPS_DEPTHBIAS means the device supports legacy depth bias.
+	// PRASTERCAPS_DEPTHBIAS means the device supports legacy depth bias. For
+	// true depth bias, see PRASTERCAPS_SLOPESCALEDEPTHBIAS.
 	PRASTERCAPS_DEPTHBIAS = C.D3DPRASTERCAPS_DEPTHBIAS
-	// D3DPRASTERCAPS_FOGRANGE means the device supports range-based fog. In
+	// PRASTERCAPS_FOGRANGE means the device supports range-based fog. In
+	// range-based fog, the distance of an object from the viewer is used to
+	// compute fog effects, not the depth of the object (that is, the
+	// z-coordinate) in the scene.
 	PRASTERCAPS_FOGRANGE = C.D3DPRASTERCAPS_FOGRANGE
-	// D3DPRASTERCAPS_FOGTABLE means the device calculates the fog value by
+	// PRASTERCAPS_FOGTABLE means the device calculates the fog value by
+	// referring to a lookup table containing fog values that are indexed to
+	// the depth of a given pixel.
 	PRASTERCAPS_FOGTABLE = C.D3DPRASTERCAPS_FOGTABLE
-	// D3DPRASTERCAPS_FOGVERTEX means the device calculates the fog value
+	// PRASTERCAPS_FOGVERTEX means the device calculates the fog value during
+	// the lighting operation and interpolates the fog value during
+	// rasterization.
 	PRASTERCAPS_FOGVERTEX = C.D3DPRASTERCAPS_FOGVERTEX
-	// D3DPRASTERCAPS_MIPMAPLODBIAS means the device supports level-of-detail
+	// PRASTERCAPS_MIPMAPLODBIAS means the device supports level-of-detail bias
+	// adjustments. These bias adjustments enable an application to make a
+	// mipmap appear crisper or less sharp than it normally would. For more
+	// information about level-of-detail bias in mipmaps, see
+	// SAMP_MIPMAPLODBIAS.
 	PRASTERCAPS_MIPMAPLODBIAS = C.D3DPRASTERCAPS_MIPMAPLODBIAS
-	// D3DPRASTERCAPS_MULTISAMPLE_TOGGLE means the device supports toggling
+	// PRASTERCAPS_MULTISAMPLE_TOGGLE means the device supports toggling
+	// multisampling on and off between Device.BeginScene and Device.EndScene
+	// (using RS_MULTISAMPLEANTIALIAS).
 	PRASTERCAPS_MULTISAMPLE_TOGGLE = C.D3DPRASTERCAPS_MULTISAMPLE_TOGGLE
-	// D3DPRASTERCAPS_SCISSORTEST means the device supports scissor test.
+	// PRASTERCAPS_SCISSORTEST means the device supports scissor test.
 	PRASTERCAPS_SCISSORTEST = C.D3DPRASTERCAPS_SCISSORTEST
-	// D3DPRASTERCAPS_SLOPESCALEDEPTHBIAS means the device performs true
+	// PRASTERCAPS_SLOPESCALEDEPTHBIAS means the device performs true
+	// slope-scale based depth bias. This is in contrast to the legacy style
+	// depth bias.
 	PRASTERCAPS_SLOPESCALEDEPTHBIAS = C.D3DPRASTERCAPS_SLOPESCALEDEPTHBIAS
-	// D3DPRASTERCAPS_WBUFFER means the device supports depth buffering using w.
+	// PRASTERCAPS_WBUFFER means the device supports depth buffering using w.
 	PRASTERCAPS_WBUFFER = C.D3DPRASTERCAPS_WBUFFER
-	// D3DPRASTERCAPS_WFOG means the device supports w-based fog. W-based fog
+	// PRASTERCAPS_WFOG means the device supports w-based fog. W-based fog is
+	// used when a perspective projection matrix is specified, but affine
+	// projections still use z-based fog. The system considers a projection
+	// matrix that contains a nonzero value in the [3][4] element to be a
+	// perspective projection matrix.
 	PRASTERCAPS_WFOG = C.D3DPRASTERCAPS_WFOG
-	// D3DPRASTERCAPS_ZBUFFERLESSHSR means the device can perform
+	// PRASTERCAPS_ZBUFFERLESSHSR means the device can perform hidden-surface
+	// removal (HSR) without requiring the application to sort polygons and
+	// without requiring the allocation of a depth-buffer. This leaves more
+	// video memory for textures. The method used to perform HSR is
+	// hardware-dependent and is transparent to the application.
 	// Z-bufferless HSR is performed if no depth-buffer surface is associated
+	// with the rendering-target surface and the depth-buffer comparison test
+	// is enabled (that is, when the state value associated with the RS_ZENABLE
+	// enumeration constant is set to TRUE).
 	PRASTERCAPS_ZBUFFERLESSHSR = C.D3DPRASTERCAPS_ZBUFFERLESSHSR
-	// D3DPRASTERCAPS_ZFOG means the device supports z-based fog.
+	// PRASTERCAPS_ZFOG means the device supports z-based fog.
 	PRASTERCAPS_ZFOG = C.D3DPRASTERCAPS_ZFOG
-	// D3DPRASTERCAPS_ZTEST means the device can perform z-test operations.
+	// PRASTERCAPS_ZTEST means the device can perform z-test operations. This
+	// effectively renders a primitive and indicates whether any z pixels have
+	// been rendered.
 	PRASTERCAPS_ZTEST = C.D3DPRASTERCAPS_ZTEST
-	// D3DPRESENT_INTERVAL_DEFAULT is nearly equivalent to
+	// PRESENT_INTERVAL_DEFAULT is nearly equivalent to PRESENT_INTERVAL_ONE.
 	PRESENT_INTERVAL_DEFAULT = C.D3DPRESENT_INTERVAL_DEFAULT
-	// D3DPRESENT_INTERVAL_ONE means the driver will wait for the vertical
+	// PRESENT_INTERVAL_ONE means the driver will wait for the vertical retrace
+	// period (the runtime will "beam follow" to prevent tearing). Present
+	// operations will not be affected more frequently than the screen refresh;
+	// the runtime will complete at most one Present operation per adapter
+	// refresh period. This is equivalent to using SWAPEFFECT_COPYVSYNC in
+	// DirectX 8.1. This option is always available for both windowed and
+	// full-screen swap chains.
 	PRESENT_INTERVAL_ONE = C.D3DPRESENT_INTERVAL_ONE
-	// D3DPRESENT_INTERVAL_TWO means the driver will wait for the vertical
+	// PRESENT_INTERVAL_TWO means the driver will wait for the vertical retrace
+	// period. Present operations will not be affected more frequently than
+	// every second screen refresh. Check the PresentationIntervals cap (see
+	// CAPS) to see if PRESENT_INTERVAL_TWO is supported by the driver.
 	PRESENT_INTERVAL_TWO = C.D3DPRESENT_INTERVAL_TWO
-	// D3DPRESENT_INTERVAL_THREE means the driver will wait for the vertical
+	// PRESENT_INTERVAL_THREE means the driver will wait for the vertical
+	// retrace period. Present operations will not be affected more frequently
+	// than every third screen refresh. Check the PresentationIntervals cap
+	// (see CAPS) to see if PRESENT_INTERVAL_THREE is supported by the driver.
 	PRESENT_INTERVAL_THREE = C.D3DPRESENT_INTERVAL_THREE
-	// D3DPRESENT_INTERVAL_FOUR means the driver will wait for the vertical
+	// PRESENT_INTERVAL_FOUR means the driver will wait for the vertical
+	// retrace period. Present operations will not be affected more frequently
+	// than every fourth screen refresh. Check the PresentationIntervals member
+	// (see CAPS) to see if PRESENT_INTERVAL_FOUR is supported by the driver.
 	PRESENT_INTERVAL_FOUR = C.D3DPRESENT_INTERVAL_FOUR
-	// D3DPRESENT_INTERVAL_IMMEDIATE means the runtime updates the window
+	// PRESENT_INTERVAL_IMMEDIATE means the runtime updates the window client
+	// area immediately and might do so more than once during the adapter
+	// refresh period. This is equivalent to using SWAPEFFECT_COPY in DirectX
+	// 8. Present operations might be affected immediately. This option is
+	// always available for both windowed and full-screen swap chains.
 	PRESENT_INTERVAL_IMMEDIATE = C.D3DPRESENT_INTERVAL_IMMEDIATE
-	// D3DPRESENT_BACK_BUFFERS_MAX is the maximum number of back buffers
+	// PRESENT_BACK_BUFFERS_MAX is the maximum number of back buffers supported
+	// in Direct3D 9.
 	PRESENT_BACK_BUFFERS_MAX = C.D3DPRESENT_BACK_BUFFERS_MAX
-	// D3DPRESENTFLAG_DEVICECLIP clips a windowed Present blit into the window
+	// PRESENTFLAG_DEVICECLIP clips a windowed Present blit into the window
+	// client area, within the monitor screen area of the video adapter that
+	// created the Direct3D device. PRESENTFLAG_DEVICECLIP is not valid with
+	// SWAPEFFECT_FLIPEX.
 	PRESENTFLAG_DEVICECLIP = C.D3DPRESENTFLAG_DEVICECLIP
-	// D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL set this flag when the device or
+	// PRESENTFLAG_DISCARD_DEPTHSTENCIL set this flag when the device or swap
+	// chain is created to enable z-buffer discarding. If this flag is set, the
+	// contents of the depth stencil buffer will be invalid after calling
+	// either Present, or SetDepthStencilSurface with a different depth surface.
 	// Discarding z-buffer data can increase performance and is driver
+	// dependent. The debug runtime will enforce discarding by clearing the
+	// z-buffer to some constant value after calling either Present, or
+	// SetDepthStencilSurface with a different depth surface.
 	// Discarding z-buffer data is illegal for all lockable formats,
+	// FMT_D16_LOCKABLE and FMT_D32F_LOCKABLE. Any use of CreateDevice
+	// specifying a lockable format and z-buffer discarding will fail.
 	PRESENTFLAG_DISCARD_DEPTHSTENCIL = C.D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL
-	// D3DPRESENTFLAG_LOCKABLE_BACKBUFFER set this flag if the application
+	// PRESENTFLAG_LOCKABLE_BACKBUFFER set this flag if the application
+	// requires the ability to lock the back buffer directly. Note that back
+	// buffers are not lockable unless the application specifies
+	// PRESENTFLAG_LOCKABLE_BACKBUFFER when calling CreateDevice or Reset.
+	// Lockable back buffers incur a performance cost on some graphics hardware
+	// configurations.
 	// Performing a lock operation (or using UpdateSurface to write) on the
+	// lockable back buffer decreases performance on many cards. In this case,
+	// consider using textured triangles to move data to the back buffer.
 	PRESENTFLAG_LOCKABLE_BACKBUFFER = C.D3DPRESENTFLAG_LOCKABLE_BACKBUFFER
-	// D3DPRESENTFLAG_VIDEO is a hint to the driver that the back buffers will
+	// PRESENTFLAG_VIDEO is a hint to the driver that the back buffers will
+	// contain video data.
 	PRESENTFLAG_VIDEO = C.D3DPRESENTFLAG_VIDEO
-	// D3DPSHADECAPS_ALPHAGOURAUDBLEND means the device can support an alpha
+	// PSHADECAPS_ALPHAGOURAUDBLEND means the device can support an alpha
+	// component for Gouraud-blended transparency (the SHADE_GOURAUD state for
+	// the SHADEMODE enumerated type). In this mode, the alpha color component
+	// of a primitive is provided at vertices and interpolated across a face
+	// along with the other color components.
 	PSHADECAPS_ALPHAGOURAUDBLEND = C.D3DPSHADECAPS_ALPHAGOURAUDBLEND
-	// D3DPSHADECAPS_COLORGOURAUDRGB means the device can support colored
+	// PSHADECAPS_COLORGOURAUDRGB means the device can support colored Gouraud
+	// shading. In this mode, the per-vertex color components (red, green, and
+	// blue) are interpolated across a triangle face.
 	PSHADECAPS_COLORGOURAUDRGB = C.D3DPSHADECAPS_COLORGOURAUDRGB
-	// D3DPSHADECAPS_FOGGOURAUD means the device can support fog in the Gouraud
+	// PSHADECAPS_FOGGOURAUD means the device can support fog in the Gouraud
+	// shading mode.
 	PSHADECAPS_FOGGOURAUD = C.D3DPSHADECAPS_FOGGOURAUD
-	// D3DPSHADECAPS_SPECULARGOURAUDRGB means the device supports Gouraud
+	// PSHADECAPS_SPECULARGOURAUDRGB means the device supports Gouraud shading
+	// of specular highlights.
 	PSHADECAPS_SPECULARGOURAUDRGB = C.D3DPSHADECAPS_SPECULARGOURAUDRGB
-	// D3DPS20_MAX_DYNAMICFLOWCONTROLDEPTH is the maximum level of nesting of
+	// PS20_MAX_DYNAMICFLOWCONTROLDEPTH is the maximum level of nesting of
+	// dynamic flow control instructions (break, breakc, ifc).
 	PS20_MAX_DYNAMICFLOWCONTROLDEPTH = C.D3DPS20_MAX_DYNAMICFLOWCONTROLDEPTH
-	// D3DPS20_MIN_DYNAMICFLOWCONTROLDEPTH is the minimum level of nesting of
+	// PS20_MIN_DYNAMICFLOWCONTROLDEPTH is the minimum level of nesting of
+	// dynamic flow control instructions (break, breakc, ifc).
 	PS20_MIN_DYNAMICFLOWCONTROLDEPTH = C.D3DPS20_MIN_DYNAMICFLOWCONTROLDEPTH
-	// D3DPS20_MAX_NUMTEMPS is the maximum number of supported temporary
+	// PS20_MAX_NUMTEMPS is the maximum number of supported temporary registers.
 	PS20_MAX_NUMTEMPS = C.D3DPS20_MAX_NUMTEMPS
-	// D3DPS20_MIN_NUMTEMPS is the minimum number of supported temporary
+	// PS20_MIN_NUMTEMPS is the minimum number of supported temporary registers.
 	PS20_MIN_NUMTEMPS = C.D3DPS20_MIN_NUMTEMPS
-	// D3DPS20_MAX_STATICFLOWCONTROLDEPTH is the maximum depth of nesting of
+	// PS20_MAX_STATICFLOWCONTROLDEPTH is the maximum depth of nesting of the
+	// loop - vs/rep - vs and call - vs/callnz bool - vs instructions.
 	PS20_MAX_STATICFLOWCONTROLDEPTH = C.D3DPS20_MAX_STATICFLOWCONTROLDEPTH
-	// D3DPS20_MIN_STATICFLOWCONTROLDEPTH is the minimum depth of nesting of
+	// PS20_MIN_STATICFLOWCONTROLDEPTH is the minimum depth of nesting of the
+	// loop - vs/rep - vs and call - vs/callnz bool - vs instructions.
 	PS20_MIN_STATICFLOWCONTROLDEPTH = C.D3DPS20_MIN_STATICFLOWCONTROLDEPTH
-	// D3DPS20_MAX_NUMINSTRUCTIONSLOTS is the maximum number of supported
+	// PS20_MAX_NUMINSTRUCTIONSLOTS is the maximum number of supported
+	// instructions.
 	PS20_MAX_NUMINSTRUCTIONSLOTS = C.D3DPS20_MAX_NUMINSTRUCTIONSLOTS
-	// D3DPS20_MIN_NUMINSTRUCTIONSLOTS is the minimum number of supported
+	// PS20_MIN_NUMINSTRUCTIONSLOTS is the minimum number of supported
+	// instructions.
 	PS20_MIN_NUMINSTRUCTIONSLOTS = C.D3DPS20_MIN_NUMINSTRUCTIONSLOTS
-	// D3DPTADDRESSCAPS_BORDER means the device supports setting coordinates
+	// PTADDRESSCAPS_BORDER means the device supports setting coordinates
+	// outside the range [0.0, 1.0] to the border color, as specified by the
+	// SAMP_BORDERCOLOR texture-stage state.
 	PTADDRESSCAPS_BORDER = C.D3DPTADDRESSCAPS_BORDER
-	// D3DPTADDRESSCAPS_CLAMP means the device can clamp textures to addresses.
+	// PTADDRESSCAPS_CLAMP means the device can clamp textures to addresses.
 	PTADDRESSCAPS_CLAMP = C.D3DPTADDRESSCAPS_CLAMP
-	// D3DPTADDRESSCAPS_INDEPENDENTUV means the device can separate the
+	// PTADDRESSCAPS_INDEPENDENTUV means the device can separate the
+	// texture-addressing modes of the u and v coordinates of the texture. This
+	// ability corresponds to the SAMP_ADDRESSU and SAMP_ADDRESSV render-state
+	// values.
 	PTADDRESSCAPS_INDEPENDENTUV = C.D3DPTADDRESSCAPS_INDEPENDENTUV
-	// D3DPTADDRESSCAPS_MIRROR means the device can mirror textures to
+	// PTADDRESSCAPS_MIRROR means the device can mirror textures to addresses.
 	PTADDRESSCAPS_MIRROR = C.D3DPTADDRESSCAPS_MIRROR
-	// D3DPTADDRESSCAPS_MIRRORONCE means the device can take the absolute value
+	// PTADDRESSCAPS_MIRRORONCE means the device can take the absolute value of
+	// the texture coordinate (thus, mirroring around 0) and then clamp to the
+	// maximum value.
 	PTADDRESSCAPS_MIRRORONCE = C.D3DPTADDRESSCAPS_MIRRORONCE
-	// D3DPTADDRESSCAPS_WRAP means the device can wrap textures to addresses.
+	// PTADDRESSCAPS_WRAP means the device can wrap textures to addresses.
 	PTADDRESSCAPS_WRAP = C.D3DPTADDRESSCAPS_WRAP
-	// D3DPTEXTURECAPS_ALPHA means alpha in texture pixels is supported.
+	// PTEXTURECAPS_ALPHA means alpha in texture pixels is supported.
 	PTEXTURECAPS_ALPHA = C.D3DPTEXTURECAPS_ALPHA
-	// D3DPTEXTURECAPS_ALPHAPALETTE means the device can draw alpha from
+	// PTEXTURECAPS_ALPHAPALETTE means the device can draw alpha from texture
+	// palettes.
 	PTEXTURECAPS_ALPHAPALETTE = C.D3DPTEXTURECAPS_ALPHAPALETTE
-	// D3DPTEXTURECAPS_CUBEMAP means the device upports cube textures.
+	// PTEXTURECAPS_CUBEMAP means the device upports cube textures.
 	PTEXTURECAPS_CUBEMAP = C.D3DPTEXTURECAPS_CUBEMAP
-	// D3DPTEXTURECAPS_CUBEMAP_POW2 means the device requires that cube texture
+	// PTEXTURECAPS_CUBEMAP_POW2 means the device requires that cube texture
+	// maps have dimensions specified as powers of two.
 	PTEXTURECAPS_CUBEMAP_POW2 = C.D3DPTEXTURECAPS_CUBEMAP_POW2
-	// D3DPTEXTURECAPS_MIPCUBEMAP means the device supports mipmapped cube
+	// PTEXTURECAPS_MIPCUBEMAP means the device supports mipmapped cube
+	// textures.
 	PTEXTURECAPS_MIPCUBEMAP = C.D3DPTEXTURECAPS_MIPCUBEMAP
-	// D3DPTEXTURECAPS_MIPMAP means the device supports mipmapped textures.
+	// PTEXTURECAPS_MIPMAP means the device supports mipmapped textures.
 	PTEXTURECAPS_MIPMAP = C.D3DPTEXTURECAPS_MIPMAP
-	// D3DPTEXTURECAPS_MIPVOLUMEMAP means the device supports mipmapped volume
+	// PTEXTURECAPS_MIPVOLUMEMAP means the device supports mipmapped volume
+	// textures.
 	PTEXTURECAPS_MIPVOLUMEMAP = C.D3DPTEXTURECAPS_MIPVOLUMEMAP
-	// D3DPTEXTURECAPS_NONPOW2CONDITIONAL means D3DPTEXTURECAPS_POW2 is also
+	// PTEXTURECAPS_NONPOW2CONDITIONAL means PTEXTURECAPS_POW2 is also set,
+	// conditionally supports the use of 2D textures with dimensions that are
+	// not powers of two. A device that exposes this capability can use such a
+	// texture if all of the following requirements are met.
 	// - The texture addressing mode for the texture stage is set to
-	// - Texture wrapping for the texture stage is disabled (D3DRS_WRAP n set
+	// TADDRESS_CLAMP.
+	// - Texture wrapping for the texture stage is disabled (RS_WRAP n set to
+	// 0).
 	// - Mipmapping is not in use (use magnification filter only).
-	// - Texture formats must not be D3DFMT_DXT1 through D3DFMT_DXT5.
-	// If this flag is not set, and D3DPTEXTURECAPS_POW2 is also not set, then
+	// - Texture formats must not be FMT_DXT1 through FMT_DXT5.
+	// If this flag is not set, and PTEXTURECAPS_POW2 is also not set, then
+	// unconditional support is provided for 2D textures with dimensions that
+	// are not powers of two.
 	// A texture that is not a power of two cannot be set at a stage that will
+	// be read based on a shader computation (such as the bem - ps and texm3x3
+	// - ps instructions in pixel shaders versions 1_0 to 1_3). For example,
+	// these textures can be used to store bumps that will be fed into texture
+	// reads, but not the environment maps that are used in texbem - ps,
+	// texbeml - ps, and texm3x3spec - ps. This means that a texture with
+	// dimensions that are not powers of two cannot be addressed or sampled
+	// using texture coordinates computed within the shader. This type of
+	// operation is known as a dependent read and cannot be performed on these
+	// types of textures.
 	PTEXTURECAPS_NONPOW2CONDITIONAL = C.D3DPTEXTURECAPS_NONPOW2CONDITIONAL
-	// D3DPTEXTURECAPS_NOPROJECTEDBUMPENV means the device does not support a
+	// PTEXTURECAPS_NOPROJECTEDBUMPENV means the device does not support a
+	// projected bump-environment loopkup operation in programmable and fixed
+	// function shaders.
 	PTEXTURECAPS_NOPROJECTEDBUMPENV = C.D3DPTEXTURECAPS_NOPROJECTEDBUMPENV
-	// D3DPTEXTURECAPS_PERSPECTIVE means perspective correction texturing is
+	// PTEXTURECAPS_PERSPECTIVE means perspective correction texturing is
+	// supported.
 	PTEXTURECAPS_PERSPECTIVE = C.D3DPTEXTURECAPS_PERSPECTIVE
-	// D3DPTEXTURECAPS_POW2 means that if D3DPTEXTURECAPS_NONPOW2CONDITIONAL is
-	// If D3DPTEXTURECAPS_NONPOW2CONDITIONAL is also set, conditionally
-	// If this flag is not set, and D3DPTEXTURECAPS_NONPOW2CONDITIONAL is also
+	// PTEXTURECAPS_POW2 means that if PTEXTURECAPS_NONPOW2CONDITIONAL is not
+	// set, all textures must have widths and heights specified as powers of
+	// two. This requirement does not apply to either cube textures or volume
+	// textures.
+	// If PTEXTURECAPS_NONPOW2CONDITIONAL is also set, conditionally supports
+	// the use of 2D textures with dimensions that are not powers of two. See
+	// PTEXTURECAPS_NONPOW2CONDITIONAL description.
+	// If this flag is not set, and PTEXTURECAPS_NONPOW2CONDITIONAL is also not
+	// set, then unconditional support is provided for 2D textures with
+	// dimensions that are not powers of two.
 	PTEXTURECAPS_POW2 = C.D3DPTEXTURECAPS_POW2
-	// D3DPTEXTURECAPS_PROJECTED means the device supports the
+	// PTEXTURECAPS_PROJECTED means the device supports the TTFF_PROJECTED
+	// texture transformation flag. When applied, the device divides
+	// transformed texture coordinates by the last texture coordinate. If this
+	// capability is present, then the projective divide occurs per pixel. If
+	// this capability is not present, but the projective divide needs to occur
+	// anyway, then it is performed on a per-vertex basis by the Direct3D
+	// runtime.
 	PTEXTURECAPS_PROJECTED = C.D3DPTEXTURECAPS_PROJECTED
-	// D3DPTEXTURECAPS_SQUAREONLY means all textures must be square.
+	// PTEXTURECAPS_SQUAREONLY means all textures must be square.
 	PTEXTURECAPS_SQUAREONLY = C.D3DPTEXTURECAPS_SQUAREONLY
-	// D3DPTEXTURECAPS_TEXREPEATNOTSCALEDBYSIZE means texture indices are not
+	// PTEXTURECAPS_TEXREPEATNOTSCALEDBYSIZE means texture indices are not
+	// scaled by the texture size prior to interpolation.
 	PTEXTURECAPS_TEXREPEATNOTSCALEDBYSIZE = C.D3DPTEXTURECAPS_TEXREPEATNOTSCALEDBYSIZE
-	// D3DPTEXTURECAPS_VOLUMEMAP means the device supports volume textures.
+	// PTEXTURECAPS_VOLUMEMAP means the device supports volume textures.
 	PTEXTURECAPS_VOLUMEMAP = C.D3DPTEXTURECAPS_VOLUMEMAP
-	// D3DPTEXTURECAPS_VOLUMEMAP_POW2 means the device requires that volume
+	// PTEXTURECAPS_VOLUMEMAP_POW2 means the device requires that volume
+	// texture maps have dimensions specified as powers of two.
 	PTEXTURECAPS_VOLUMEMAP_POW2 = C.D3DPTEXTURECAPS_VOLUMEMAP_POW2
-	// D3DPTFILTERCAPS_MAGFPOINT means the device supports per-stage
+	// PTFILTERCAPS_MAGFPOINT means the device supports per-stage point-sample
+	// filtering for magnifying textures. The point-sample magnification filter
+	// is represented by the TEXF_POINT member of the TEXTUREFILTERTYPE
+	// enumerated type.
 	PTFILTERCAPS_MAGFPOINT = C.D3DPTFILTERCAPS_MAGFPOINT
-	// D3DPTFILTERCAPS_MAGFLINEAR means the device supports per-stage bilinear
+	// PTFILTERCAPS_MAGFLINEAR means the device supports per-stage bilinear
+	// interpolation filtering for magnifying mipmaps. The bilinear
+	// interpolation mipmapping filter is represented by the TEXF_LINEAR member
+	// of the TEXTUREFILTERTYPE enumerated type.
 	PTFILTERCAPS_MAGFLINEAR = C.D3DPTFILTERCAPS_MAGFLINEAR
-	// D3DPTFILTERCAPS_MAGFANISOTROPIC means the device supports per-stage
+	// PTFILTERCAPS_MAGFANISOTROPIC means the device supports per-stage
+	// anisotropic filtering for magnifying textures. The anisotropic
+	// magnification filter is represented by the TEXF_ANISOTROPIC member of
+	// the TEXTUREFILTERTYPE enumerated type.
 	PTFILTERCAPS_MAGFANISOTROPIC = C.D3DPTFILTERCAPS_MAGFANISOTROPIC
-	// D3DPTFILTERCAPS_MAGFPYRAMIDALQUAD means the device supports per-stage
+	// PTFILTERCAPS_MAGFPYRAMIDALQUAD means the device supports per-stage
+	// pyramidal sample filtering for magnifying textures. The pyramidal
+	// magnifying filter is represented by the TEXF_PYRAMIDALQUAD member of the
+	// TEXTUREFILTERTYPE enumerated type.
 	PTFILTERCAPS_MAGFPYRAMIDALQUAD = C.D3DPTFILTERCAPS_MAGFPYRAMIDALQUAD
-	// D3DPTFILTERCAPS_MAGFGAUSSIANQUAD means the device supports per-stage
+	// PTFILTERCAPS_MAGFGAUSSIANQUAD means the device supports per-stage
+	// Gaussian quad filtering for magnifying textures.
 	PTFILTERCAPS_MAGFGAUSSIANQUAD = C.D3DPTFILTERCAPS_MAGFGAUSSIANQUAD
-	// D3DPTFILTERCAPS_MINFPOINT means the device supports per-stage
+	// PTFILTERCAPS_MINFPOINT means the device supports per-stage point-sample
+	// filtering for minifying textures. The point-sample minification filter
+	// is represented by the TEXF_POINT member of the TEXTUREFILTERTYPE
+	// enumerated type.
 	PTFILTERCAPS_MINFPOINT = C.D3DPTFILTERCAPS_MINFPOINT
-	// D3DPTFILTERCAPS_MINFLINEAR means the device supports per-stage linear
+	// PTFILTERCAPS_MINFLINEAR means the device supports per-stage linear
+	// filtering for minifying textures. The linear minification filter is
+	// represented by the TEXF_LINEAR member of the TEXTUREFILTERTYPE
+	// enumerated type.
 	PTFILTERCAPS_MINFLINEAR = C.D3DPTFILTERCAPS_MINFLINEAR
-	// D3DPTFILTERCAPS_MINFANISOTROPIC means the device supports per-stage
+	// PTFILTERCAPS_MINFANISOTROPIC means the device supports per-stage
+	// anisotropic filtering for minifying textures. The anisotropic
+	// minification filter is represented by the TEXF_ANISOTROPIC member of the
+	// TEXTUREFILTERTYPE enumerated type.
 	PTFILTERCAPS_MINFANISOTROPIC = C.D3DPTFILTERCAPS_MINFANISOTROPIC
-	// D3DPTFILTERCAPS_MINFPYRAMIDALQUAD means the device supports per-stage
+	// PTFILTERCAPS_MINFPYRAMIDALQUAD means the device supports per-stage
+	// pyramidal sample filtering for minifying textures.
 	PTFILTERCAPS_MINFPYRAMIDALQUAD = C.D3DPTFILTERCAPS_MINFPYRAMIDALQUAD
-	// D3DPTFILTERCAPS_MINFGAUSSIANQUAD means the device supports per-stage
+	// PTFILTERCAPS_MINFGAUSSIANQUAD means the device supports per-stage
+	// Gaussian quad filtering for minifying textures.
 	PTFILTERCAPS_MINFGAUSSIANQUAD = C.D3DPTFILTERCAPS_MINFGAUSSIANQUAD
-	// D3DPTFILTERCAPS_MIPFPOINT means the device supports per-stage
+	// PTFILTERCAPS_MIPFPOINT means the device supports per-stage point-sample
+	// filtering for mipmaps. The point-sample mipmapping filter is represented
+	// by the TEXF_POINT member of the TEXTUREFILTERTYPE enumerated type.
 	PTFILTERCAPS_MIPFPOINT = C.D3DPTFILTERCAPS_MIPFPOINT
-	// D3DPTFILTERCAPS_MIPFLINEAR means the device supports per-stage bilinear
+	// PTFILTERCAPS_MIPFLINEAR means the device supports per-stage bilinear
+	// interpolation filtering for mipmaps. The bilinear interpolation
+	// mipmapping filter is represented by the TEXF_LINEAR member of the
+	// TEXTUREFILTERTYPE enumerated type.
 	PTFILTERCAPS_MIPFLINEAR = C.D3DPTFILTERCAPS_MIPFLINEAR
-	// D3DSPD_IUNKNOWN is used in Resource.SetPrivateData. The data at is a
+	// SPD_IUNKNOWN is used in Resource.SetPrivateData. The data at is a
+	// pointer to an IUnknown interface. The size parameter must be set to the
+	// size of a pointer to IUnknown. Direct3D automatically calls IUnknown
+	// through the data pointer when the private data is destroyed. Private
+	// data will be destroyed by a subsequent call to Resource.SetPrivateData
+	// with the same GUID, a subsequent call to Resource.FreePrivateData, or
+	// when the Direct3D object is released.
 	SPD_IUNKNOWN = C.D3DSPD_IUNKNOWN
-	// D3DSTENCILCAPS_KEEP does not update the entry in the stencil buffer.
+	// STENCILCAPS_KEEP does not update the entry in the stencil buffer. This
+	// is the default value.
 	STENCILCAPS_KEEP = C.D3DSTENCILCAPS_KEEP
-	// D3DSTENCILCAPS_ZERO sets the stencil-buffer entry to 0.
+	// STENCILCAPS_ZERO sets the stencil-buffer entry to 0.
 	STENCILCAPS_ZERO = C.D3DSTENCILCAPS_ZERO
-	// D3DSTENCILCAPS_REPLACE replaces the stencil-buffer entry with reference
+	// STENCILCAPS_REPLACE replaces the stencil-buffer entry with reference
+	// value.
 	STENCILCAPS_REPLACE = C.D3DSTENCILCAPS_REPLACE
-	// D3DSTENCILCAPS_INCRSAT increments the stencil-buffer entry, clamping to
+	// STENCILCAPS_INCRSAT increments the stencil-buffer entry, clamping to the
+	// maximum value.
 	STENCILCAPS_INCRSAT = C.D3DSTENCILCAPS_INCRSAT
-	// D3DSTENCILCAPS_DECRSAT decrements the stencil-buffer entry, clamping to
+	// STENCILCAPS_DECRSAT decrements the stencil-buffer entry, clamping to
+	// zero.
 	STENCILCAPS_DECRSAT = C.D3DSTENCILCAPS_DECRSAT
-	// D3DSTENCILCAPS_INVERT inverts the bits in the stencil-buffer entry.
+	// STENCILCAPS_INVERT inverts the bits in the stencil-buffer entry.
 	STENCILCAPS_INVERT = C.D3DSTENCILCAPS_INVERT
-	// D3DSTENCILCAPS_INCR increments the stencil-buffer entry, wrapping to
+	// STENCILCAPS_INCR increments the stencil-buffer entry, wrapping to zero
+	// if the new value exceeds the maximum value.
 	STENCILCAPS_INCR = C.D3DSTENCILCAPS_INCR
-	// D3DSTENCILCAPS_DECR decrements the stencil-buffer entry, wrapping to the
+	// STENCILCAPS_DECR decrements the stencil-buffer entry, wrapping to the
+	// maximum value if the new value is less than zero.
 	STENCILCAPS_DECR = C.D3DSTENCILCAPS_DECR
-	// D3DSTENCILCAPS_TWOSIDED means the device supports two-sided stencil.
+	// STENCILCAPS_TWOSIDED means the device supports two-sided stencil.
 	STENCILCAPS_TWOSIDED = C.D3DSTENCILCAPS_TWOSIDED
-	// D3DTA_CONSTANT selects a constant from a texture stage. The default
+	// TA_CONSTANT selects a constant from a texture stage. The default value
+	// is 0xFFFFFFFF.
 	TA_CONSTANT = C.D3DTA_CONSTANT
-	// D3DTA_CURRENT means the texture argument is the result of the previous
+	// TA_CURRENT means the texture argument is the result of the previous
+	// blending stage. In the first texture stage (stage 0), this argument is
+	// equivalent to TA_DIFFUSE. If the previous blending stage uses a bump-map
+	// texture (the TOP_BUMPENVMAP operation), the system chooses the texture
+	// from the stage before the bump-map texture. If s represents the current
+	// texture stage and s - 1 contains a bump-map texture, this argument
+	// becomes the result output by texture stage s - 2. Permissions are
+	// read/write.
 	TA_CURRENT = C.D3DTA_CURRENT
-	// D3DTA_DIFFUSE means the texture argument is the diffuse color
+	// TA_DIFFUSE means the texture argument is the diffuse color interpolated
+	// from vertex components during Gouraud shading. If the vertex does not
+	// contain a diffuse color, the default color is 0xFFFFFFFF. Permissions
+	// are read-only.
 	TA_DIFFUSE = C.D3DTA_DIFFUSE
-	// D3DTA_SELECTMASK is a mask value for all arguments; not used when
+	// TA_SELECTMASK is a mask value for all arguments; not used when setting
+	// texture arguments.
 	TA_SELECTMASK = C.D3DTA_SELECTMASK
-	// D3DTA_SPECULAR means the texture argument is the specular color
+	// TA_SPECULAR means the texture argument is the specular color
+	// interpolated from vertex components during Gouraud shading. If the
+	// vertex does not contain a specular color, the default color is
+	// 0xFFFFFFFF. Permissions are read-only.
 	TA_SPECULAR = C.D3DTA_SPECULAR
-	// D3DTA_TEMP means the texture argument is a temporary register color for
+	// TA_TEMP means the texture argument is a temporary register color for
+	// read or write. TA_TEMP is supported if the PMISCCAPS_TSSARGTEMP device
+	// capability is present. The default value for the register is (0.0, 0.0,
+	// 0.0, 0.0). Permissions are read/write.
 	TA_TEMP = C.D3DTA_TEMP
-	// D3DTA_TEXTURE means the texture argument is the texture color for this
+	// TA_TEXTURE means the texture argument is the texture color for this
+	// texture stage. Permissions are read-only.
 	TA_TEXTURE = C.D3DTA_TEXTURE
-	// D3DTA_TFACTOR means the texture argument is the texture factor set in a
+	// TA_TFACTOR means the texture argument is the texture factor set in a
+	// previous call to the SetRenderState with the RS_TEXTUREFACTOR
+	// render-state value. Permissions are read-only.
 	TA_TFACTOR = C.D3DTA_TFACTOR
-	// D3DTA_ALPHAREPLICATE replicates the alpha information to all color
+	// TA_ALPHAREPLICATE replicates the alpha information to all color channels
+	// before the operation completes. This is a read modifier.
 	TA_ALPHAREPLICATE = C.D3DTA_ALPHAREPLICATE
-	// D3DTA_COMPLEMENT takes the complement of the argument x, (1.0 - x). This
+	// TA_COMPLEMENT takes the complement of the argument x, (1.0 - x). This is
+	// a read modifier.
 	TA_COMPLEMENT = C.D3DTA_COMPLEMENT
-	// D3DTEXOPCAPS_ADD means the D3DTOP_ADD texture-blending operation is
+	// TEXOPCAPS_ADD means the TOP_ADD texture-blending operation is supported.
 	TEXOPCAPS_ADD = C.D3DTEXOPCAPS_ADD
-	// D3DTEXOPCAPS_ADDSIGNED means the D3DTOP_ADDSIGNED texture-blending
+	// TEXOPCAPS_ADDSIGNED means the TOP_ADDSIGNED texture-blending operation
+	// is supported.
 	TEXOPCAPS_ADDSIGNED = C.D3DTEXOPCAPS_ADDSIGNED
-	// D3DTEXOPCAPS_ADDSIGNED2X means the D3DTOP_ADDSIGNED2X texture-blending
+	// TEXOPCAPS_ADDSIGNED2X means the TOP_ADDSIGNED2X texture-blending
+	// operation is supported.
 	TEXOPCAPS_ADDSIGNED2X = C.D3DTEXOPCAPS_ADDSIGNED2X
-	// D3DTEXOPCAPS_ADDSMOOTH means the D3DTOP_ADDSMOOTH texture-blending
+	// TEXOPCAPS_ADDSMOOTH means the TOP_ADDSMOOTH texture-blending operation
+	// is supported.
 	TEXOPCAPS_ADDSMOOTH = C.D3DTEXOPCAPS_ADDSMOOTH
-	// D3DTEXOPCAPS_BLENDCURRENTALPHA means the D3DTOP_BLENDCURRENTALPHA
+	// TEXOPCAPS_BLENDCURRENTALPHA means the TOP_BLENDCURRENTALPHA
+	// texture-blending operation is supported.
 	TEXOPCAPS_BLENDCURRENTALPHA = C.D3DTEXOPCAPS_BLENDCURRENTALPHA
-	// D3DTEXOPCAPS_BLENDDIFFUSEALPHA means the D3DTOP_BLENDDIFFUSEALPHA
+	// TEXOPCAPS_BLENDDIFFUSEALPHA means the TOP_BLENDDIFFUSEALPHA
+	// texture-blending operation is supported.
 	TEXOPCAPS_BLENDDIFFUSEALPHA = C.D3DTEXOPCAPS_BLENDDIFFUSEALPHA
-	// D3DTEXOPCAPS_BLENDFACTORALPHA means the D3DTOP_BLENDFACTORALPHA
+	// TEXOPCAPS_BLENDFACTORALPHA means the TOP_BLENDFACTORALPHA
+	// texture-blending operation is supported.
 	TEXOPCAPS_BLENDFACTORALPHA = C.D3DTEXOPCAPS_BLENDFACTORALPHA
-	// D3DTEXOPCAPS_BLENDTEXTUREALPHA means the D3DTOP_BLENDTEXTUREALPHA
+	// TEXOPCAPS_BLENDTEXTUREALPHA means the TOP_BLENDTEXTUREALPHA
+	// texture-blending operation is supported.
 	TEXOPCAPS_BLENDTEXTUREALPHA = C.D3DTEXOPCAPS_BLENDTEXTUREALPHA
-	// D3DTEXOPCAPS_BLENDTEXTUREALPHAPM means the D3DTOP_BLENDTEXTUREALPHAPM
+	// TEXOPCAPS_BLENDTEXTUREALPHAPM means the TOP_BLENDTEXTUREALPHAPM
+	// texture-blending operation is supported.
 	TEXOPCAPS_BLENDTEXTUREALPHAPM = C.D3DTEXOPCAPS_BLENDTEXTUREALPHAPM
-	// D3DTEXOPCAPS_BUMPENVMAP means the D3DTOP_BUMPENVMAP texture-blending
+	// TEXOPCAPS_BUMPENVMAP means the TOP_BUMPENVMAP texture-blending operation
+	// is supported.
 	TEXOPCAPS_BUMPENVMAP = C.D3DTEXOPCAPS_BUMPENVMAP
-	// D3DTEXOPCAPS_BUMPENVMAPLUMINANCE means the D3DTOP_BUMPENVMAPLUMINANCE
+	// TEXOPCAPS_BUMPENVMAPLUMINANCE means the TOP_BUMPENVMAPLUMINANCE
+	// texture-blending operation is supported.
 	TEXOPCAPS_BUMPENVMAPLUMINANCE = C.D3DTEXOPCAPS_BUMPENVMAPLUMINANCE
-	// D3DTEXOPCAPS_DISABLE means the D3DTOP_DISABLE texture-blending operation
+	// TEXOPCAPS_DISABLE means the TOP_DISABLE texture-blending operation is
+	// supported.
 	TEXOPCAPS_DISABLE = C.D3DTEXOPCAPS_DISABLE
-	// D3DTEXOPCAPS_DOTPRODUCT3 means the D3DTOP_DOTPRODUCT3 texture-blending
+	// TEXOPCAPS_DOTPRODUCT3 means the TOP_DOTPRODUCT3 texture-blending
+	// operation is supported.
 	TEXOPCAPS_DOTPRODUCT3 = C.D3DTEXOPCAPS_DOTPRODUCT3
-	// D3DTEXOPCAPS_LERP means the D3DTOP_LERP texture-blending operation is
+	// TEXOPCAPS_LERP means the TOP_LERP texture-blending operation is
+	// supported.
 	TEXOPCAPS_LERP = C.D3DTEXOPCAPS_LERP
-	// D3DTEXOPCAPS_MODULATE means the D3DTOP_MODULATE texture-blending
+	// TEXOPCAPS_MODULATE means the TOP_MODULATE texture-blending operation is
+	// supported.
 	TEXOPCAPS_MODULATE = C.D3DTEXOPCAPS_MODULATE
-	// D3DTEXOPCAPS_MODULATE2X means the D3DTOP_MODULATE2X texture-blending
+	// TEXOPCAPS_MODULATE2X means the TOP_MODULATE2X texture-blending operation
+	// is supported.
 	TEXOPCAPS_MODULATE2X = C.D3DTEXOPCAPS_MODULATE2X
-	// D3DTEXOPCAPS_MODULATE4X means the D3DTOP_MODULATE4X texture-blending
+	// TEXOPCAPS_MODULATE4X means the TOP_MODULATE4X texture-blending operation
+	// is supported.
 	TEXOPCAPS_MODULATE4X = C.D3DTEXOPCAPS_MODULATE4X
-	// D3DTEXOPCAPS_MODULATEALPHA_ADDCOLOR means the
+	// TEXOPCAPS_MODULATEALPHA_ADDCOLOR means the TOP_MODULATEALPHA_ADDCOLOR
+	// texture-blending operation is supported.
 	TEXOPCAPS_MODULATEALPHA_ADDCOLOR = C.D3DTEXOPCAPS_MODULATEALPHA_ADDCOLOR
-	// D3DTEXOPCAPS_MODULATECOLOR_ADDALPHA means the
+	// TEXOPCAPS_MODULATECOLOR_ADDALPHA means the TOP_MODULATECOLOR_ADDALPHA
+	// texture-blending operation is supported.
 	TEXOPCAPS_MODULATECOLOR_ADDALPHA = C.D3DTEXOPCAPS_MODULATECOLOR_ADDALPHA
-	// D3DTEXOPCAPS_MODULATEINVALPHA_ADDCOLOR means the
+	// TEXOPCAPS_MODULATEINVALPHA_ADDCOLOR means the
+	// TOP_MODULATEINVALPHA_ADDCOLOR texture-blending operation is supported.
 	TEXOPCAPS_MODULATEINVALPHA_ADDCOLOR = C.D3DTEXOPCAPS_MODULATEINVALPHA_ADDCOLOR
-	// D3DTEXOPCAPS_MODULATEINVCOLOR_ADDALPHA means the
+	// TEXOPCAPS_MODULATEINVCOLOR_ADDALPHA means the
+	// TOP_MODULATEINVCOLOR_ADDALPHA texture-blending operation is supported.
 	TEXOPCAPS_MODULATEINVCOLOR_ADDALPHA = C.D3DTEXOPCAPS_MODULATEINVCOLOR_ADDALPHA
-	// D3DTEXOPCAPS_MULTIPLYADD means the D3DTOP_MULTIPLYADD texture-blending
+	// TEXOPCAPS_MULTIPLYADD means the TOP_MULTIPLYADD texture-blending
+	// operation is supported.
 	TEXOPCAPS_MULTIPLYADD = C.D3DTEXOPCAPS_MULTIPLYADD
-	// D3DTEXOPCAPS_PREMODULATE means the D3DTOP_PREMODULATE texture-blending
+	// TEXOPCAPS_PREMODULATE means the TOP_PREMODULATE texture-blending
+	// operation is supported.
 	TEXOPCAPS_PREMODULATE = C.D3DTEXOPCAPS_PREMODULATE
-	// D3DTEXOPCAPS_SELECTARG1 means the D3DTOP_SELECTARG1 texture-blending
+	// TEXOPCAPS_SELECTARG1 means the TOP_SELECTARG1 texture-blending operation
+	// is supported.
 	TEXOPCAPS_SELECTARG1 = C.D3DTEXOPCAPS_SELECTARG1
-	// D3DTEXOPCAPS_SELECTARG2 means the D3DTOP_SELECTARG2 texture-blending
+	// TEXOPCAPS_SELECTARG2 means the TOP_SELECTARG2 texture-blending operation
+	// is supported.
 	TEXOPCAPS_SELECTARG2 = C.D3DTEXOPCAPS_SELECTARG2
-	// D3DTEXOPCAPS_SUBTRACT means the D3DTOP_SUBTRACT texture-blending
+	// TEXOPCAPS_SUBTRACT means the TOP_SUBTRACT texture-blending operation is
+	// supported.
 	TEXOPCAPS_SUBTRACT = C.D3DTEXOPCAPS_SUBTRACT
-	// D3DTSS_TCI_PASSTHRU uses the specified texture coordinates contained
+	// TSS_TCI_PASSTHRU uses the specified texture coordinates contained within
+	// the vertex format. This value resolves to zero.
 	TSS_TCI_PASSTHRU = C.D3DTSS_TCI_PASSTHRU
-	// D3DTSS_TCI_CAMERASPACENORMAL uses the vertex normal, transformed to
+	// TSS_TCI_CAMERASPACENORMAL uses the vertex normal, transformed to camera
+	// space, as the input texture coordinates for this stage's texture
+	// transformation.
 	TSS_TCI_CAMERASPACENORMAL = C.D3DTSS_TCI_CAMERASPACENORMAL
-	// D3DTSS_TCI_CAMERASPACEPOSITION uses the vertex position, transformed to
+	// TSS_TCI_CAMERASPACEPOSITION uses the vertex position, transformed to
+	// camera space, as the input texture coordinates for this stage's texture
+	// transformation.
 	TSS_TCI_CAMERASPACEPOSITION = C.D3DTSS_TCI_CAMERASPACEPOSITION
-	// D3DTSS_TCI_CAMERASPACEREFLECTIONVECTOR uses the reflection vector,
+	// TSS_TCI_CAMERASPACEREFLECTIONVECTOR uses the reflection vector,
+	// transformed to camera space, as the input texture coordinate for this
+	// stage's texture transformation. The reflection vector is computed from
+	// the input vertex position and normal vector.
 	TSS_TCI_CAMERASPACEREFLECTIONVECTOR = C.D3DTSS_TCI_CAMERASPACEREFLECTIONVECTOR
-	// D3DTSS_TCI_SPHEREMAP uses the specified texture coordinates for sphere
+	// TSS_TCI_SPHEREMAP uses the specified texture coordinates for sphere
+	// mapping.
 	TSS_TCI_SPHEREMAP = C.D3DTSS_TCI_SPHEREMAP
-	// D3DUSAGE_AUTOGENMIPMAP means the resource will automatically generate
+	// USAGE_AUTOGENMIPMAP means the resource will automatically generate
+	// mipmaps. See Automatic Generation of Mipmaps (Direct3D 9). Automatic
+	// generation of mipmaps is not supported for volume textures and depth
+	// stencil surfaces/textures. This usage is not valid for a resource in
+	// system memory (POOL_SYSTEMMEM).
 	USAGE_AUTOGENMIPMAP = C.D3DUSAGE_AUTOGENMIPMAP
-	// D3DUSAGE_DEPTHSTENCIL means the resource will be a depth stencil buffer.
+	// USAGE_DEPTHSTENCIL means the resource will be a depth stencil buffer.
+	// USAGE_DEPTHSTENCIL can only be used with POOL_DEFAULT.
 	USAGE_DEPTHSTENCIL = C.D3DUSAGE_DEPTHSTENCIL
-	// D3DUSAGE_DMAP means the resource will be a displacement map.
+	// USAGE_DMAP means the resource will be a displacement map.
 	USAGE_DMAP = C.D3DUSAGE_DMAP
-	// D3DUSAGE_DONOTCLIP indicates that the vertex buffer content will never
+	// USAGE_DONOTCLIP indicates that the vertex buffer content will never
+	// require clipping. When rendering with buffers that have this flag set,
+	// the RS_CLIPPING render state must be set to false.
 	USAGE_DONOTCLIP = C.D3DUSAGE_DONOTCLIP
-	// D3DUSAGE_DYNAMIC indicates that the vertex buffer requires dynamic
-	// D3DUSAGE_DYNAMIC and D3DPOOL_MANAGED are incompatible and should not be
-	// Textures can specify D3DUSAGE_DYNAMIC. However, managed textures cannot
+	// USAGE_DYNAMIC indicates that the vertex buffer requires dynamic memory
+	// use. This is useful for drivers because it enables them to decide where
+	// to place the buffer. In general, static vertex buffers are placed in
+	// video memory and dynamic vertex buffers are placed in AGP memory. Note
+	// that there is no separate static use. If you do not specify
+	// USAGE_DYNAMIC, the vertex buffer is made static. USAGE_DYNAMIC is
+	// strictly enforced through the LOCK_DISCARD and LOCK_NOOVERWRITE locking
+	// flags. As a result, LOCK_DISCARD and LOCK_NOOVERWRITE are valid only on
+	// vertex buffers created with USAGE_DYNAMIC. They are not valid flags on
+	// static vertex buffers.
+	// USAGE_DYNAMIC and POOL_MANAGED are incompatible and should not be used
+	// together.
+	// Textures can specify USAGE_DYNAMIC. However, managed textures cannot use
+	// USAGE_DYNAMIC.
 	USAGE_DYNAMIC = C.D3DUSAGE_DYNAMIC
-	// D3DUSAGE_NPATCHES indicates that the vertex buffer is to be used for
+	// USAGE_NPATCHES indicates that the vertex buffer is to be used for
+	// drawing N-patches.
 	USAGE_NPATCHES = C.D3DUSAGE_NPATCHES
-	// D3DUSAGE_POINTS indicates that the vertex or index buffer will be used
+	// USAGE_POINTS indicates that the vertex or index buffer will be used for
+	// drawing point sprites. The buffer will be loaded in system memory if
+	// software vertex processing is needed to emulate point sprites.
 	USAGE_POINTS = C.D3DUSAGE_POINTS
-	// D3DUSAGE_RENDERTARGET means the resource will be a render target.
+	// USAGE_RENDERTARGET means the resource will be a render target.
+	// USAGE_RENDERTARGET can only be used with POOL_DEFAULT.
 	USAGE_RENDERTARGET = C.D3DUSAGE_RENDERTARGET
-	// D3DUSAGE_RTPATCHES indicates that the vertex buffer is to be used for
+	// USAGE_RTPATCHES indicates that the vertex buffer is to be used for
+	// drawing high-order primitives.
 	USAGE_RTPATCHES = C.D3DUSAGE_RTPATCHES
-	// D3DUSAGE_SOFTWAREPROCESSING if this flag is used, vertex processing is
-	// The D3DUSAGE_SOFTWAREPROCESSING flag can be set when mixed-mode or
-	// D3DUSAGE_SOFTWAREPROCESSING is used with CheckDeviceFormat to find out
+	// USAGE_SOFTWAREPROCESSING if this flag is used, vertex processing is done
+	// in software. If this flag is not used, vertex processing is done in
+	// hardware.
+	// The USAGE_SOFTWAREPROCESSING flag can be set when mixed-mode or software
+	// vertex processing (CREATE_MIXED_VERTEXPROCESSING /
+	// CREATE_SOFTWARE_VERTEXPROCESSING) is enabled for that device.
+	// USAGE_SOFTWAREPROCESSING must be set for buffers to be used with
+	// software vertex processing in mixed mode, but it should not be set for
+	// the best possible performance when using hardware index processing in
+	// mixed mode (CREATE_HARDWARE_VERTEXPROCESSING). However, setting
+	// USAGE_SOFTWAREPROCESSING is the only option when a single buffer is used
+	// with both hardware and software vertex processing.
+	// USAGE_SOFTWAREPROCESSING is allowed for mixed and software devices.
+	// USAGE_SOFTWAREPROCESSING is used with CheckDeviceFormat to find out if a
+	// particular texture format can be used as a vertex texture during
+	// software vertex processing. If it can, the texture must be created in
+	// POOL_SCRATCH.
 	USAGE_SOFTWAREPROCESSING = C.D3DUSAGE_SOFTWAREPROCESSING
-	// D3DUSAGE_WRITEONLY informs the system that the application writes only
+	// USAGE_WRITEONLY informs the system that the application writes only to
+	// the vertex buffer. Using this flag enables the driver to choose the best
+	// memory location for efficient write operations and rendering. Attempts
+	// to read from a vertex buffer that is created with this capability will
+	// fail. Buffers created with POOL_DEFAULT that do not specify
+	// USAGE_WRITEONLY may suffer a severe performance penalty. USAGE_WRITEONLY
+	// only affects the performance of POOL_DEFAULT buffers.
 	USAGE_WRITEONLY = C.D3DUSAGE_WRITEONLY
-	// D3DUSAGE_QUERY_FILTER queries the resource format to see if it supports
+	// USAGE_QUERY_FILTER queries the resource format to see if it supports
+	// texture filter types other than TEXF_POINT (which is always supported).
 	USAGE_QUERY_FILTER = C.D3DUSAGE_QUERY_FILTER
-	// D3DUSAGE_QUERY_LEGACYBUMPMAP queries the resource about a legacy bump
+	// USAGE_QUERY_LEGACYBUMPMAP queries the resource about a legacy bump map.
 	USAGE_QUERY_LEGACYBUMPMAP = C.D3DUSAGE_QUERY_LEGACYBUMPMAP
-	// D3DUSAGE_QUERY_POSTPIXELSHADER_BLENDING queries the resource to verify
+	// USAGE_QUERY_POSTPIXELSHADER_BLENDING queries the resource to verify
+	// support for post pixel shader blending support. If CheckDeviceFormat
+	// fails with USAGE_QUERY_POSTPIXELSHADER_BLENDING, post pixel blending
+	// operations are not supported. These include alpha test, pixel fog,
+	// render-target blending, color write enable, and dithering.
 	USAGE_QUERY_POSTPIXELSHADER_BLENDING = C.D3DUSAGE_QUERY_POSTPIXELSHADER_BLENDING
-	// D3DUSAGE_QUERY_SRGBREAD queries the resource to verify if a texture
+	// USAGE_QUERY_SRGBREAD queries the resource to verify if a texture
+	// supports gamma correction during a read operation.
 	USAGE_QUERY_SRGBREAD = C.D3DUSAGE_QUERY_SRGBREAD
-	// D3DUSAGE_QUERY_SRGBWRITE queries the resource to verify if a texture
+	// USAGE_QUERY_SRGBWRITE queries the resource to verify if a texture
+	// supports gamma correction during a write operation.
 	USAGE_QUERY_SRGBWRITE = C.D3DUSAGE_QUERY_SRGBWRITE
-	// D3DUSAGE_QUERY_VERTEXTEXTURE queries the resource to verify support for
+	// USAGE_QUERY_VERTEXTEXTURE queries the resource to verify support for
+	// vertex shader texture sampling.
 	USAGE_QUERY_VERTEXTEXTURE = C.D3DUSAGE_QUERY_VERTEXTEXTURE
-	// D3DUSAGE_QUERY_WRAPANDMIP queries the resource to verify support for
+	// USAGE_QUERY_WRAPANDMIP queries the resource to verify support for
+	// texture wrapping and mip-mapping.
 	USAGE_QUERY_WRAPANDMIP = C.D3DUSAGE_QUERY_WRAPANDMIP
-	// D3DVERTEXTEXTURESAMPLER0 identifies the texture sampler used by vertex
+	// VERTEXTEXTURESAMPLER0 identifies the texture sampler used by vertex
+	// shaders.
 	VERTEXTEXTURESAMPLER0 = C.D3DVERTEXTEXTURESAMPLER0
-	// D3DVERTEXTEXTURESAMPLER1 identifies the texture sampler used by vertex
+	// VERTEXTEXTURESAMPLER1 identifies the texture sampler used by vertex
+	// shaders.
 	VERTEXTEXTURESAMPLER1 = C.D3DVERTEXTEXTURESAMPLER1
-	// D3DVERTEXTEXTURESAMPLER2 identifies the texture sampler used by vertex
+	// VERTEXTEXTURESAMPLER2 identifies the texture sampler used by vertex
+	// shaders.
 	VERTEXTEXTURESAMPLER2 = C.D3DVERTEXTEXTURESAMPLER2
-	// D3DVERTEXTEXTURESAMPLER3 identifies the texture sampler used by vertex
+	// VERTEXTEXTURESAMPLER3 identifies the texture sampler used by vertex
+	// shaders.
 	VERTEXTEXTURESAMPLER3 = C.D3DVERTEXTEXTURESAMPLER3
-	// D3DVS20CAPS_PREDICATION indicates that instruction predication is
+	// VS20CAPS_PREDICATION indicates that instruction predication is
+	// supported. See setp_comp - vs.
 	VS20CAPS_PREDICATION = C.D3DVS20CAPS_PREDICATION
-	// D3DVS20_MAX_DYNAMICFLOWCONTROLDEPTH is the maximum level of nesting of
+	// VS20_MAX_DYNAMICFLOWCONTROLDEPTH is the maximum level of nesting of
+	// dynamic flow control instructions (break - vs, break_comp - vs, breakp -
+	// vs, if_comp - vs, if_comp - vs, if pred - vs).
 	VS20_MAX_DYNAMICFLOWCONTROLDEPTH = C.D3DVS20_MAX_DYNAMICFLOWCONTROLDEPTH
-	// D3DVS20_MIN_DYNAMICFLOWCONTROLDEPTH is the minimum level of nesting of
+	// VS20_MIN_DYNAMICFLOWCONTROLDEPTH is the minimum level of nesting of
+	// dynamic flow control instructions (break - vs, break_comp - vs, breakp -
+	// vs, if_comp - vs, if_comp - vs, if pred - vs).
 	VS20_MIN_DYNAMICFLOWCONTROLDEPTH = C.D3DVS20_MIN_DYNAMICFLOWCONTROLDEPTH
-	// D3DVS20_MAX_NUMTEMPS is the maximum number of temporary registers
+	// VS20_MAX_NUMTEMPS is the maximum number of temporary registers supported.
 	VS20_MAX_NUMTEMPS = C.D3DVS20_MAX_NUMTEMPS
-	// D3DVS20_MIN_NUMTEMPS is the minimum number of temporary registers
+	// VS20_MIN_NUMTEMPS is the minimum number of temporary registers supported.
 	VS20_MIN_NUMTEMPS = C.D3DVS20_MIN_NUMTEMPS
-	// D3DVS20_MAX_STATICFLOWCONTROLDEPTH is the maximum depth of nesting of
+	// VS20_MAX_STATICFLOWCONTROLDEPTH is the maximum depth of nesting of the
+	// loop - vs/rep - vs and call - vs/callnz bool - vs instructions.
 	VS20_MAX_STATICFLOWCONTROLDEPTH = C.D3DVS20_MAX_STATICFLOWCONTROLDEPTH
-	// D3DVS20_MIN_STATICFLOWCONTROLDEPTH is the minimum depth of nesting of
+	// VS20_MIN_STATICFLOWCONTROLDEPTH is the minimum depth of nesting of the
+	// loop - vs/rep - vs and call - vs/callnz bool - vs instructions.
 	VS20_MIN_STATICFLOWCONTROLDEPTH = C.D3DVS20_MIN_STATICFLOWCONTROLDEPTH
-	// D3DVTXPCAPS_DIRECTIONALLIGHTS means the device can do directional lights.
+	// VTXPCAPS_DIRECTIONALLIGHTS means the device can do directional lights.
 	VTXPCAPS_DIRECTIONALLIGHTS = C.D3DVTXPCAPS_DIRECTIONALLIGHTS
-	// D3DVTXPCAPS_LOCALVIEWER means the device can do local viewer.
+	// VTXPCAPS_LOCALVIEWER means the device can do local viewer.
 	VTXPCAPS_LOCALVIEWER = C.D3DVTXPCAPS_LOCALVIEWER
-	// D3DVTXPCAPS_MATERIALSOURCE7 means the device supports the color material
+	// VTXPCAPS_MATERIALSOURCE7 means the device supports the color material
+	// states: RS_AMBIENTMATERIALSOURCE, RS_DIFFUSEMATERIALSOURCE,
+	// RS_EMISSIVEMATERIALSOURCE, and RS_SPECULARMATERIALSOURCE.
 	VTXPCAPS_MATERIALSOURCE7 = C.D3DVTXPCAPS_MATERIALSOURCE7
-	// D3DVTXPCAPS_NO_TEXGEN_NONLOCALVIEWER means the device does not support
+	// VTXPCAPS_NO_TEXGEN_NONLOCALVIEWER means the device does not support
+	// texture generation in non-local viewer mode.
 	VTXPCAPS_NO_TEXGEN_NONLOCALVIEWER = C.D3DVTXPCAPS_NO_TEXGEN_NONLOCALVIEWER
-	// D3DVTXPCAPS_POSITIONALLIGHTS means the device can do positional lights
+	// VTXPCAPS_POSITIONALLIGHTS means the device can do positional lights
+	// (includes point and spot).
 	VTXPCAPS_POSITIONALLIGHTS = C.D3DVTXPCAPS_POSITIONALLIGHTS
-	// D3DVTXPCAPS_TEXGEN means the device can do texgen.
+	// VTXPCAPS_TEXGEN means the device can do texgen.
 	VTXPCAPS_TEXGEN = C.D3DVTXPCAPS_TEXGEN
-	// D3DVTXPCAPS_TEXGEN_SPHEREMAP means the device supports
+	// VTXPCAPS_TEXGEN_SPHEREMAP means the device supports TSS_TCI_SPHEREMAP.
 	VTXPCAPS_TEXGEN_SPHEREMAP = C.D3DVTXPCAPS_TEXGEN_SPHEREMAP
-	// D3DVTXPCAPS_TWEENING means the device can do vertex tweening.
+	// VTXPCAPS_TWEENING means the device can do vertex tweening.
 	VTXPCAPS_TWEENING = C.D3DVTXPCAPS_TWEENING
 	// S_OK indicates that no error occurred.
 	S_OK = C.S_OK
 	// S_PRESENT_OCCLUDED indicates that the presentation area is occluded.
+	// Occlusion means that the presentation window is minimized or another
+	// device entered the fullscreen mode on the same monitor as the
+	// presentation window and the presentation window is completely on that
+	// monitor. Occlusion will not occur if the client area is covered by
+	// another Window.
 	// Occluded applications can continue rendering and all calls will succeed,
+	// but the occluded presentation window will not be updated. Preferably the
+	// application should stop rendering to the presentation window using the
+	// device and keep calling CheckDeviceState until S_OK or
+	// S_PRESENT_MODE_CHANGED returns.
 	// Direct3D 9Ex only.
 	S_PRESENT_OCCLUDED = C.S_PRESENT_OCCLUDED
 	// S_PRESENT_MODE_CHANGED indicates that the desktop display mode has been
+	// changed. The application can continue rendering, but there might be
+	// color conversion/stretching. Pick a back buffer format similar to the
+	// current display mode, and call Reset to recreate the swap chains. The
+	// device will leave this state after a Reset is called. Direct3D 9Ex only.
 	S_PRESENT_MODE_CHANGED = C.S_PRESENT_MODE_CHANGED
-	// D3D_SDK_VERSION is must be used as the argument to Create.
+	// _SDK_VERSION is must be used as the argument to Create.
 	SDK_VERSION = C.D3D_SDK_VERSION
-	// D3D_MAX_SIMULTANEOUS_RENDERTARGETS is the maximum number of
+	// _MAX_SIMULTANEOUS_RENDERTARGETS is the maximum number of rendertargets.
 	MAX_SIMULTANEOUS_RENDERTARGETS = C.D3D_MAX_SIMULTANEOUS_RENDERTARGETS
-	// D3DDMAPSAMPLER is 256, which is the maximum number of texture samplers.
+	// DMAPSAMPLER is 256, which is the maximum number of texture samplers.
 	DMAPSAMPLER = C.D3DDMAPSAMPLER
-	// D3DDP_MAXTEXCOORD is the maximum number of texture coordinates.
+	// DP_MAXTEXCOORD is the maximum number of texture coordinates.
 	DP_MAXTEXCOORD = C.D3DDP_MAXTEXCOORD
 	// MAXD3DDECLLENGTH is the maximum number of elements in a vertex
+	// declaration (does not include "end" marker vertex element).
 	MAXD3DDECLLENGTH = C.MAXD3DDECLLENGTH
 	// MAXD3DDECLUSAGEINDEX is the maximum index (0-15) that can be used in a
+	// vertex declaration.
 	MAXD3DDECLUSAGEINDEX = C.MAXD3DDECLUSAGEINDEX
 )
