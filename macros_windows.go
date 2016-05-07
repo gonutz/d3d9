@@ -1,12 +1,12 @@
 package d3d9
 
 // PSVersion creates a pixel shader version token.
-func PSVersion(major, minor int) uint32 {
+func PSVersion(major, minor uint) uint32 {
 	return uint32(0xFFFF0000 | ((major) << 8) | (minor))
 }
 
 // VSVersion creates a vertex shader version token.
-func VSVersion(major, minor int) uint32 {
+func VSVersion(major, minor uint) uint32 {
 	return uint32(0xFFFE0000 | ((major) << 8) | (minor))
 }
 
