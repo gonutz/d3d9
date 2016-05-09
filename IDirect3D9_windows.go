@@ -189,7 +189,7 @@ func (obj Direct3D) Release() {
 func Create(version uint) (obj Direct3D, err error) {
 	Direct3DCreate9, err := syscall.GetProcAddress(dll, "Direct3DCreate9")
 	if err != nil {
-		return Direct3D{}, err
+		return Direct3D{}, errors.New("getting Direct3DCreate9 proc address: " + err.Error())
 	}
 	result, _, callErr := syscall.Syscall(
 		Direct3DCreate9,
@@ -199,7 +199,7 @@ func Create(version uint) (obj Direct3D, err error) {
 		0,
 	)
 	if callErr != 0 {
-		return Direct3D{}, callErr
+		return Direct3D{}, errors.New("calling Direct3DCreate9: " + callErr.Error())
 	}
 	if result == 0 {
 		return Direct3D{}, errors.New("Direct3DCreate9 returned nil")
