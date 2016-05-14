@@ -191,16 +191,13 @@ func Create(version uint) (obj Direct3D, err error) {
 	if err != nil {
 		return Direct3D{}, errors.New("getting Direct3DCreate9 proc address: " + err.Error())
 	}
-	result, _, callErr := syscall.Syscall(
+	result, _, _ := syscall.Syscall(
 		Direct3DCreate9,
 		1,
 		uintptr(version),
 		0,
 		0,
 	)
-	if callErr != 0 {
-		return Direct3D{}, errors.New("calling Direct3DCreate9: " + callErr.Error())
-	}
 	if result == 0 {
 		return Direct3D{}, errors.New("Direct3DCreate9 returned nil")
 	}
