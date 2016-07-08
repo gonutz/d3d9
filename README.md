@@ -17,7 +17,7 @@ There are some differences in the names in Go, since the package is named `d3d9`
 
 - Interfaces drop the `IDirect3D` prefix and the `9` suffix, e.g. `IDirect3DDevice9` becomes `d3d9.Device`. The only exception is `IDirect3D9` which in Go becomes `Direct3D`.
 - Constants and enumerations drop the `D3D` prefix, otherwise they are the same and keep the upper case convention so users of Direct3D can easily find what they are looking for. For example `D3DADAPTER_DEFAULT` becomes `d3d9.ADAPTER_DEFAULT`, `D3DFMT_R8G8B8` becomes `d3d9.FMT_R8G8B8` etc.
-- Structs, like constants, only drop the `D3D` prefix, they too keep the upper case naming convention, so `D3DRANGE` becomes `RANGE`. There is one exception to this, `D3DRECT` is still `D3DRECT` because the API also uses Windows' `RECT` type and these are two distinct types.
+- Structs, like constants, only drop the `D3D` prefix, they too keep the upper case naming convention, so `D3DRANGE` becomes `d3d9.RANGE`. There is one exception to this, `D3DRECT` is still `d3d9.D3DRECT` because the API also uses Windows' `RECT` type so the name `d3d9.RECT` is used for that.
 - Error constants also drop the `D3D` prefix so `D3DERR_OUTOFVIDEOMEMORY` becomes `ERR_OUTOFVIDEOMEMORY`. However, the interface functions do not return these constants, they return Go `error`s instead of `HRESULT`s.
 - Instead of returning `HRESULT`, Direct3D9 functions return `d3d9.Error` which implements the standard Go error interface and has an additional function `Code() int` which returns the error code. This code can be checked against the defined error constants. If a function succeeds it returns `nil`.
 
