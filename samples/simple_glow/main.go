@@ -33,13 +33,17 @@ func main() {
 	check(err)
 	defer d3d.Release()
 
-	device, _, err := d3d.CreateDevice(d3d9.ADAPTER_DEFAULT, d3d9.DEVTYPE_HAL,
-		windowHandle, d3d9.CREATE_HARDWARE_VERTEXPROCESSING,
+	device, _, err := d3d.CreateDevice(
+		d3d9.ADAPTER_DEFAULT,
+		d3d9.DEVTYPE_HAL,
+		windowHandle,
+		d3d9.CREATE_HARDWARE_VERTEXPROCESSING,
 		d3d9.PRESENT_PARAMETERS{
 			Windowed:      true,
 			SwapEffect:    d3d9.SWAPEFFECT_DISCARD,
 			HDeviceWindow: windowHandle,
-		})
+		},
+	)
 	check(err)
 	defer device.Release()
 
