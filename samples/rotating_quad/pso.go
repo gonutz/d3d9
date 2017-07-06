@@ -1,18 +1,5 @@
 package main
 
-/*
-pso is the pixel shader object code (compiled with fxc) for the code:
-
-struct input {};
-
-struct output {
-	float4 color : COLOR0;
-};
-
-void main(in input IN, out output OUT) {
-	OUT.color = float4(1, 0, 0, 1);
-}
-*/
 var pso = []byte{
 	0x00, 0x02, 0xff, 0xff, 0xfe, 0xff, 0x17, 0x00,
 	0x43, 0x54, 0x41, 0x42, 0x1c, 0x00, 0x00, 0x00,

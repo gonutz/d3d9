@@ -2,13 +2,11 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/gonutz/d3d9"
 )
 
 func main() {
-	check(d3d9.Init())
-	defer d3d9.Close()
-
 	d3d, err := d3d9.Create(d3d9.SDK_VERSION)
 	check(err)
 	defer d3d.Release()

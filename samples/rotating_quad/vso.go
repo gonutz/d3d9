@@ -1,22 +1,5 @@
 package main
 
-/*
-vso is the vertex shader object code (compiled with fxc) for the code:
-
-float4x4 mvp : register(c0);
-
-struct input {
-	float4 position : POSITION;
-};
-
-struct output {
-	float4 position : POSITION;
-};
-
-void main(in input IN, out output OUT) {
-	OUT.position = mul(IN.position, mvp);
-}
-*/
 var vso = []byte{
 	0x00, 0x02, 0xfe, 0xff, 0xfe, 0xff, 0x21, 0x00,
 	0x43, 0x54, 0x41, 0x42, 0x1c, 0x00, 0x00, 0x00,

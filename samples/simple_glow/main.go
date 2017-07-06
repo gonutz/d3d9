@@ -1,13 +1,11 @@
 package main
 
-//#include <windows.h>
-import "C"
 import (
-	"github.com/AllenDang/gform"
-	"github.com/AllenDang/w32"
-	"github.com/gonutz/d3d9"
 	"runtime"
-	"unsafe"
+
+	"github.com/AllenDang/gform"
+	"github.com/gonutz/d3d9"
+	"github.com/gonutz/w32"
 )
 
 func init() {
@@ -17,17 +15,12 @@ func init() {
 func main() {
 	// setup gform and create a window
 	gform.Init()
-
 	form := gform.NewForm(nil)
-	windowHandle := unsafe.Pointer(form.Handle())
+	windowHandle := form.Handle()
 	form.Show()
 	form.OnClose().Bind(func(*gform.EventArg) {
-		w32.DestroyWindow(form.Handle())
+		w32.DestroyWindow(w32.HWND(form.Handle()))
 	})
-
-	// set up Direct3D9
-	check(d3d9.Init())
-	defer d3d9.Close()
 
 	d3d, err := d3d9.Create(d3d9.SDK_VERSION)
 	check(err)
@@ -36,21 +29,21 @@ func main() {
 	device, _, err := d3d.CreateDevice(
 		d3d9.ADAPTER_DEFAULT,
 		d3d9.DEVTYPE_HAL,
-		windowHandle,
+		d3d9.HWND(windowHandle),
 		d3d9.CREATE_HARDWARE_VERTEXPROCESSING,
 		d3d9.PRESENT_PARAMETERS{
-			Windowed:      true,
+			Windowed:      1,
 			SwapEffect:    d3d9.SWAPEFFECT_DISCARD,
-			HDeviceWindow: windowHandle,
+			HDeviceWindow: d3d9.HWND(windowHandle),
 		},
 	)
 	check(err)
 	defer device.Release()
 
 	// create a timer that ticks every 10ms and register a callback for it
-	C.SetTimer(C.HWND(windowHandle), 1, 10, nil)
+	w32.SetTimer(w32.HWND(windowHandle), 1, 10, 0)
 	red, dRed := 255, -1
-	form.Bind(C.WM_TIMER, func(*gform.EventArg) {
+	form.Bind(w32.WM_TIMER, func(*gform.EventArg) {
 		// clear the screen to the current color
 		check(device.Clear(
 			nil,
@@ -66,7 +59,7 @@ func main() {
 			dRed = -1
 		}
 		red += dRed
-		check(device.Present(nil, nil, nil, nil))
+		check(device.Present(nil, nil, 0, nil))
 	})
 
 	gform.RunMainLoop()

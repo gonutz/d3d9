@@ -1,7 +1,5 @@
 package d3d9
 
-//#include <windows.h>
-import "C"
 import "strconv"
 
 // Error is returned by all Direct3D9 functions. It encapsulates the error code
@@ -17,19 +15,20 @@ type Error interface {
 	// instead of a non-nil error with that code in it. This way, functions
 	// behave in a standard Go way, returning nil as the error in case of
 	// success and only returning non-nil errors if something went wrong.
-	Code() int
+	Code() int32
 }
 
-func toErr(result C.HRESULT) Error {
-	if result >= 0 {
+func toErr(result uintptr) Error {
+	res := hResultError(result) // case to signed int
+	if res >= 0 {
 		return nil
 	}
-	return hResultError(result)
+	return res
 }
 
-type hResultError C.HRESULT
+type hResultError int32
 
-func (r hResultError) Code() int { return int(r) }
+func (r hResultError) Code() int32 { return int32(r) }
 
 func (r hResultError) Error() string {
 	switch r {
@@ -89,8 +88,6 @@ func (r hResultError) Error() string {
 		return "cannot protect content"
 	case ERR_UNSUPPORTEDCRYPTO:
 		return "unsupported crypto"
-	case ERR_PRESENT_STATISTICS_DISJOINT:
-		return "present statistics disjoint"
 
 	case E_FAIL:
 		return "fail"

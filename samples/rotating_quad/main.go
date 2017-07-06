@@ -1,10 +1,12 @@
 package main
 
 import (
-	"github.com/gonutz/d3d9"
-	"github.com/veandco/go-sdl2/sdl"
 	"math"
 	"runtime"
+
+	"github.com/AllenDang/gform"
+	"github.com/gonutz/d3d9"
+	"github.com/gonutz/w32"
 )
 
 func init() {
@@ -12,22 +14,18 @@ func init() {
 }
 
 func main() {
-	// set up SDL2, init nothing as we will be initializing D3D ourselves
-	check(sdl.Init(0))
-	defer sdl.Quit()
-
-	window, err := sdl.CreateWindow("D3D9 in Go", 100, 100, 640, 640, 0)
-	check(err)
-	defer window.Destroy()
-
-	// this gets the Windows window handle for the native window
-	info, err := window.GetWMInfo()
-	check(err)
-	windowHandle := info.GetWindowsInfo().Window
-
-	// set up Direct3D9
-	check(d3d9.Init())
-	defer d3d9.Close()
+	// setup gform and create a window
+	gform.Init()
+	form := gform.NewForm(nil)
+	windowHandle := form.Handle()
+	// we want a square window interior, but the window has a title bar and
+	// borders left and right, so add some pixels to compensate for it; this is
+	// just a sample, the window content will be square enough for our purposes
+	form.SetSize(520, 540)
+	form.Show()
+	form.OnClose().Bind(func(*gform.EventArg) {
+		w32.DestroyWindow(w32.HWND(form.Handle()))
+	})
 
 	d3d, err := d3d9.Create(d3d9.SDK_VERSION)
 	check(err)
@@ -36,12 +34,12 @@ func main() {
 	device, _, err := d3d.CreateDevice(
 		d3d9.ADAPTER_DEFAULT,
 		d3d9.DEVTYPE_HAL,
-		windowHandle,
+		d3d9.HWND(windowHandle),
 		d3d9.CREATE_HARDWARE_VERTEXPROCESSING,
 		d3d9.PRESENT_PARAMETERS{
-			Windowed:      true,
+			Windowed:      1,
 			SwapEffect:    d3d9.SWAPEFFECT_DISCARD,
-			HDeviceWindow: windowHandle,
+			HDeviceWindow: d3d9.HWND(windowHandle),
 		},
 	)
 	check(err)
@@ -58,7 +56,7 @@ func main() {
 		d3d9.USAGE_WRITEONLY,
 		0,
 		d3d9.POOL_DEFAULT,
-		nil,
+		0,
 	)
 	check(err)
 	defer vb.Release()
@@ -87,17 +85,10 @@ func main() {
 	defer ps.Release()
 	check(device.SetPixelShader(ps))
 
-	// run the main event loop
+	// create a timer that ticks every 10ms and register a callback for it
 	rotation := float32(0)
-	running := true
-	for running {
-		for e := sdl.PollEvent(); e != nil; e = sdl.PollEvent() {
-			switch e.(type) {
-			case *sdl.QuitEvent:
-				running = false
-			}
-		}
-
+	w32.SetTimer(w32.HWND(windowHandle), 1, 10, 0)
+	form.Bind(w32.WM_TIMER, func(*gform.EventArg) {
 		// create a 4x4 model-view-projection matrix that rotates the
 		// rectangle about the Z-axis
 		s, c := math.Sincos(float64(rotation))
@@ -114,8 +105,10 @@ func main() {
 		check(device.BeginScene())
 		check(device.DrawPrimitive(d3d9.PT_TRIANGLESTRIP, 0, 2))
 		check(device.EndScene())
-		check(device.Present(nil, nil, nil, nil))
-	}
+		check(device.Present(nil, nil, 0, nil))
+	})
+
+	gform.RunMainLoop()
 }
 
 func check(err error) {

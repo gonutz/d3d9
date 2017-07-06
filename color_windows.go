@@ -1,8 +1,5 @@
 package d3d9
 
-//#include "d3d9wrapper.h"
-import "C"
-
 // COLOR represents a color with red, green, blue and alpha channels, 8 bits
 // each, in a 32 bit unsinged integer.
 type COLOR uint32
