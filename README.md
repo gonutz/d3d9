@@ -5,9 +5,11 @@ This library is a pure Go wrapper for Microsoft's Direct3D9 API.
 Here you can see the library in action, it was used for two 48 hour game jams.
 
 This is [my entry](https://github.com/gonutz/gophette) to the [GopherGala 2016](http://gophergala.com/):
-[![Gophette Screenshot](https://raw.githubusercontent.com/gonutz/gophette/master/screenshots/race.png)]
+
+![Gophette Screenshot](https://raw.githubusercontent.com/gonutz/gophette/master/screenshots/race.png)]
 
 And here is [my entry](https://github.com/gonutz/ld36) for the [Ludum Dare Game Jam 2016](http://ludumdare.com/compo/ludum-dare-36/?action=preview&uid=110557):
+
 ![Reinventing the Wheel Screenshot](http://ludumdare.com/compo/wp-content/compo2//570486/110557-shot0-1472432554.png-eq-900-500.jpg)
 
 # Installation
