@@ -19,7 +19,7 @@ type Error interface {
 }
 
 func toErr(result uintptr) Error {
-	res := hResultError(result) // case to signed int
+	res := hResultError(result) // cast to signed int
 	if res >= 0 {
 		return nil
 	}
