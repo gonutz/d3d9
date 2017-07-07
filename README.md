@@ -55,6 +55,8 @@ A real world usage of this library is [my entry](https://github.com/gonutz/gophe
 
 Another real world example is [my entry](https://github.com/gonutz/ld36) for the [Ludum Dare Game Jam 2016](http://ludumdare.com/compo/ludum-dare-36/?action=preview&uid=110557) which is Windows only.
 
+The [prototype library](https://github.com/gonutz/prototype) also uses `d3d9` on Windows.
+
 # Status
 The code started out as a rough version generated from the MSDN online documentation and was then manually refined to work well with Go and its conventions. It wraps the whole Direct3D9 API right now and adds some additional convenience functions for easy Go usage. However, `LOCKED_RECT` only has one function for setting the whole data rectangle at once, there is no simple way to set only sub-rectangles right now. Similarly the CubeTexture's `LOCKED_BOX` has no wrapper functions for getting and setting its data, yet. For now the raw `uintptr` memory pointers can be used along with the pitch values and in the future such functions can be added when needed.
 
