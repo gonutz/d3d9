@@ -363,8 +363,7 @@ type LOCKED_RECT struct {
 
 // SetAllBytes will fill the whole rect with the given data, taking into account
 // the rect's pitch. The given byte slice is expected to have the given stride
-// in bytes, i.e. one line in the given data is <stride> bytes in length. If the
-// byte slice is tightly packed, stride will be 0.
+// in bytes, i.e. one line in the given data is <srcStride> bytes in length.
 func (r LOCKED_RECT) SetAllBytes(data []byte, srcStride int) {
 	dest := r.PBits
 	destStride := int(r.Pitch)
