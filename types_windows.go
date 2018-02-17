@@ -378,14 +378,42 @@ func (r LOCKED_RECT) SetAllBytes(data []byte, srcStride int) {
 	srcSkip := uintptr(srcStride - stride)
 	d := dest
 	s := src
-	for y := 0; y < height; y++ {
-		for x := 0; x < stride; x++ {
-			*((*byte)(unsafe.Pointer(d))) = *((*byte)(unsafe.Pointer(s)))
-			d++
-			s++
+	if stride%8 == 0 {
+		// in this case we can speed up copying by using 8 byte wide uint64s
+		// instead of copying byte for byte
+		for y := 0; y < height; y++ {
+			for x := 0; x < stride; x += 8 {
+				*((*uint64)(unsafe.Pointer(d))) = *((*uint64)(unsafe.Pointer(s)))
+				d += 8
+				s += 8
+			}
+			d += destSkip
+			s += srcSkip
 		}
-		d += destSkip
-		s += srcSkip
+	} else if stride%4 == 0 {
+		// in this case we can speed up copying by using 4 byte wide uint32s
+		// instead of copying byte for byte
+		for y := 0; y < height; y++ {
+			for x := 0; x < stride; x += 4 {
+				*((*uint32)(unsafe.Pointer(d))) = *((*uint32)(unsafe.Pointer(s)))
+				d += 4
+				s += 4
+			}
+			d += destSkip
+			s += srcSkip
+		}
+	} else {
+		// in the unlikely case that stride is neither a multiple of 8 nor 4
+		// bytes, just copy byte for byte
+		for y := 0; y < height; y++ {
+			for x := 0; x < stride; x++ {
+				*((*byte)(unsafe.Pointer(d))) = *((*byte)(unsafe.Pointer(s)))
+				d++
+				s++
+			}
+			d += destSkip
+			s += srcSkip
+		}
 	}
 }
 
