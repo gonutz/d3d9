@@ -368,7 +368,7 @@ func (r LOCKED_RECT) SetAllBytes(data []byte, srcStride int) {
 	dest := r.PBits
 	destStride := int(r.Pitch)
 	src := uintptr(unsafe.Pointer(&data[0]))
-	height := len(data) / srcStride
+	height := (len(data) + srcStride - 1) / srcStride
 
 	stride := srcStride
 	if destStride < srcStride {
@@ -378,7 +378,7 @@ func (r LOCKED_RECT) SetAllBytes(data []byte, srcStride int) {
 	srcSkip := uintptr(srcStride - stride)
 	d := dest
 	s := src
-	if stride%8 == 0 {
+	if srcStride%8 == 0 && destStride%8 == 0 {
 		// in this case we can speed up copying by using 8 byte wide uint64s
 		// instead of copying byte for byte
 		for y := 0; y < height; y++ {
@@ -390,7 +390,7 @@ func (r LOCKED_RECT) SetAllBytes(data []byte, srcStride int) {
 			d += destSkip
 			s += srcSkip
 		}
-	} else if stride%4 == 0 {
+	} else if srcStride%4 == 0 && destStride%4 == 0 {
 		// in this case we can speed up copying by using 4 byte wide uint32s
 		// instead of copying byte for byte
 		for y := 0; y < height; y++ {
