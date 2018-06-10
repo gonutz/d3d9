@@ -19,18 +19,18 @@ type Error interface {
 }
 
 func toErr(result uintptr) Error {
-	res := hResultError(result) // cast to signed int
+	res := HResultError(result) // cast to signed int
 	if res >= 0 {
 		return nil
 	}
 	return res
 }
 
-type hResultError int32
+type HResultError int32
 
-func (r hResultError) Code() int32 { return int32(r) }
+func (r HResultError) Code() int32 { return int32(r) }
 
-func (r hResultError) Error() string {
+func (r HResultError) Error() string {
 	switch r {
 	case ERR_CONFLICTINGRENDERSTATE:
 		return "conflicting render state"
