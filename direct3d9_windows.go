@@ -153,6 +153,19 @@ func (obj *Direct3D) GetAdapterModeCount(adapter uint, format FORMAT) uint {
 // EnumAdapterModes queries the device to determine whether the specified
 // adapter supports the requested format and display mode. This method could be
 // used in a loop to enumerate all the available adapter modes.
+//
+// Allowed formats are as follows:
+//   FMT_A1R5G5B5
+//   FMT_A2R10G10B10
+//   FMT_A8R8G8B8
+//   FMT_R5G6B5
+//   FMT_X1R5G5B5
+//   FMT_X8R8G8B8
+//
+// EnumAdapterModes treats pixel formats 565 and 555 as equivalent, and returns
+// the correct version. The difference comes into play only when the application
+// locks the back buffer and there is an explicit flag that the application must
+// set in order to accomplish this.
 func (obj *Direct3D) EnumAdapterModes(
 	adapter uint,
 	format FORMAT,
@@ -345,7 +358,7 @@ func (obj *Direct3D) GetAdapterMonitor(adapter uint) HMONITOR {
 	return HMONITOR(ret)
 }
 
-// CreateDevice reates a device to represent the display adapter.
+// CreateDevice creates a device to represent the display adapter.
 func (obj *Direct3D) CreateDevice(
 	adapter uint,
 	deviceType DEVTYPE,
