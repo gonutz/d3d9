@@ -413,6 +413,10 @@ type LOCKED_RECT struct {
 // the rect's pitch. The given byte slice is expected to have the given stride
 // in bytes, i.e. one line in the given data is <srcStride> bytes in length.
 func (r LOCKED_RECT) SetAllBytes(data []byte, srcStride int) {
+	if len(data) == 0 {
+		return
+	}
+
 	dest := r.PBits
 	destStride := int(r.Pitch)
 	src := uintptr(unsafe.Pointer(&data[0]))
