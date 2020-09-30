@@ -9,6 +9,8 @@ import (
 )
 
 func main() {
+	// This sample starts by setting up a window using the Win32 API, skip down
+	// to line 44 for the D3D9 part.
 	runtime.LockOSThread()
 
 	const className = "fullscreen_window_class"
@@ -39,11 +41,13 @@ func main() {
 		0, 0, 0, nil,
 	)
 
+	// Initialize Direct3D9.
 	d3d, err := d3d9.Create(d3d9.SDK_VERSION)
 	check(err)
 	defer d3d.Release()
 
-	// use the first found display mode for going full screen
+	// EnumAdapterModes lets us inspect all supported graphics modes for our
+	// graphics card. We use the first one at index 0 to go full screen.
 	mode, err := d3d.EnumAdapterModes(0, d3d9.FMT_X8R8G8B8, 0)
 	check(err)
 
@@ -51,6 +55,10 @@ func main() {
 		d3d9.ADAPTER_DEFAULT,
 		d3d9.DEVTYPE_HAL,
 		d3d9.HWND(window),
+		// We use software emulation for this sample, as we do not render
+		// anything. In reality you would check for hardware support by
+		// inspecting the device capabilities and use hardware mode if
+		// available.
 		d3d9.CREATE_SOFTWARE_VERTEXPROCESSING,
 		d3d9.PRESENT_PARAMETERS{
 			Windowed:         0,
@@ -64,9 +72,11 @@ func main() {
 	check(err)
 	defer device.Release()
 
+	// Fill the screen with magic pink and call Present to show it.
 	check(device.Clear(nil, d3d9.CLEAR_TARGET, d3d9.ColorRGB(255, 0, 255), 0, 1))
 	check(device.Present(nil, nil, 0, nil))
 
+	// This is the main message loop that runs until the window is closed.
 	var msg w32.MSG
 	for w32.GetMessage(&msg, 0, 0, 0) != 0 {
 		w32.TranslateMessage(&msg)
