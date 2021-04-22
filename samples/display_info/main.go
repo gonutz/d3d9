@@ -19,7 +19,7 @@ func main() {
 		fmt.Printf("adapter %v has %v R8G8B8 modes:\n", adapter, modeCount)
 
 		for mode := uint(0); mode < modeCount; mode++ {
-			adapaterMode, err := d3d.EnumAdapterModes(
+			adapterMode, err := d3d.EnumAdapterModes(
 				adapter,
 				d3d9.FMT_X8R8G8B8,
 				mode,
@@ -28,9 +28,9 @@ func main() {
 			fmt.Printf(
 				"  mode %2d: %vx%v %vHz\n",
 				mode,
-				adapaterMode.Width,
-				adapaterMode.Height,
-				adapaterMode.RefreshRate,
+				adapterMode.Width,
+				adapterMode.Height,
+				adapterMode.RefreshRate,
 			)
 		}
 
