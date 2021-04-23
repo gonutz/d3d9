@@ -1,4 +1,4 @@
-module github.com/gonutz/d3d9/samples/fullscreen
+module github.com/gonutz/d3d9/samples/rotating_quad
 
 go 1.11
 
