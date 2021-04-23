@@ -2,25 +2,44 @@ package main
 
 import (
 	"runtime"
+	"syscall"
 
-	"github.com/AllenDang/gform"
 	"github.com/gonutz/d3d9"
-	"github.com/gonutz/w32"
+	"github.com/gonutz/w32/v2"
 )
 
-func init() {
-	runtime.LockOSThread()
-}
-
 func main() {
-	// setup gform and create a window
-	gform.Init()
-	form := gform.NewForm(nil)
-	windowHandle := form.Handle()
-	form.Show()
-	form.OnClose().Bind(func(*gform.EventArg) {
-		w32.DestroyWindow(w32.HWND(form.Handle()))
+	runtime.LockOSThread()
+
+	const className = "fullscreen_window_class"
+	classNamePtr, _ := syscall.UTF16PtrFromString(className)
+	w32.RegisterClassEx(&w32.WNDCLASSEX{
+		Cursor: w32.LoadCursor(0, w32.MakeIntResource(w32.IDC_ARROW)),
+		WndProc: syscall.NewCallback(func(window w32.HWND, msg uint32, w, l uintptr) uintptr {
+			switch msg {
+			case w32.WM_KEYDOWN:
+				if w == w32.VK_ESCAPE {
+					w32.SendMessage(window, w32.WM_CLOSE, 0, 0)
+				}
+				return 0
+			case w32.WM_DESTROY:
+				w32.PostQuitMessage(0)
+				return 0
+			default:
+				return w32.DefWindowProc(window, msg, w, l)
+			}
+		}),
+		ClassName: classNamePtr,
 	})
+
+	windowNamePtr, _ := syscall.UTF16PtrFromString("Simple Glow")
+	windowHandle := w32.CreateWindow(
+		classNamePtr,
+		windowNamePtr,
+		w32.WS_OVERLAPPEDWINDOW|w32.WS_VISIBLE,
+		w32.CW_USEDEFAULT, w32.CW_USEDEFAULT, 640, 480,
+		0, 0, 0, nil,
+	)
 
 	d3d, err := d3d9.Create(d3d9.SDK_VERSION)
 	check(err)
@@ -41,9 +60,14 @@ func main() {
 	defer device.Release()
 
 	// create a timer that ticks every 10ms and register a callback for it
-	w32.SetTimer(w32.HWND(windowHandle), 1, 10, 0)
+	w32.SetTimer(windowHandle, 1, 10, 0)
 	red, dRed := 255, -1
-	form.Bind(w32.WM_TIMER, func(*gform.EventArg) {
+
+	// This is the main message loop that runs until the window is closed.
+	var msg w32.MSG
+	for w32.GetMessage(&msg, 0, 0, 0) != 0 {
+		w32.TranslateMessage(&msg)
+
 		// clear the screen to the current color
 		check(device.Clear(
 			nil,
@@ -60,9 +84,9 @@ func main() {
 		}
 		red += dRed
 		check(device.Present(nil, nil, 0, nil))
-	})
 
-	gform.RunMainLoop()
+		w32.DispatchMessage(&msg)
+	}
 }
 
 func check(err error) {

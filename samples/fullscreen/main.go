@@ -5,7 +5,7 @@ import (
 	"syscall"
 
 	"github.com/gonutz/d3d9"
-	"github.com/gonutz/w32"
+	"github.com/gonutz/w32/v2"
 )
 
 func main() {
@@ -14,6 +14,7 @@ func main() {
 	runtime.LockOSThread()
 
 	const className = "fullscreen_window_class"
+	classNamePtr, _ := syscall.UTF16PtrFromString(className)
 	w32.RegisterClassEx(&w32.WNDCLASSEX{
 		Cursor: w32.LoadCursor(0, w32.MakeIntResource(w32.IDC_ARROW)),
 		WndProc: syscall.NewCallback(func(window w32.HWND, msg uint32, w, l uintptr) uintptr {
@@ -30,12 +31,13 @@ func main() {
 				return w32.DefWindowProc(window, msg, w, l)
 			}
 		}),
-		ClassName: syscall.StringToUTF16Ptr(className),
+		ClassName: classNamePtr,
 	})
 
+	windowNamePtr, _ := syscall.UTF16PtrFromString("Fullscreen")
 	window := w32.CreateWindow(
-		syscall.StringToUTF16Ptr(className),
-		syscall.StringToUTF16Ptr("Fullscreen"),
+		classNamePtr,
+		windowNamePtr,
 		w32.WS_OVERLAPPEDWINDOW|w32.WS_VISIBLE,
 		w32.CW_USEDEFAULT, w32.CW_USEDEFAULT, 640, 480,
 		0, 0, 0, nil,
