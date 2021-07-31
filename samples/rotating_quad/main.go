@@ -33,12 +33,20 @@ func main() {
 		ClassName: classNamePtr,
 	})
 
+	windowStyle := uint(w32.WS_OVERLAPPEDWINDOW | w32.WS_VISIBLE)
+	windowRect := w32.RECT{
+		Left:   0,
+		Top:    0,
+		Right:  640,
+		Bottom: 480,
+	}
+	w32.AdjustWindowRect(&windowRect, windowStyle, false)
 	windowNamePtr, _ := syscall.UTF16PtrFromString("Rotating Quad")
 	windowHandle := w32.CreateWindow(
 		classNamePtr,
 		windowNamePtr,
-		w32.WS_OVERLAPPEDWINDOW|w32.WS_VISIBLE,
-		w32.CW_USEDEFAULT, w32.CW_USEDEFAULT, 640, 480,
+		windowStyle,
+		w32.CW_USEDEFAULT, w32.CW_USEDEFAULT, int(windowRect.Width()), int(windowRect.Height()),
 		0, 0, 0, nil,
 	)
 
