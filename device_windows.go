@@ -1,6 +1,7 @@
 package d3d9
 
 import (
+	"math"
 	"syscall"
 	"unsafe"
 )
@@ -868,7 +869,7 @@ func (obj *Device) Clear(
 		uintptr(unsafe.Pointer(rectPtr)),
 		uintptr(flags),
 		uintptr(color),
-		uintptr(z),
+		uintptr(math.Float32bits(z)),
 		uintptr(stencil),
 		0,
 		0,
@@ -1055,7 +1056,7 @@ func (obj *Device) SetRenderState(state RENDERSTATETYPE, value uint32) Error {
 }
 
 func (obj *Device) SetRenderStateFloat(state RENDERSTATETYPE, value float32) Error {
-	return obj.SetRenderState(state, *((*uint32)(unsafe.Pointer(&value))))
+	return obj.SetRenderState(state, math.Float32bits(value))
 }
 
 func (obj *Device) SetRenderStateBool(state RENDERSTATETYPE, value bool) Error {
@@ -1381,7 +1382,7 @@ func (obj *Device) SetNPatchMode(segmentCount float32) Error {
 		obj.vtbl.SetNPatchMode,
 		2,
 		uintptr(unsafe.Pointer(obj)),
-		uintptr(segmentCount),
+		uintptr(math.Float32bits(segmentCount)),
 		0,
 	)
 	return toErr(ret)
@@ -1396,7 +1397,7 @@ func (obj *Device) GetNPatchMode() float32 {
 		0,
 		0,
 	)
-	return float32(ret)
+	return math.Float32frombits(uint32(ret))
 }
 
 // DrawPrimitive renders a sequence of nonindexed, geometric primitives of the
