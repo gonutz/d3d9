@@ -1,20 +1,11 @@
 This simple example initializes Direct3D9 and draws a static pink triangle in
 the center of a black background. It shows how to create and use vertex buffers
-and shaders. For compiling shaders for Direct3D you need `FXC.exe`, the DirectX
-effects compiler, which is included in the DirectX SDK and the Windows Platform
-SDK.
-
-The script `build.bat` only builds the executable. The necessary shader objects
-are included in this repository.
-
-The shaders are defined in `vs.code` (vertex shader) and `ps.code` (pixel
-shader). Use the script `build_all.bat` to recompile the shaders and then build
-the executable. You must have `FXC.exe` installed and the variable `FXC` in the
-`build_all.bat` script must point to it. The script will then compile `vs.code`
-and `ps.code` into `vs.object` and `ps.object` object files. These object files
-are then converted to byte slices that are embedded in the Go code. This is
-done with the `bin2go` tool. This makes it unnecessary to load files at
-run-time, the shader object code is shipped with the executable.
+and shaders. For compiling shaders for Direct3D it uses the
+[dxc](https://github.com/gonutz/dxc) library, which utilizes the DirectX
+effects compiler DLL that comes with Windows. This lets you compile shaders on
+the fly. You might also use the command line `dxc` tool to create your shaders
+up front if you have so many of them that compiling on the fly makes your
+program too slow.
 
 For window creation this sample uses
 [the Windows API](https://github.com/gonutz/w32). Direct3D needs a handle to

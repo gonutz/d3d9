@@ -5,11 +5,56 @@ import (
 	"syscall"
 
 	"github.com/gonutz/d3d9"
+	"github.com/gonutz/dxc"
 	"github.com/gonutz/w32/v2"
 )
 
+const vertexShaderCode = `
+struct input {
+	float4 position : POSITION;
+};
+
+struct output {
+	float4 position : POSITION;
+};
+
+void main(in input IN, out output OUT) {
+	OUT.position = IN.position;
+}
+`
+
+const pixelShaderCode = `
+struct input {};
+
+struct output {
+	float4 color : COLOR0;
+};
+
+void main(in input IN, out output OUT) {
+	OUT.color = float4(1, 0, 1, 1);
+}
+`
+
 func main() {
 	runtime.LockOSThread()
+
+	vertexShaderObject, err := dxc.Compile(
+		[]byte(vertexShaderCode),
+		"main",
+		"vs_2_0",
+		dxc.WARNINGS_ARE_ERRORS,
+		0,
+	)
+	check(err)
+
+	pixelShaderObject, err := dxc.Compile(
+		[]byte(pixelShaderCode),
+		"main",
+		"ps_2_0",
+		dxc.WARNINGS_ARE_ERRORS,
+		0,
+	)
+	check(err)
 
 	const className = "fullscreen_window_class"
 	classNamePtr, _ := syscall.UTF16PtrFromString(className)
@@ -61,12 +106,12 @@ func main() {
 
 	check(device.SetRenderState(d3d9.RS_CULLMODE, uint32(d3d9.CULL_NONE)))
 
-	vs, err := device.CreateVertexShaderFromBytes(vso)
+	vs, err := device.CreateVertexShaderFromBytes(vertexShaderObject)
 	check(err)
 	defer vs.Release()
 	check(device.SetVertexShader(vs))
 
-	ps, err := device.CreatePixelShaderFromBytes(pso)
+	ps, err := device.CreatePixelShaderFromBytes(pixelShaderObject)
 	check(err)
 	defer ps.Release()
 	check(device.SetPixelShader(ps))

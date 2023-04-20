@@ -1,2 +1,6 @@
+github.com/gonutz/d3d9 v1.2.2 h1:dAmmLVIEnLth9jJdxgZYKi5p7AbvbzdM0B8SOaIE/Vc=
+github.com/gonutz/d3d9 v1.2.2/go.mod h1:q74g3QbR280b+qYauwEV0N9SVadszWPLZ4l/wHiD/AA=
+github.com/gonutz/dxc v1.0.0 h1:6Hw27RATgHv+XA+ntHnRxkjxIg+U1dj4+j61j3u4utU=
+github.com/gonutz/dxc v1.0.0/go.mod h1:e/+I5do1u0TIL7/54tMmdL6wDXEvOdqEvnuSI9D+Ypc=
 github.com/gonutz/w32/v2 v2.2.0 h1:XVC/Kd238O+gadaDEB+E6E+kn/UBhj2UNOS8v9QPc4Q=
 github.com/gonutz/w32/v2 v2.2.0/go.mod h1:MgtHx0AScDVNKyB+kjyPder4xIi3XAcHS6LDDU2DmdE=
