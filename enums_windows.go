@@ -997,17 +997,17 @@ const (
 	// RS_LASTPIXEL is true by default, which enables drawing of the last pixel
 	// in a line. To prevent drawing of the last pixel, set this value to false.
 	RS_LASTPIXEL = 16
-	// RS_SRCBLEND expectes one member of the BLEND enumerated type. The
+	// RS_SRCBLEND expects one member of the BLEND enumerated type. The
 	// default value is BLEND_ONE.
 	RS_SRCBLEND = 19
-	// RS_DESTBLEND expectes one member of the BLEND enumerated type. The
+	// RS_DESTBLEND expects one member of the BLEND enumerated type. The
 	// default value is BLEND_ZERO.
 	RS_DESTBLEND = 20
 	// RS_CULLMODE specifies how back-facing triangles are culled, if at all.
 	// This can be set to one member of the CULL enumerated type. The default
 	// value is CULL_CCW.
 	RS_CULLMODE = 22
-	// RS_ZFUNC expectes one member of the CMPFUNC enumerated type. The default
+	// RS_ZFUNC expects one member of the CMPFUNC enumerated type. The default
 	// value is CMP_LESSEQUAL. This member enables an application to accept or
 	// reject a pixel, based on its distance from the camera.
 	// The depth value of the pixel is compared with the depth-buffer value. If
@@ -1019,13 +1019,13 @@ const (
 	// depth test fails, because there is no need to filter and modulate the
 	// texture if the pixel is not going to be rendered.
 	RS_ZFUNC = 23
-	// RS_ALPHAREF expectes a value that specifies a reference alpha value
+	// RS_ALPHAREF expects a value that specifies a reference alpha value
 	// against which pixels are tested when alpha testing is enabled. This is
 	// an 8-bit value placed in the low 8 bits of the render-state value.
 	// Values can range from 0x00000000 through 0x000000FF. The default value
 	// is 0.
 	RS_ALPHAREF = 24
-	// RS_ALPHAFUNC expectes one member of the CMPFUNC enumerated type. The
+	// RS_ALPHAFUNC expects one member of the CMPFUNC enumerated type. The
 	// default value is CMP_ALWAYS. This member enables an application to
 	// accept or reject a pixel, based on its alpha value.
 	RS_ALPHAFUNC = 25
@@ -1050,7 +1050,7 @@ const (
 	// When this member is set to true, the specular color is added to the base
 	// color after the texture cascade but before alpha blending.
 	RS_SPECULARENABLE = 29
-	// RS_FOGCOLOR expectes a value whose type is COLOR. The default value is 0.
+	// RS_FOGCOLOR expects a value whose type is COLOR. The default value is 0.
 	RS_FOGCOLOR = 34
 	// RS_FOGTABLEMODE is the fog formula to be used for pixel fog. Set to one
 	// of the members of the FOGMODE enumerated type. The default value is

@@ -155,12 +155,13 @@ func (obj *Direct3D) GetAdapterModeCount(adapter uint, format FORMAT) uint {
 // used in a loop to enumerate all the available adapter modes.
 //
 // Allowed formats are as follows:
-//   FMT_A1R5G5B5
-//   FMT_A2R10G10B10
-//   FMT_A8R8G8B8
-//   FMT_R5G6B5
-//   FMT_X1R5G5B5
-//   FMT_X8R8G8B8
+//
+//	FMT_A1R5G5B5
+//	FMT_A2R10G10B10
+//	FMT_A8R8G8B8
+//	FMT_R5G6B5
+//	FMT_X1R5G5B5
+//	FMT_X8R8G8B8
 //
 // EnumAdapterModes treats pixel formats 565 and 555 as equivalent, and returns
 // the correct version. The difference comes into play only when the application
