@@ -11,7 +11,7 @@ import (
 func main() {
 	runtime.LockOSThread()
 
-	const className = "fullscreen_window_class"
+	const className = "glowing_window_class"
 	classNamePtr, _ := syscall.UTF16PtrFromString(className)
 	w32.RegisterClassEx(&w32.WNDCLASSEX{
 		Cursor: w32.LoadCursor(0, w32.MakeIntResource(w32.IDC_ARROW)),
@@ -32,7 +32,7 @@ func main() {
 		ClassName: classNamePtr,
 	})
 
-	windowNamePtr, _ := syscall.UTF16PtrFromString("Simple Glow")
+	windowNamePtr, _ := syscall.UTF16PtrFromString("Glow")
 	windowHandle := w32.CreateWindow(
 		classNamePtr,
 		windowNamePtr,
@@ -59,7 +59,7 @@ func main() {
 	check(err)
 	defer device.Release()
 
-	// create a timer that ticks every 10ms and register a callback for it
+	// Create a timer that ticks every 10ms and register a callback for it.
 	w32.SetTimer(windowHandle, 1, 10, 0)
 	red, dRed := 255, -1
 
@@ -68,7 +68,7 @@ func main() {
 	for w32.GetMessage(&msg, 0, 0, 0) != 0 {
 		w32.TranslateMessage(&msg)
 
-		// clear the screen to the current color
+		// Clear the screen to the current color.
 		check(device.Clear(
 			nil,
 			d3d9.CLEAR_TARGET,

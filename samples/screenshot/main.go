@@ -17,7 +17,7 @@ func main() {
 	mode, err := d3d.GetAdapterDisplayMode(d3d9.ADAPTER_DEFAULT)
 	check(err)
 	if mode.Format != d3d9.FMT_X8R8G8B8 && mode.Format != d3d9.FMT_A8R8G8B8 {
-		panic("we assume the mode is ARGB.")
+		panic("We assume the mode is ARGB.")
 	}
 
 	device, _, err := d3d.CreateDevice(

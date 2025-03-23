@@ -9,10 +9,9 @@ import (
 )
 
 func main() {
-	// This sample starts by setting up a window using the Win32 API, skip down
-	// to line 44 for the D3D9 part.
 	runtime.LockOSThread()
 
+	// Set up a window using the Win32 API.
 	const className = "fullscreen_window_class"
 	classNamePtr, _ := syscall.UTF16PtrFromString(className)
 	w32.RegisterClassEx(&w32.WNDCLASSEX{

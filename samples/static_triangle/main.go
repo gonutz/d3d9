@@ -132,14 +132,14 @@ func main() {
 	check(device.SetStreamSource(0, vb, 0, 2*4))
 
 	decl, err := device.CreateVertexDeclaration([]d3d9.VERTEXELEMENT{
-		{0, 0, d3d9.DECLTYPE_FLOAT2, d3d9.DECLMETHOD_DEFAULT, d3d9.DECLUSAGE_POSITION, 0},
+		{Type: d3d9.DECLTYPE_FLOAT2, Usage: d3d9.DECLUSAGE_POSITION},
 		d3d9.DeclEnd(),
 	})
 	check(err)
 	defer decl.Release()
 	check(device.SetVertexDeclaration(decl))
 
-	// create a timer that ticks every 100ms and register a callback for it
+	// Create a timer that ticks every 100ms and register a callback for it.
 	w32.SetTimer(windowHandle, 1, 100, 0)
 	var msg w32.MSG
 	for w32.GetMessage(&msg, 0, 0, 0) != 0 {

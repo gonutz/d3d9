@@ -6,13 +6,60 @@ import (
 	"syscall"
 
 	"github.com/gonutz/d3d9"
+	"github.com/gonutz/dxc"
 	"github.com/gonutz/w32/v2"
 )
+
+const vertexShaderCode = `
+float4x4 mvp : register(c0);
+
+struct input {
+	float4 position : POSITION;
+};
+
+struct output {
+	float4 position : POSITION;
+};
+
+void main(in input IN, out output OUT) {
+	OUT.position = mul(IN.position, mvp);
+}
+`
+
+const pixelShaderCode = `
+struct input {};
+
+struct output {
+	float4 color : COLOR0;
+};
+
+void main(in input IN, out output OUT) {
+	OUT.color = float4(1, 0, 0, 1);
+}
+`
 
 func main() {
 	runtime.LockOSThread()
 
-	const className = "fullscreen_window_class"
+	vertexShaderObject, err := dxc.Compile(
+		[]byte(vertexShaderCode),
+		"main",
+		"vs_2_0",
+		dxc.WARNINGS_ARE_ERRORS,
+		0,
+	)
+	check(err)
+
+	pixelShaderObject, err := dxc.Compile(
+		[]byte(pixelShaderCode),
+		"main",
+		"ps_2_0",
+		dxc.WARNINGS_ARE_ERRORS,
+		0,
+	)
+	check(err)
+
+	const className = "quad_window_class"
 	classNamePtr, _ := syscall.UTF16PtrFromString(className)
 	w32.RegisterClassEx(&w32.WNDCLASSEX{
 		Cursor: w32.LoadCursor(0, w32.MakeIntResource(w32.IDC_ARROW)),
@@ -83,26 +130,26 @@ func main() {
 	check(device.SetStreamSource(0, vb, 0, 2*4))
 
 	decl, err := device.CreateVertexDeclaration([]d3d9.VERTEXELEMENT{
-		{0, 0, d3d9.DECLTYPE_FLOAT2, d3d9.DECLMETHOD_DEFAULT, d3d9.DECLUSAGE_POSITION, 0},
+		{Type: d3d9.DECLTYPE_FLOAT2, Usage: d3d9.DECLUSAGE_POSITION},
 		d3d9.DeclEnd(),
 	})
 	check(err)
 	defer decl.Release()
 	check(device.SetVertexDeclaration(decl))
 
-	vs, err := device.CreateVertexShaderFromBytes(vso)
+	vs, err := device.CreateVertexShaderFromBytes(vertexShaderObject)
 	check(err)
 	defer vs.Release()
 	check(device.SetVertexShader(vs))
 
-	ps, err := device.CreatePixelShaderFromBytes(pso)
+	ps, err := device.CreatePixelShaderFromBytes(pixelShaderObject)
 	check(err)
 	defer ps.Release()
 	check(device.SetPixelShader(ps))
 
 	// create a timer that ticks every 10ms and register a callback for it
 	rotation := float32(0)
-	w32.SetTimer(windowHandle, 1, 100, 0)
+	w32.SetTimer(windowHandle, 1, 10, 0)
 	var msg w32.MSG
 	for w32.GetMessage(&msg, 0, 0, 0) != 0 {
 		w32.TranslateMessage(&msg)
