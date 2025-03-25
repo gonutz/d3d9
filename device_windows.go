@@ -1498,7 +1498,7 @@ func (obj *Device) DrawIndexedPrimitiveUP(
 // DrawIndexedPrimitiveUPuint32 renders the specified geometric primitive with
 // data specified by a user memory pointer.
 func (obj *Device) DrawIndexedPrimitiveUPuint32(
-	primitiveType PRIMITIVETYPE,
+	typ PRIMITIVETYPE,
 	minVertexIndex uint,
 	numVertices uint,
 	primitiveCount uint,
@@ -1507,7 +1507,7 @@ func (obj *Device) DrawIndexedPrimitiveUPuint32(
 	vertexStreamZeroStride uint,
 ) Error {
 	return obj.DrawIndexedPrimitiveUP(
-		primitiveType,
+		typ,
 		minVertexIndex,
 		numVertices,
 		primitiveCount,
@@ -1521,18 +1521,16 @@ func (obj *Device) DrawIndexedPrimitiveUPuint32(
 // DrawIndexedPrimitiveUPuint16 renders the specified geometric primitive with
 // data specified by a user memory pointer.
 func (obj *Device) DrawIndexedPrimitiveUPuint16(
-	primitiveType PRIMITIVETYPE,
+	typ PRIMITIVETYPE,
 	minVertexIndex uint,
 	numVertices uint,
 	primitiveCount uint,
 	indexData []uint16,
 	vertexStreamZeroData uintptr,
 	vertexStreamZeroStride uint,
-) (
-	err Error,
-) {
+) Error {
 	return obj.DrawIndexedPrimitiveUP(
-		primitiveType,
+		typ,
 		minVertexIndex,
 		numVertices,
 		primitiveCount,
