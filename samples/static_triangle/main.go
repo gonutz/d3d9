@@ -139,8 +139,6 @@ func main() {
 	defer decl.Release()
 	check(device.SetVertexDeclaration(decl))
 
-	// Create a timer that ticks every 100ms and register a callback for it.
-	w32.SetTimer(windowHandle, 1, 100, 0)
 	var msg w32.MSG
 	for w32.GetMessage(&msg, 0, 0, 0) != 0 {
 		w32.TranslateMessage(&msg)
