@@ -662,13 +662,20 @@ func (obj *Device) UpdateSurface(
 }
 
 // UpdateTexture updates the dirty portions of a texture.
-func (obj *Device) UpdateTexture(sourceTexture, destTexture *BaseTexture) Error {
+func (obj *Device) UpdateTexture(sourceTexture, destTexture BaseTextureImpl) Error {
+	var src, dest uintptr
+	if sourceTexture != nil {
+		src = sourceTexture.baseTexturePointer()
+	}
+	if destTexture != nil {
+		dest = destTexture.baseTexturePointer()
+	}
 	ret, _, _ := syscall.Syscall(
 		obj.vtbl.UpdateTexture,
 		3,
 		uintptr(unsafe.Pointer(obj)),
-		uintptr(unsafe.Pointer(sourceTexture)),
-		uintptr(unsafe.Pointer(destTexture)),
+		src,
+		dest,
 	)
 	return toErr(ret)
 }
